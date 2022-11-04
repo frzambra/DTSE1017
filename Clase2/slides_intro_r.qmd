@@ -1,0 +1,106 @@
+---
+title: "Introducción al análisis de datos con R"
+author: "Dr. Francisco Zambrano"
+date: "agosto 2022"
+format: 
+  revealjs:
+    slide-number: true
+    #title-slide-attributes: 
+      #data-background-image: "https://media.giphy.com/media/GldXiKXeO7hpczEHxt/giphy.gif"
+      #data-background-size: "contain"
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: default
+    code-fold: true
+    code-summary: "Código"
+---
+
+## 1 Motivación {.smaller}
+
+::: incremental
+¿Por qué utilizar `R` para análisis de datos?
+
+-   `R` en su nucleo, es un lenguaje de programación `orientada a objetos` de alto nivel, lenguaje de programación funcional (Wickham, 2014), y fue especialmente diseñado como una interfaz intercativa a otros softwares (Chambers 2016).
+
+-   `R` es una herramienta potente que ha tenido un alto crecimiento.
+
+-   Revolución de geodata (ej., datos satelitales).
+
+-   `R` para entender el mundo
+
+-   `R` es un ambiente y lenguaje de código abierto y multiplataforma para computacion estadística y gráficos.
+
+-   Por todas las ventajas que tiene para análisis de datos (includios espaciales) e investigación reproducible.
+:::
+
+# Un poco de historia {background-color="orange"}
+
+## 2. Ranking popularidad `R`
+
+```{r}
+#| echo: false
+knitr::include_url({"https://pypl.github.io/PYPL.html?country=DE"})
+```
+
+## Al principio tendras que batallar, pero mejorá con el tiempo! {.smaller}
+
+```{r, echo = F, out.width="80%", fig.align = 'center'}
+knitr::include_graphics("../img/r_first_then_new.png")
+```
+
+::: incremental
+-   No es super fácil, pero mejora!
+-   Una gran comunidad muy inclusiva
+-   Mucho material en la web (ej., github, stackoverflow) con casos de uso y ejemplos
+:::
+
+------------------------------------------------------------------------
+
+### ¿Qué es ![](../img/Rlogo.svg){style="display: inline-block margin: 0" width="50px"}?
+
+::: fragment
+R es un lenguaje de progrmación `estadístico` desarrollado para análisis de datos y visualización.
+:::
+
+::: fragment
+### ¿Qué es ![](../img/rstudio.png){style="display: inline-block margin: 0" width="80px"}?
+:::
+
+::: fragment
+RStudio es una IDE (Integrated Development Environment).
+
+-   Escribir, guardar y abrir código en R (.R/.Rmd files)
+
+-   Proporciona resaltado de sintaxis, auto-completación y mucho, mucho más.
+:::
+
+::: fragment
+### Pero, ¿por qué aprender ![](../img/Rlogo.svg){style="display: inline-block margin: 0" width="50px"}?
+:::
+
+## ¿por qué aprender ![](../img/Rlogo.svg){style="display: inline-block margin: 0" width="50px"}? {.smaller}
+
+::: columns
+::: {.column width="50%"}
+-   Gran comunidad `(pero ya lo dije)`
+
+-   Sobresaliente repertorio de métodos estadisticos y computacionales
+
+-   Se integra bien con otros lenguajes de programación (como Python)
+
+-   Hermosas visualizaciónes de datos con `{ggplot2}` y más
+:::
+
+::: {.column width="\"50%"}
+::: r-stack
+![](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/welcome_to_rstats_twitter.png){.fragment .absolute top="50" width="50%"}
+
+![](http://www.favstats.eu/img/headers/season_views.png){.fragment .absolute top="50" width="50%"}
+
+![](https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-artwork/tidyverse_celestial.png?raw=true){.fragment .absolute top="50" width="50%"}
+
+![](https://pbs.twimg.com/media/E4mDfxSXEAA_kvG.jpg){.fragment .absolute top="50" width="50%"} ![](https://rstudio.github.io/reticulate/images/reticulated_python.png){.fragment .absolute top="50" width="50%"}
+:::
+:::
+:::

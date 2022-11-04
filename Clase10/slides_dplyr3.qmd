@@ -1,0 +1,180 @@
+---
+title: "R: {dplyr} (parte 3)"
+author: "Dr. Francisco Zambrano"
+format: 
+  revealjs:
+    slide-number: true
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: simple
+    echo: true
+---
+
+```{r 'setup'}
+#| include: false
+library(palmerpenguins)
+library(dplyr)
+```
+
+# `{dplyr}`: Una gramática de la manipulación de datos {background-color="brown"}
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Apilando grupos `group_by()`:** Usar `.add = TRUE` para agregar nuevas variables de grupos.
+
+```{r}
+penguins |>  
+  group_by(species) |>  
+  group_by(year, .add = TRUE)   # equivalente a: group_by(species, year)
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Aplicar multiples funciones de resumen:** Proporcionar una lista de funciones estilo `purrr` a `across()`
+
+```{r}
+penguins |> 
+  group_by(species)  |> 
+  summarise(
+    across(
+      contains("mm"),
+      list(avg =\(x) mean(x, na.rm = TRUE), sd = \(x) sd(x, na.rm = TRUE)),
+      .names = "{.col}_{.fn}"
+    ),
+    .groups = "drop"
+  )
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Cambio de comportamiento de `mutate()`:** funciones de resumen, ej., `mean()` or `sd()` ahora operan en la data particionada (grupos) e vez de en todo los datos
+
+```{r}
+penguins |> 
+  group_by(species)  |>  
+  mutate(stand_bm = (body_mass_g - mean(body_mass_g, na.rm = TRUE)) / sd(body_mass_g, na.rm = TRUE))  |> 
+  glimpse()
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**`group_by()` una columna transformada:** Proporcionar una expresion tipo `mutate()` en la declaración del `group_by()`
+
+```{r}
+bm_breaks <- mean(penguins$body_mass_g, na.rm = TRUE) - (-3:3) * sd(penguins$body_mass_g, na.rm = TRUE)
+
+penguins |>  
+  group_by(species, bm_bin = cut(body_mass_g, breaks = bm_breaks)) |> 
+  summarise(count = n(), .groups = "drop")
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Cambiar el comportamiento de `filter()`:** Los filtros ahora operan en los datos particionados en vez de en todos los datos
+
+```{r}
+penguins |>  
+  group_by(species, island) |>  
+  filter(flipper_length_mm == max(flipper_length_mm, na.rm = TRUE))
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Anidamiento de datos agrupados:** Usualmente, encontrarn más intuitivo usar `group_by()` seguido de `nest()` para producir data frames anidados en comparación con los ejemplos realizados con `{tidyr}`.
+
+```{r}
+penguins  |>  
+  group_by(species, year) |>  
+  tidyr::nest()
+```
+
+*Nota: Encuentra más información acerca de `group_by()` corriendo lo viñeta `vignette("grouping")`.*
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Otras operaciones con `dplyr`:**
+
+::: panel-tabset
+## distinct()
+
+`distinct()` selecciona filas únicas.
+
+```{r}
+penguins |>  
+  distinct(species, island)
+```
+
+## pull()
+
+`pull()` extrae columnas como vectores
+
+```{r, echo=FALSE}
+options(max.print=100)
+```
+
+```{r}
+penguins |>  
+  pull(year)  # equivalente A: penguins$year
+```
+
+```{r, echo=FALSE}
+options(max.print=1000)
+```
+
+## if_else()
+
+`if_else()` aplica una declaración if-else vectorizada .
+
+```{r}
+penguins |>  select(species, island, body_mass_g)  |>  
+  mutate(penguin_size = if_else(body_mass_g < 3500, "tiny penguin", "big penguin"))
+```
+
+## lag()
+
+`lag()` desplaza los valores de una columna por un desplazamiento de `n` filas hacia adelante.
+
+```{r}
+penguins |>  select(species, body_mass_g) |>  
+  mutate(lagged_bm = lag(body_mass_g, n = 1))
+```
+
+## lead()
+
+`lead()` desplaza los valores de una columna `n` filas hacia atras.
+
+```{r}
+penguins  |>  select(species, body_mass_g) |>  
+  mutate(lead_bm = lead(body_mass_g, n = 2))
+```
+
+## join()
+
+`left_join()`, `right_join()`, `inner_join()` y `full_join()` enable para fusionar diferentes marcos de datos haciendo coincidir las filas en función de las claves (similar a las uniones realizadas en SQL).
+
+```{r}
+#| echo: false
+knitr::include_graphics('../img/dplyr_joins.png')
+```
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Similitudes entre las sentencias `dplyr` y `SQL`:**
+
+```{r, echo=F, out.width='70%', out.height='70%', fig.align='center'}
+knitr::include_graphics("../img/sql-tidyverse.png")
+```
+
+*Fuente: [Steves (2021)](https://www.rstudio.com/resources/rstudioglobal-2021/the-dynamic-duo-sql-and-r/)*
+
+## Ejercicios {.smaller .scrollable}
+
+1.  Con los datos de agromet, calcule el promedio de temperatura (media, máxima, mínima) por día y estación. Utilice `summarize` y `across`.
+2.  Para cada estacion calcule el valor de la mediana.
+3.  Filtre las estaciones cuyo valor de temperatura promedio es mayor que la temperatura mediana.
+4.  Verifique que los nombres de la estaciones son únicos (`distinct`).
+5.  Extraiga la columna del nombre de la estaciones.
+6.  Una el data.frame de los valores promedios de temperatura diario por estación con el data.frame de la metadata de las estaciones de agromet.
+7.  Cree un data.frame con datos anidados con los valores de promedios de temperatura diario, por estación.

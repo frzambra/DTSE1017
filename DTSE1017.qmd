@@ -1,0 +1,50 @@
+---
+title: "Mineria de Datos (DTSE1017)"
+subtitle: "Ciencia de Datos"
+author: "Dr. Francisco Zambrano"
+lang: es
+theme: default
+format:
+  html:
+    number-sections: true
+    number-depth: 2
+    smooth-scroll: true
+    code-fold: true
+    toc: true
+    html-math-method: katex
+---
+
+## Reseña
+
+En este repositorio se pone a disposición de los alumnos de la carrera de Ciencia de Datos de la UMayor, las clases, laboratorios y material que se utilizará en la asignatura de SIG Avanzado. Este repositorio está creado con [quarto](https://quarto.org/) por medio del software `R`.
+
+## Clases
+
+1.  [Presentación curso](Clase1/slides_intro_curso.html)
+2.  [Introducción a `R` para análisis de datos](Clase2/slides_intro_r.html)
+3.  [R: Tipos y estructura de datos](Clase3/slides_rbase_estructuras_datos.html)\
+4.  [Manipulación de datos en R](Clase4/slides_rbase_data_manipulacion.html)
+5.  [Introducción a {tidyverse}](Clase5/slides_intro_tidyverse.html)
+6.  [Datos ajustados (tidy)](Clase5/slides_data_tidy.html)
+7.  [Tibbles y pipes](Clase6/slides_tibbles_pipes.html)
+8.  [R {readr} y {tidyr}](Clase7/slides_readr_tidyr.html)
+9.  [R {dplyr} (parte 1)](Clase8/slides_dplyr1.html)
+10. [R {dplyr} (parte 2)](Clase9/slides_dplyr2.html)
+11. [R {dplyr} (parte 3)](Clase10/slides_dplyr3.html)
+12. [R {lubridate}](Clase11/slides_lubridate.html)
+
+## Talleres
+
+1.  [Taller 1: R: Tipos y estructura de datos](Talleres/Taller1/taller1.html)\
+2.  [Taller 2: Ordenar datos anidados](Talleres/Taller2/taller2.html)\
+3.  [Taller 3: Ejercicios {readr},{tidyr} y {dplyr}](Talleres/Taller3/taller3.html)\
+
+    
+## Material
+
+-   R
+    -   [SWIRL](https://swirlstats.com/)
+    -   [Quick-R](https://www.statmethods.net/)
+-   R para anpalisis de datos
+    -   [R para ciencia de datos](https://es.r4ds.hadley.nz/) - Garrett Grolemund, Hadley Wickham
+    -   [R for data science (2ed)](https://r4ds.hadley.nz/) - Garrett Grolemund, Hadley Wickham

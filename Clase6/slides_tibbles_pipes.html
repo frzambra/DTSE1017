@@ -1,0 +1,2895 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="slides_tibbles_pipes_files/libs/clipboard/clipboard.min.js"></script>
+<script src="slides_tibbles_pipes_files/libs/quarto-html/tabby.min.js"></script>
+<script src="slides_tibbles_pipes_files/libs/quarto-html/popper.min.js"></script>
+<script src="slides_tibbles_pipes_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="slides_tibbles_pipes_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="slides_tibbles_pipes_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="slides_tibbles_pipes_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.0.36">
+
+  <meta name="author" content="Dr.&nbsp;Francisco Zambrano">
+  <title>R: Tibbles y pipes</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="slides_tibbles_pipes_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="slides_tibbles_pipes_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="slides_tibbles_pipes_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link href="slides_tibbles_pipes_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="slides_tibbles_pipes_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="slides_tibbles_pipes_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="slides_tibbles_pipes_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="center">
+  <h1 class="title">R: Tibbles y pipes</h1>
+  <p class="author">Dr.&nbsp;Francisco Zambrano</p>
+</section>
+
+<section>
+<section id="tibble-data-frames-mejorados" class="title-slide slide level1 center" data-background-color="darkgreen">
+<h1>Tibble: <br> Data frames mejorados</h1>
+
+</section>
+<section id="tibbles" class="slide level2" data-background-image="https://raw.githubusercontent.com/tidyverse/tibble/master/man/figures/logo.png" data-background-position="97.5% 2.5%" data-background-size="7.5%" data-layout="true">
+<h2>Tibbles</h2>
+<p><code>tibble</code> proporciona un <code>data frame</code> mejorado de clase <code>tbl_df</code>, el llamado <code>tibble</code>.</p>
+<ul>
+<li><p>Tipo de objeto diseñado para trabajar con datos tidy (ordenados/ajustados) y tidyverse</p></li>
+<li><p>Tiene diferencias con el <code>data.frame</code> en la visualización e indexación</p></li>
+<li><p>Los <code>tibbles</code> no aceptan nombre de filas (rownames)</p></li>
+</ul>
+</section>
+<section id="tibble-vs-data.frame" class="slide level2">
+<h2>tibble vs data.frame</h2>
+<ul>
+<li>Impresión/visualizacion de los datos (<code>print</code>):
+<ul>
+<li>el <code>data frame</code> tratá de mostrar 1000 filas y todas las columnas</li>
+<li>el <code>tibble</code> muestra 10 observaciones y las columnas que caben en pantalla</li>
+<li>el <code>tibble</code> despliega información sobre el tipo de dato de cada variable (columna)</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># ver ayuda método print para objeto data.frame</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>?print.data.frame</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># ver ayuda método print para objeto tbl_df</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>?print.tbl_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tibble-vs-data.frame-1" class="slide level2 smaller">
+<h2><code>tibble</code> vs <code>data.frame</code></h2>
+<ul>
+<li>Impresión/visualizacion de los datos (<code>print</code>):</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>penguins <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      species    island bill_length_mm bill_depth_mm flipper_length_mm
+1      Adelie Torgersen           39.1          18.7               181
+2      Adelie Torgersen           39.5          17.4               186
+3      Adelie Torgersen           40.3          18.0               195
+4      Adelie Torgersen             NA            NA                NA
+5      Adelie Torgersen           36.7          19.3               193
+6      Adelie Torgersen           39.3          20.6               190
+7      Adelie Torgersen           38.9          17.8               181
+8      Adelie Torgersen           39.2          19.6               195
+9      Adelie Torgersen           34.1          18.1               193
+10     Adelie Torgersen           42.0          20.2               190
+11     Adelie Torgersen           37.8          17.1               186
+12     Adelie Torgersen           37.8          17.3               180
+13     Adelie Torgersen           41.1          17.6               182
+14     Adelie Torgersen           38.6          21.2               191
+15     Adelie Torgersen           34.6          21.1               198
+16     Adelie Torgersen           36.6          17.8               185
+17     Adelie Torgersen           38.7          19.0               195
+18     Adelie Torgersen           42.5          20.7               197
+19     Adelie Torgersen           34.4          18.4               184
+20     Adelie Torgersen           46.0          21.5               194
+21     Adelie    Biscoe           37.8          18.3               174
+22     Adelie    Biscoe           37.7          18.7               180
+23     Adelie    Biscoe           35.9          19.2               189
+24     Adelie    Biscoe           38.2          18.1               185
+25     Adelie    Biscoe           38.8          17.2               180
+26     Adelie    Biscoe           35.3          18.9               187
+27     Adelie    Biscoe           40.6          18.6               183
+28     Adelie    Biscoe           40.5          17.9               187
+29     Adelie    Biscoe           37.9          18.6               172
+30     Adelie    Biscoe           40.5          18.9               180
+31     Adelie     Dream           39.5          16.7               178
+32     Adelie     Dream           37.2          18.1               178
+33     Adelie     Dream           39.5          17.8               188
+34     Adelie     Dream           40.9          18.9               184
+35     Adelie     Dream           36.4          17.0               195
+36     Adelie     Dream           39.2          21.1               196
+37     Adelie     Dream           38.8          20.0               190
+38     Adelie     Dream           42.2          18.5               180
+39     Adelie     Dream           37.6          19.3               181
+40     Adelie     Dream           39.8          19.1               184
+41     Adelie     Dream           36.5          18.0               182
+42     Adelie     Dream           40.8          18.4               195
+43     Adelie     Dream           36.0          18.5               186
+44     Adelie     Dream           44.1          19.7               196
+45     Adelie     Dream           37.0          16.9               185
+46     Adelie     Dream           39.6          18.8               190
+47     Adelie     Dream           41.1          19.0               182
+48     Adelie     Dream           37.5          18.9               179
+49     Adelie     Dream           36.0          17.9               190
+50     Adelie     Dream           42.3          21.2               191
+51     Adelie    Biscoe           39.6          17.7               186
+52     Adelie    Biscoe           40.1          18.9               188
+53     Adelie    Biscoe           35.0          17.9               190
+54     Adelie    Biscoe           42.0          19.5               200
+55     Adelie    Biscoe           34.5          18.1               187
+56     Adelie    Biscoe           41.4          18.6               191
+57     Adelie    Biscoe           39.0          17.5               186
+58     Adelie    Biscoe           40.6          18.8               193
+59     Adelie    Biscoe           36.5          16.6               181
+60     Adelie    Biscoe           37.6          19.1               194
+61     Adelie    Biscoe           35.7          16.9               185
+62     Adelie    Biscoe           41.3          21.1               195
+63     Adelie    Biscoe           37.6          17.0               185
+64     Adelie    Biscoe           41.1          18.2               192
+65     Adelie    Biscoe           36.4          17.1               184
+66     Adelie    Biscoe           41.6          18.0               192
+67     Adelie    Biscoe           35.5          16.2               195
+68     Adelie    Biscoe           41.1          19.1               188
+69     Adelie Torgersen           35.9          16.6               190
+70     Adelie Torgersen           41.8          19.4               198
+71     Adelie Torgersen           33.5          19.0               190
+72     Adelie Torgersen           39.7          18.4               190
+73     Adelie Torgersen           39.6          17.2               196
+74     Adelie Torgersen           45.8          18.9               197
+75     Adelie Torgersen           35.5          17.5               190
+76     Adelie Torgersen           42.8          18.5               195
+77     Adelie Torgersen           40.9          16.8               191
+78     Adelie Torgersen           37.2          19.4               184
+79     Adelie Torgersen           36.2          16.1               187
+80     Adelie Torgersen           42.1          19.1               195
+81     Adelie Torgersen           34.6          17.2               189
+82     Adelie Torgersen           42.9          17.6               196
+83     Adelie Torgersen           36.7          18.8               187
+84     Adelie Torgersen           35.1          19.4               193
+85     Adelie     Dream           37.3          17.8               191
+86     Adelie     Dream           41.3          20.3               194
+87     Adelie     Dream           36.3          19.5               190
+88     Adelie     Dream           36.9          18.6               189
+89     Adelie     Dream           38.3          19.2               189
+90     Adelie     Dream           38.9          18.8               190
+91     Adelie     Dream           35.7          18.0               202
+92     Adelie     Dream           41.1          18.1               205
+93     Adelie     Dream           34.0          17.1               185
+94     Adelie     Dream           39.6          18.1               186
+95     Adelie     Dream           36.2          17.3               187
+96     Adelie     Dream           40.8          18.9               208
+97     Adelie     Dream           38.1          18.6               190
+98     Adelie     Dream           40.3          18.5               196
+99     Adelie     Dream           33.1          16.1               178
+100    Adelie     Dream           43.2          18.5               192
+101    Adelie    Biscoe           35.0          17.9               192
+102    Adelie    Biscoe           41.0          20.0               203
+103    Adelie    Biscoe           37.7          16.0               183
+104    Adelie    Biscoe           37.8          20.0               190
+105    Adelie    Biscoe           37.9          18.6               193
+106    Adelie    Biscoe           39.7          18.9               184
+107    Adelie    Biscoe           38.6          17.2               199
+108    Adelie    Biscoe           38.2          20.0               190
+109    Adelie    Biscoe           38.1          17.0               181
+110    Adelie    Biscoe           43.2          19.0               197
+111    Adelie    Biscoe           38.1          16.5               198
+112    Adelie    Biscoe           45.6          20.3               191
+113    Adelie    Biscoe           39.7          17.7               193
+114    Adelie    Biscoe           42.2          19.5               197
+115    Adelie    Biscoe           39.6          20.7               191
+116    Adelie    Biscoe           42.7          18.3               196
+117    Adelie Torgersen           38.6          17.0               188
+118    Adelie Torgersen           37.3          20.5               199
+119    Adelie Torgersen           35.7          17.0               189
+120    Adelie Torgersen           41.1          18.6               189
+121    Adelie Torgersen           36.2          17.2               187
+122    Adelie Torgersen           37.7          19.8               198
+123    Adelie Torgersen           40.2          17.0               176
+124    Adelie Torgersen           41.4          18.5               202
+125    Adelie Torgersen           35.2          15.9               186
+126    Adelie Torgersen           40.6          19.0               199
+127    Adelie Torgersen           38.8          17.6               191
+128    Adelie Torgersen           41.5          18.3               195
+129    Adelie Torgersen           39.0          17.1               191
+130    Adelie Torgersen           44.1          18.0               210
+131    Adelie Torgersen           38.5          17.9               190
+132    Adelie Torgersen           43.1          19.2               197
+133    Adelie     Dream           36.8          18.5               193
+134    Adelie     Dream           37.5          18.5               199
+135    Adelie     Dream           38.1          17.6               187
+136    Adelie     Dream           41.1          17.5               190
+137    Adelie     Dream           35.6          17.5               191
+138    Adelie     Dream           40.2          20.1               200
+139    Adelie     Dream           37.0          16.5               185
+140    Adelie     Dream           39.7          17.9               193
+141    Adelie     Dream           40.2          17.1               193
+142    Adelie     Dream           40.6          17.2               187
+143    Adelie     Dream           32.1          15.5               188
+144    Adelie     Dream           40.7          17.0               190
+145    Adelie     Dream           37.3          16.8               192
+146    Adelie     Dream           39.0          18.7               185
+147    Adelie     Dream           39.2          18.6               190
+148    Adelie     Dream           36.6          18.4               184
+149    Adelie     Dream           36.0          17.8               195
+150    Adelie     Dream           37.8          18.1               193
+151    Adelie     Dream           36.0          17.1               187
+152    Adelie     Dream           41.5          18.5               201
+153    Gentoo    Biscoe           46.1          13.2               211
+154    Gentoo    Biscoe           50.0          16.3               230
+155    Gentoo    Biscoe           48.7          14.1               210
+156    Gentoo    Biscoe           50.0          15.2               218
+157    Gentoo    Biscoe           47.6          14.5               215
+158    Gentoo    Biscoe           46.5          13.5               210
+159    Gentoo    Biscoe           45.4          14.6               211
+160    Gentoo    Biscoe           46.7          15.3               219
+161    Gentoo    Biscoe           43.3          13.4               209
+162    Gentoo    Biscoe           46.8          15.4               215
+163    Gentoo    Biscoe           40.9          13.7               214
+164    Gentoo    Biscoe           49.0          16.1               216
+165    Gentoo    Biscoe           45.5          13.7               214
+166    Gentoo    Biscoe           48.4          14.6               213
+167    Gentoo    Biscoe           45.8          14.6               210
+168    Gentoo    Biscoe           49.3          15.7               217
+169    Gentoo    Biscoe           42.0          13.5               210
+170    Gentoo    Biscoe           49.2          15.2               221
+171    Gentoo    Biscoe           46.2          14.5               209
+172    Gentoo    Biscoe           48.7          15.1               222
+173    Gentoo    Biscoe           50.2          14.3               218
+174    Gentoo    Biscoe           45.1          14.5               215
+175    Gentoo    Biscoe           46.5          14.5               213
+176    Gentoo    Biscoe           46.3          15.8               215
+177    Gentoo    Biscoe           42.9          13.1               215
+178    Gentoo    Biscoe           46.1          15.1               215
+179    Gentoo    Biscoe           44.5          14.3               216
+180    Gentoo    Biscoe           47.8          15.0               215
+181    Gentoo    Biscoe           48.2          14.3               210
+182    Gentoo    Biscoe           50.0          15.3               220
+183    Gentoo    Biscoe           47.3          15.3               222
+184    Gentoo    Biscoe           42.8          14.2               209
+185    Gentoo    Biscoe           45.1          14.5               207
+186    Gentoo    Biscoe           59.6          17.0               230
+187    Gentoo    Biscoe           49.1          14.8               220
+188    Gentoo    Biscoe           48.4          16.3               220
+189    Gentoo    Biscoe           42.6          13.7               213
+190    Gentoo    Biscoe           44.4          17.3               219
+191    Gentoo    Biscoe           44.0          13.6               208
+192    Gentoo    Biscoe           48.7          15.7               208
+193    Gentoo    Biscoe           42.7          13.7               208
+194    Gentoo    Biscoe           49.6          16.0               225
+195    Gentoo    Biscoe           45.3          13.7               210
+196    Gentoo    Biscoe           49.6          15.0               216
+197    Gentoo    Biscoe           50.5          15.9               222
+198    Gentoo    Biscoe           43.6          13.9               217
+199    Gentoo    Biscoe           45.5          13.9               210
+200    Gentoo    Biscoe           50.5          15.9               225
+201    Gentoo    Biscoe           44.9          13.3               213
+202    Gentoo    Biscoe           45.2          15.8               215
+203    Gentoo    Biscoe           46.6          14.2               210
+204    Gentoo    Biscoe           48.5          14.1               220
+205    Gentoo    Biscoe           45.1          14.4               210
+206    Gentoo    Biscoe           50.1          15.0               225
+207    Gentoo    Biscoe           46.5          14.4               217
+208    Gentoo    Biscoe           45.0          15.4               220
+209    Gentoo    Biscoe           43.8          13.9               208
+210    Gentoo    Biscoe           45.5          15.0               220
+211    Gentoo    Biscoe           43.2          14.5               208
+212    Gentoo    Biscoe           50.4          15.3               224
+213    Gentoo    Biscoe           45.3          13.8               208
+214    Gentoo    Biscoe           46.2          14.9               221
+215    Gentoo    Biscoe           45.7          13.9               214
+216    Gentoo    Biscoe           54.3          15.7               231
+217    Gentoo    Biscoe           45.8          14.2               219
+218    Gentoo    Biscoe           49.8          16.8               230
+219    Gentoo    Biscoe           46.2          14.4               214
+220    Gentoo    Biscoe           49.5          16.2               229
+221    Gentoo    Biscoe           43.5          14.2               220
+222    Gentoo    Biscoe           50.7          15.0               223
+223    Gentoo    Biscoe           47.7          15.0               216
+224    Gentoo    Biscoe           46.4          15.6               221
+225    Gentoo    Biscoe           48.2          15.6               221
+226    Gentoo    Biscoe           46.5          14.8               217
+227    Gentoo    Biscoe           46.4          15.0               216
+228    Gentoo    Biscoe           48.6          16.0               230
+229    Gentoo    Biscoe           47.5          14.2               209
+230    Gentoo    Biscoe           51.1          16.3               220
+231    Gentoo    Biscoe           45.2          13.8               215
+232    Gentoo    Biscoe           45.2          16.4               223
+233    Gentoo    Biscoe           49.1          14.5               212
+234    Gentoo    Biscoe           52.5          15.6               221
+235    Gentoo    Biscoe           47.4          14.6               212
+236    Gentoo    Biscoe           50.0          15.9               224
+237    Gentoo    Biscoe           44.9          13.8               212
+238    Gentoo    Biscoe           50.8          17.3               228
+239    Gentoo    Biscoe           43.4          14.4               218
+240    Gentoo    Biscoe           51.3          14.2               218
+241    Gentoo    Biscoe           47.5          14.0               212
+242    Gentoo    Biscoe           52.1          17.0               230
+243    Gentoo    Biscoe           47.5          15.0               218
+244    Gentoo    Biscoe           52.2          17.1               228
+245    Gentoo    Biscoe           45.5          14.5               212
+246    Gentoo    Biscoe           49.5          16.1               224
+247    Gentoo    Biscoe           44.5          14.7               214
+248    Gentoo    Biscoe           50.8          15.7               226
+249    Gentoo    Biscoe           49.4          15.8               216
+250    Gentoo    Biscoe           46.9          14.6               222
+251    Gentoo    Biscoe           48.4          14.4               203
+252    Gentoo    Biscoe           51.1          16.5               225
+253    Gentoo    Biscoe           48.5          15.0               219
+254    Gentoo    Biscoe           55.9          17.0               228
+255    Gentoo    Biscoe           47.2          15.5               215
+256    Gentoo    Biscoe           49.1          15.0               228
+257    Gentoo    Biscoe           47.3          13.8               216
+258    Gentoo    Biscoe           46.8          16.1               215
+259    Gentoo    Biscoe           41.7          14.7               210
+260    Gentoo    Biscoe           53.4          15.8               219
+261    Gentoo    Biscoe           43.3          14.0               208
+262    Gentoo    Biscoe           48.1          15.1               209
+263    Gentoo    Biscoe           50.5          15.2               216
+264    Gentoo    Biscoe           49.8          15.9               229
+265    Gentoo    Biscoe           43.5          15.2               213
+266    Gentoo    Biscoe           51.5          16.3               230
+267    Gentoo    Biscoe           46.2          14.1               217
+268    Gentoo    Biscoe           55.1          16.0               230
+269    Gentoo    Biscoe           44.5          15.7               217
+270    Gentoo    Biscoe           48.8          16.2               222
+271    Gentoo    Biscoe           47.2          13.7               214
+272    Gentoo    Biscoe             NA            NA                NA
+273    Gentoo    Biscoe           46.8          14.3               215
+274    Gentoo    Biscoe           50.4          15.7               222
+275    Gentoo    Biscoe           45.2          14.8               212
+276    Gentoo    Biscoe           49.9          16.1               213
+277 Chinstrap     Dream           46.5          17.9               192
+278 Chinstrap     Dream           50.0          19.5               196
+279 Chinstrap     Dream           51.3          19.2               193
+280 Chinstrap     Dream           45.4          18.7               188
+281 Chinstrap     Dream           52.7          19.8               197
+282 Chinstrap     Dream           45.2          17.8               198
+283 Chinstrap     Dream           46.1          18.2               178
+284 Chinstrap     Dream           51.3          18.2               197
+285 Chinstrap     Dream           46.0          18.9               195
+286 Chinstrap     Dream           51.3          19.9               198
+287 Chinstrap     Dream           46.6          17.8               193
+288 Chinstrap     Dream           51.7          20.3               194
+289 Chinstrap     Dream           47.0          17.3               185
+290 Chinstrap     Dream           52.0          18.1               201
+291 Chinstrap     Dream           45.9          17.1               190
+292 Chinstrap     Dream           50.5          19.6               201
+293 Chinstrap     Dream           50.3          20.0               197
+294 Chinstrap     Dream           58.0          17.8               181
+295 Chinstrap     Dream           46.4          18.6               190
+296 Chinstrap     Dream           49.2          18.2               195
+297 Chinstrap     Dream           42.4          17.3               181
+298 Chinstrap     Dream           48.5          17.5               191
+299 Chinstrap     Dream           43.2          16.6               187
+300 Chinstrap     Dream           50.6          19.4               193
+301 Chinstrap     Dream           46.7          17.9               195
+302 Chinstrap     Dream           52.0          19.0               197
+303 Chinstrap     Dream           50.5          18.4               200
+304 Chinstrap     Dream           49.5          19.0               200
+305 Chinstrap     Dream           46.4          17.8               191
+306 Chinstrap     Dream           52.8          20.0               205
+307 Chinstrap     Dream           40.9          16.6               187
+308 Chinstrap     Dream           54.2          20.8               201
+309 Chinstrap     Dream           42.5          16.7               187
+310 Chinstrap     Dream           51.0          18.8               203
+311 Chinstrap     Dream           49.7          18.6               195
+312 Chinstrap     Dream           47.5          16.8               199
+313 Chinstrap     Dream           47.6          18.3               195
+314 Chinstrap     Dream           52.0          20.7               210
+315 Chinstrap     Dream           46.9          16.6               192
+316 Chinstrap     Dream           53.5          19.9               205
+317 Chinstrap     Dream           49.0          19.5               210
+318 Chinstrap     Dream           46.2          17.5               187
+319 Chinstrap     Dream           50.9          19.1               196
+320 Chinstrap     Dream           45.5          17.0               196
+321 Chinstrap     Dream           50.9          17.9               196
+322 Chinstrap     Dream           50.8          18.5               201
+323 Chinstrap     Dream           50.1          17.9               190
+324 Chinstrap     Dream           49.0          19.6               212
+325 Chinstrap     Dream           51.5          18.7               187
+326 Chinstrap     Dream           49.8          17.3               198
+327 Chinstrap     Dream           48.1          16.4               199
+328 Chinstrap     Dream           51.4          19.0               201
+329 Chinstrap     Dream           45.7          17.3               193
+330 Chinstrap     Dream           50.7          19.7               203
+331 Chinstrap     Dream           42.5          17.3               187
+332 Chinstrap     Dream           52.2          18.8               197
+333 Chinstrap     Dream           45.2          16.6               191
+334 Chinstrap     Dream           49.3          19.9               203
+335 Chinstrap     Dream           50.2          18.8               202
+336 Chinstrap     Dream           45.6          19.4               194
+337 Chinstrap     Dream           51.9          19.5               206
+338 Chinstrap     Dream           46.8          16.5               189
+339 Chinstrap     Dream           45.7          17.0               195
+340 Chinstrap     Dream           55.8          19.8               207
+341 Chinstrap     Dream           43.5          18.1               202
+342 Chinstrap     Dream           49.6          18.2               193
+343 Chinstrap     Dream           50.8          19.0               210
+344 Chinstrap     Dream           50.2          18.7               198
+    body_mass_g    sex year
+1          3750   male 2007
+2          3800 female 2007
+3          3250 female 2007
+4            NA   &lt;NA&gt; 2007
+5          3450 female 2007
+6          3650   male 2007
+7          3625 female 2007
+8          4675   male 2007
+9          3475   &lt;NA&gt; 2007
+10         4250   &lt;NA&gt; 2007
+11         3300   &lt;NA&gt; 2007
+12         3700   &lt;NA&gt; 2007
+13         3200 female 2007
+14         3800   male 2007
+15         4400   male 2007
+16         3700 female 2007
+17         3450 female 2007
+18         4500   male 2007
+19         3325 female 2007
+20         4200   male 2007
+21         3400 female 2007
+22         3600   male 2007
+23         3800 female 2007
+24         3950   male 2007
+25         3800   male 2007
+26         3800 female 2007
+27         3550   male 2007
+28         3200 female 2007
+29         3150 female 2007
+30         3950   male 2007
+31         3250 female 2007
+32         3900   male 2007
+33         3300 female 2007
+34         3900   male 2007
+35         3325 female 2007
+36         4150   male 2007
+37         3950   male 2007
+38         3550 female 2007
+39         3300 female 2007
+40         4650   male 2007
+41         3150 female 2007
+42         3900   male 2007
+43         3100 female 2007
+44         4400   male 2007
+45         3000 female 2007
+46         4600   male 2007
+47         3425   male 2007
+48         2975   &lt;NA&gt; 2007
+49         3450 female 2007
+50         4150   male 2007
+51         3500 female 2008
+52         4300   male 2008
+53         3450 female 2008
+54         4050   male 2008
+55         2900 female 2008
+56         3700   male 2008
+57         3550 female 2008
+58         3800   male 2008
+59         2850 female 2008
+60         3750   male 2008
+61         3150 female 2008
+62         4400   male 2008
+63         3600 female 2008
+64         4050   male 2008
+65         2850 female 2008
+66         3950   male 2008
+67         3350 female 2008
+68         4100   male 2008
+69         3050 female 2008
+70         4450   male 2008
+71         3600 female 2008
+72         3900   male 2008
+73         3550 female 2008
+74         4150   male 2008
+75         3700 female 2008
+76         4250   male 2008
+77         3700 female 2008
+78         3900   male 2008
+79         3550 female 2008
+80         4000   male 2008
+81         3200 female 2008
+82         4700   male 2008
+83         3800 female 2008
+84         4200   male 2008
+85         3350 female 2008
+86         3550   male 2008
+87         3800   male 2008
+88         3500 female 2008
+89         3950   male 2008
+90         3600 female 2008
+91         3550 female 2008
+92         4300   male 2008
+93         3400 female 2008
+94         4450   male 2008
+95         3300 female 2008
+96         4300   male 2008
+97         3700 female 2008
+98         4350   male 2008
+99         2900 female 2008
+100        4100   male 2008
+101        3725 female 2009
+102        4725   male 2009
+103        3075 female 2009
+104        4250   male 2009
+105        2925 female 2009
+106        3550   male 2009
+107        3750 female 2009
+108        3900   male 2009
+109        3175 female 2009
+110        4775   male 2009
+111        3825 female 2009
+112        4600   male 2009
+113        3200 female 2009
+114        4275   male 2009
+115        3900 female 2009
+116        4075   male 2009
+117        2900 female 2009
+118        3775   male 2009
+119        3350 female 2009
+120        3325   male 2009
+121        3150 female 2009
+122        3500   male 2009
+123        3450 female 2009
+124        3875   male 2009
+125        3050 female 2009
+126        4000   male 2009
+127        3275 female 2009
+128        4300   male 2009
+129        3050 female 2009
+130        4000   male 2009
+131        3325 female 2009
+132        3500   male 2009
+133        3500 female 2009
+134        4475   male 2009
+135        3425 female 2009
+136        3900   male 2009
+137        3175 female 2009
+138        3975   male 2009
+139        3400 female 2009
+140        4250   male 2009
+141        3400 female 2009
+142        3475   male 2009
+143        3050 female 2009
+144        3725   male 2009
+145        3000 female 2009
+146        3650   male 2009
+147        4250   male 2009
+148        3475 female 2009
+149        3450 female 2009
+150        3750   male 2009
+151        3700 female 2009
+152        4000   male 2009
+153        4500 female 2007
+154        5700   male 2007
+155        4450 female 2007
+156        5700   male 2007
+157        5400   male 2007
+158        4550 female 2007
+159        4800 female 2007
+160        5200   male 2007
+161        4400 female 2007
+162        5150   male 2007
+163        4650 female 2007
+164        5550   male 2007
+165        4650 female 2007
+166        5850   male 2007
+167        4200 female 2007
+168        5850   male 2007
+169        4150 female 2007
+170        6300   male 2007
+171        4800 female 2007
+172        5350   male 2007
+173        5700   male 2007
+174        5000 female 2007
+175        4400 female 2007
+176        5050   male 2007
+177        5000 female 2007
+178        5100   male 2007
+179        4100   &lt;NA&gt; 2007
+180        5650   male 2007
+181        4600 female 2007
+182        5550   male 2007
+183        5250   male 2007
+184        4700 female 2007
+185        5050 female 2007
+186        6050   male 2007
+187        5150 female 2008
+188        5400   male 2008
+189        4950 female 2008
+190        5250   male 2008
+191        4350 female 2008
+192        5350   male 2008
+193        3950 female 2008
+194        5700   male 2008
+195        4300 female 2008
+196        4750   male 2008
+197        5550   male 2008
+198        4900 female 2008
+199        4200 female 2008
+200        5400   male 2008
+201        5100 female 2008
+202        5300   male 2008
+203        4850 female 2008
+204        5300   male 2008
+205        4400 female 2008
+206        5000   male 2008
+207        4900 female 2008
+208        5050   male 2008
+209        4300 female 2008
+210        5000   male 2008
+211        4450 female 2008
+212        5550   male 2008
+213        4200 female 2008
+214        5300   male 2008
+215        4400 female 2008
+216        5650   male 2008
+217        4700 female 2008
+218        5700   male 2008
+219        4650   &lt;NA&gt; 2008
+220        5800   male 2008
+221        4700 female 2008
+222        5550   male 2008
+223        4750 female 2008
+224        5000   male 2008
+225        5100   male 2008
+226        5200 female 2008
+227        4700 female 2008
+228        5800   male 2008
+229        4600 female 2008
+230        6000   male 2008
+231        4750 female 2008
+232        5950   male 2008
+233        4625 female 2009
+234        5450   male 2009
+235        4725 female 2009
+236        5350   male 2009
+237        4750 female 2009
+238        5600   male 2009
+239        4600 female 2009
+240        5300   male 2009
+241        4875 female 2009
+242        5550   male 2009
+243        4950 female 2009
+244        5400   male 2009
+245        4750 female 2009
+246        5650   male 2009
+247        4850 female 2009
+248        5200   male 2009
+249        4925   male 2009
+250        4875 female 2009
+251        4625 female 2009
+252        5250   male 2009
+253        4850 female 2009
+254        5600   male 2009
+255        4975 female 2009
+256        5500   male 2009
+257        4725   &lt;NA&gt; 2009
+258        5500   male 2009
+259        4700 female 2009
+260        5500   male 2009
+261        4575 female 2009
+262        5500   male 2009
+263        5000 female 2009
+264        5950   male 2009
+265        4650 female 2009
+266        5500   male 2009
+267        4375 female 2009
+268        5850   male 2009
+269        4875   &lt;NA&gt; 2009
+270        6000   male 2009
+271        4925 female 2009
+272          NA   &lt;NA&gt; 2009
+273        4850 female 2009
+274        5750   male 2009
+275        5200 female 2009
+276        5400   male 2009
+277        3500 female 2007
+278        3900   male 2007
+279        3650   male 2007
+280        3525 female 2007
+281        3725   male 2007
+282        3950 female 2007
+283        3250 female 2007
+284        3750   male 2007
+285        4150 female 2007
+286        3700   male 2007
+287        3800 female 2007
+288        3775   male 2007
+289        3700 female 2007
+290        4050   male 2007
+291        3575 female 2007
+292        4050   male 2007
+293        3300   male 2007
+294        3700 female 2007
+295        3450 female 2007
+296        4400   male 2007
+297        3600 female 2007
+298        3400   male 2007
+299        2900 female 2007
+300        3800   male 2007
+301        3300 female 2007
+302        4150   male 2007
+303        3400 female 2008
+304        3800   male 2008
+305        3700 female 2008
+306        4550   male 2008
+307        3200 female 2008
+308        4300   male 2008
+309        3350 female 2008
+310        4100   male 2008
+311        3600   male 2008
+312        3900 female 2008
+313        3850 female 2008
+314        4800   male 2008
+315        2700 female 2008
+316        4500   male 2008
+317        3950   male 2008
+318        3650 female 2008
+319        3550   male 2008
+320        3500 female 2008
+321        3675 female 2009
+322        4450   male 2009
+323        3400 female 2009
+324        4300   male 2009
+325        3250   male 2009
+326        3675 female 2009
+327        3325 female 2009
+328        3950   male 2009
+329        3600 female 2009
+330        4050   male 2009
+331        3350 female 2009
+332        3450   male 2009
+333        3250 female 2009
+334        4050   male 2009
+335        3800   male 2009
+336        3525 female 2009
+337        3950   male 2009
+338        3650 female 2009
+339        3650 female 2009
+340        4000   male 2009
+341        3400 female 2009
+342        3775   male 2009
+343        4100   male 2009
+344        3775 female 2009</code></pre>
+</div>
+</div>
+</section>
+<section id="tibble-vs-data.frame-2" class="slide level2 smaller">
+<h2><code>tibble</code> vs <code>data.frame</code></h2>
+<ul>
+<li>Impresión/visualizacion de los datos (<code>print</code>):</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>penguins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
+ 4 Adelie  Torgersen           NA            NA           NA      NA &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
+ 6 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 7 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
+ 8 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 9 Adelie  Torgersen           34.1          18.1        193    3475 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2        190    4250 &lt;NA&gt;   2007
+# … with 334 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g</code></pre>
+</div>
+</div>
+</section>
+<section id="tibbles-1" class="slide level2" data-background-image="https://raw.githubusercontent.com/tidyverse/tibble/master/man/figures/logo.png" data-background-position="97.5% 2.5%" data-background-size="7.5%" data-layout="true">
+<h2>Tibbles</h2>
+<p>Un <code>tibble</code> se puede crear de cuatro maneras diferentes.</p>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">tibble()</a></li><li><a href="#tabset-1-2">tribble()</a></li><li><a href="#tabset-1-3">as_tibble()</a></li><li><a href="#tabset-1-4">enframe()</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<p>Crea un <code>tibble</code> desde columnas de vectores con <code>tibble()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>),</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="at">z =</span> <span class="fu">c</span>(T, F)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  x         y z    
+  &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+1 a         1 TRUE 
+2 b         2 FALSE</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2">
+<p>Crea un <code>tibble</code> <em>traspuesto</em> fila por fila con <code>tribble()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">tribble</span>(</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="sc">~</span>x, <span class="sc">~</span>y,  <span class="sc">~</span>z,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="st">"a"</span>, <span class="dv">1</span>,  T,</span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="st">"b"</span>, <span class="dv">2</span>,  F</span>
+<span id="cb8-5"><a href="#cb8-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  x         y z    
+  &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+1 a         1 TRUE 
+2 b         2 FALSE</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-3">
+<p>Crea un <code>tibble</code> desde un <code>data.frame</code> existente con <code>as_tibble()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="at">z =</span> <span class="fu">c</span>(T, F)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>) <span class="sc">|&gt;</span>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  x         y z    
+  &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+1 a         1 TRUE 
+2 b         2 FALSE</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-4">
+<p>Crea un <code>tibble</code> desde vectores con nombres <code>enframe()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">c</span>(<span class="at">x =</span> <span class="st">"a"</span>, <span class="at">y =</span> <span class="st">"b"</span>, <span class="at">z =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">enframe</span>(<span class="at">name =</span> <span class="st">"x"</span>, <span class="at">value =</span> <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  x     y    
+  &lt;chr&gt; &lt;chr&gt;
+1 x     a    
+2 y     b    
+3 z     1    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="con-los-pinguinos" class="slide level2 smaller">
+<h2>Con los <code>pinguinos</code></h2>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">data.frame</a></li><li><a href="#tabset-2-2">tibble() (Opción 1)</a></li><li><a href="#tabset-2-3">tibble() (Opción 2)]</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">data.frame</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      species    island bill_length_mm bill_depth_mm flipper_length_mm
+1      Adelie Torgersen           39.1          18.7               181
+2      Adelie Torgersen           39.5          17.4               186
+3      Adelie Torgersen           40.3          18.0               195
+4      Adelie Torgersen             NA            NA                NA
+5      Adelie Torgersen           36.7          19.3               193
+6      Adelie Torgersen           39.3          20.6               190
+7      Adelie Torgersen           38.9          17.8               181
+8      Adelie Torgersen           39.2          19.6               195
+9      Adelie Torgersen           34.1          18.1               193
+10     Adelie Torgersen           42.0          20.2               190
+11     Adelie Torgersen           37.8          17.1               186
+12     Adelie Torgersen           37.8          17.3               180
+13     Adelie Torgersen           41.1          17.6               182
+14     Adelie Torgersen           38.6          21.2               191
+15     Adelie Torgersen           34.6          21.1               198
+16     Adelie Torgersen           36.6          17.8               185
+17     Adelie Torgersen           38.7          19.0               195
+18     Adelie Torgersen           42.5          20.7               197
+19     Adelie Torgersen           34.4          18.4               184
+20     Adelie Torgersen           46.0          21.5               194
+21     Adelie    Biscoe           37.8          18.3               174
+22     Adelie    Biscoe           37.7          18.7               180
+23     Adelie    Biscoe           35.9          19.2               189
+24     Adelie    Biscoe           38.2          18.1               185
+25     Adelie    Biscoe           38.8          17.2               180
+26     Adelie    Biscoe           35.3          18.9               187
+27     Adelie    Biscoe           40.6          18.6               183
+28     Adelie    Biscoe           40.5          17.9               187
+29     Adelie    Biscoe           37.9          18.6               172
+30     Adelie    Biscoe           40.5          18.9               180
+31     Adelie     Dream           39.5          16.7               178
+32     Adelie     Dream           37.2          18.1               178
+33     Adelie     Dream           39.5          17.8               188
+34     Adelie     Dream           40.9          18.9               184
+35     Adelie     Dream           36.4          17.0               195
+36     Adelie     Dream           39.2          21.1               196
+37     Adelie     Dream           38.8          20.0               190
+38     Adelie     Dream           42.2          18.5               180
+39     Adelie     Dream           37.6          19.3               181
+40     Adelie     Dream           39.8          19.1               184
+41     Adelie     Dream           36.5          18.0               182
+42     Adelie     Dream           40.8          18.4               195
+43     Adelie     Dream           36.0          18.5               186
+44     Adelie     Dream           44.1          19.7               196
+45     Adelie     Dream           37.0          16.9               185
+46     Adelie     Dream           39.6          18.8               190
+47     Adelie     Dream           41.1          19.0               182
+48     Adelie     Dream           37.5          18.9               179
+49     Adelie     Dream           36.0          17.9               190
+50     Adelie     Dream           42.3          21.2               191
+51     Adelie    Biscoe           39.6          17.7               186
+52     Adelie    Biscoe           40.1          18.9               188
+53     Adelie    Biscoe           35.0          17.9               190
+54     Adelie    Biscoe           42.0          19.5               200
+55     Adelie    Biscoe           34.5          18.1               187
+56     Adelie    Biscoe           41.4          18.6               191
+57     Adelie    Biscoe           39.0          17.5               186
+58     Adelie    Biscoe           40.6          18.8               193
+59     Adelie    Biscoe           36.5          16.6               181
+60     Adelie    Biscoe           37.6          19.1               194
+61     Adelie    Biscoe           35.7          16.9               185
+62     Adelie    Biscoe           41.3          21.1               195
+63     Adelie    Biscoe           37.6          17.0               185
+64     Adelie    Biscoe           41.1          18.2               192
+65     Adelie    Biscoe           36.4          17.1               184
+66     Adelie    Biscoe           41.6          18.0               192
+67     Adelie    Biscoe           35.5          16.2               195
+68     Adelie    Biscoe           41.1          19.1               188
+69     Adelie Torgersen           35.9          16.6               190
+70     Adelie Torgersen           41.8          19.4               198
+71     Adelie Torgersen           33.5          19.0               190
+72     Adelie Torgersen           39.7          18.4               190
+73     Adelie Torgersen           39.6          17.2               196
+74     Adelie Torgersen           45.8          18.9               197
+75     Adelie Torgersen           35.5          17.5               190
+76     Adelie Torgersen           42.8          18.5               195
+77     Adelie Torgersen           40.9          16.8               191
+78     Adelie Torgersen           37.2          19.4               184
+79     Adelie Torgersen           36.2          16.1               187
+80     Adelie Torgersen           42.1          19.1               195
+81     Adelie Torgersen           34.6          17.2               189
+82     Adelie Torgersen           42.9          17.6               196
+83     Adelie Torgersen           36.7          18.8               187
+84     Adelie Torgersen           35.1          19.4               193
+85     Adelie     Dream           37.3          17.8               191
+86     Adelie     Dream           41.3          20.3               194
+87     Adelie     Dream           36.3          19.5               190
+88     Adelie     Dream           36.9          18.6               189
+89     Adelie     Dream           38.3          19.2               189
+90     Adelie     Dream           38.9          18.8               190
+91     Adelie     Dream           35.7          18.0               202
+92     Adelie     Dream           41.1          18.1               205
+93     Adelie     Dream           34.0          17.1               185
+94     Adelie     Dream           39.6          18.1               186
+95     Adelie     Dream           36.2          17.3               187
+96     Adelie     Dream           40.8          18.9               208
+97     Adelie     Dream           38.1          18.6               190
+98     Adelie     Dream           40.3          18.5               196
+99     Adelie     Dream           33.1          16.1               178
+100    Adelie     Dream           43.2          18.5               192
+101    Adelie    Biscoe           35.0          17.9               192
+102    Adelie    Biscoe           41.0          20.0               203
+103    Adelie    Biscoe           37.7          16.0               183
+104    Adelie    Biscoe           37.8          20.0               190
+105    Adelie    Biscoe           37.9          18.6               193
+106    Adelie    Biscoe           39.7          18.9               184
+107    Adelie    Biscoe           38.6          17.2               199
+108    Adelie    Biscoe           38.2          20.0               190
+109    Adelie    Biscoe           38.1          17.0               181
+110    Adelie    Biscoe           43.2          19.0               197
+111    Adelie    Biscoe           38.1          16.5               198
+112    Adelie    Biscoe           45.6          20.3               191
+113    Adelie    Biscoe           39.7          17.7               193
+114    Adelie    Biscoe           42.2          19.5               197
+115    Adelie    Biscoe           39.6          20.7               191
+116    Adelie    Biscoe           42.7          18.3               196
+117    Adelie Torgersen           38.6          17.0               188
+118    Adelie Torgersen           37.3          20.5               199
+119    Adelie Torgersen           35.7          17.0               189
+120    Adelie Torgersen           41.1          18.6               189
+121    Adelie Torgersen           36.2          17.2               187
+122    Adelie Torgersen           37.7          19.8               198
+123    Adelie Torgersen           40.2          17.0               176
+124    Adelie Torgersen           41.4          18.5               202
+125    Adelie Torgersen           35.2          15.9               186
+126    Adelie Torgersen           40.6          19.0               199
+127    Adelie Torgersen           38.8          17.6               191
+128    Adelie Torgersen           41.5          18.3               195
+129    Adelie Torgersen           39.0          17.1               191
+130    Adelie Torgersen           44.1          18.0               210
+131    Adelie Torgersen           38.5          17.9               190
+132    Adelie Torgersen           43.1          19.2               197
+133    Adelie     Dream           36.8          18.5               193
+134    Adelie     Dream           37.5          18.5               199
+135    Adelie     Dream           38.1          17.6               187
+136    Adelie     Dream           41.1          17.5               190
+137    Adelie     Dream           35.6          17.5               191
+138    Adelie     Dream           40.2          20.1               200
+139    Adelie     Dream           37.0          16.5               185
+140    Adelie     Dream           39.7          17.9               193
+141    Adelie     Dream           40.2          17.1               193
+142    Adelie     Dream           40.6          17.2               187
+143    Adelie     Dream           32.1          15.5               188
+144    Adelie     Dream           40.7          17.0               190
+145    Adelie     Dream           37.3          16.8               192
+146    Adelie     Dream           39.0          18.7               185
+147    Adelie     Dream           39.2          18.6               190
+148    Adelie     Dream           36.6          18.4               184
+149    Adelie     Dream           36.0          17.8               195
+150    Adelie     Dream           37.8          18.1               193
+151    Adelie     Dream           36.0          17.1               187
+152    Adelie     Dream           41.5          18.5               201
+153    Gentoo    Biscoe           46.1          13.2               211
+154    Gentoo    Biscoe           50.0          16.3               230
+155    Gentoo    Biscoe           48.7          14.1               210
+156    Gentoo    Biscoe           50.0          15.2               218
+157    Gentoo    Biscoe           47.6          14.5               215
+158    Gentoo    Biscoe           46.5          13.5               210
+159    Gentoo    Biscoe           45.4          14.6               211
+160    Gentoo    Biscoe           46.7          15.3               219
+161    Gentoo    Biscoe           43.3          13.4               209
+162    Gentoo    Biscoe           46.8          15.4               215
+163    Gentoo    Biscoe           40.9          13.7               214
+164    Gentoo    Biscoe           49.0          16.1               216
+165    Gentoo    Biscoe           45.5          13.7               214
+166    Gentoo    Biscoe           48.4          14.6               213
+167    Gentoo    Biscoe           45.8          14.6               210
+168    Gentoo    Biscoe           49.3          15.7               217
+169    Gentoo    Biscoe           42.0          13.5               210
+170    Gentoo    Biscoe           49.2          15.2               221
+171    Gentoo    Biscoe           46.2          14.5               209
+172    Gentoo    Biscoe           48.7          15.1               222
+173    Gentoo    Biscoe           50.2          14.3               218
+174    Gentoo    Biscoe           45.1          14.5               215
+175    Gentoo    Biscoe           46.5          14.5               213
+176    Gentoo    Biscoe           46.3          15.8               215
+177    Gentoo    Biscoe           42.9          13.1               215
+178    Gentoo    Biscoe           46.1          15.1               215
+179    Gentoo    Biscoe           44.5          14.3               216
+180    Gentoo    Biscoe           47.8          15.0               215
+181    Gentoo    Biscoe           48.2          14.3               210
+182    Gentoo    Biscoe           50.0          15.3               220
+183    Gentoo    Biscoe           47.3          15.3               222
+184    Gentoo    Biscoe           42.8          14.2               209
+185    Gentoo    Biscoe           45.1          14.5               207
+186    Gentoo    Biscoe           59.6          17.0               230
+187    Gentoo    Biscoe           49.1          14.8               220
+188    Gentoo    Biscoe           48.4          16.3               220
+189    Gentoo    Biscoe           42.6          13.7               213
+190    Gentoo    Biscoe           44.4          17.3               219
+191    Gentoo    Biscoe           44.0          13.6               208
+192    Gentoo    Biscoe           48.7          15.7               208
+193    Gentoo    Biscoe           42.7          13.7               208
+194    Gentoo    Biscoe           49.6          16.0               225
+195    Gentoo    Biscoe           45.3          13.7               210
+196    Gentoo    Biscoe           49.6          15.0               216
+197    Gentoo    Biscoe           50.5          15.9               222
+198    Gentoo    Biscoe           43.6          13.9               217
+199    Gentoo    Biscoe           45.5          13.9               210
+200    Gentoo    Biscoe           50.5          15.9               225
+201    Gentoo    Biscoe           44.9          13.3               213
+202    Gentoo    Biscoe           45.2          15.8               215
+203    Gentoo    Biscoe           46.6          14.2               210
+204    Gentoo    Biscoe           48.5          14.1               220
+205    Gentoo    Biscoe           45.1          14.4               210
+206    Gentoo    Biscoe           50.1          15.0               225
+207    Gentoo    Biscoe           46.5          14.4               217
+208    Gentoo    Biscoe           45.0          15.4               220
+209    Gentoo    Biscoe           43.8          13.9               208
+210    Gentoo    Biscoe           45.5          15.0               220
+211    Gentoo    Biscoe           43.2          14.5               208
+212    Gentoo    Biscoe           50.4          15.3               224
+213    Gentoo    Biscoe           45.3          13.8               208
+214    Gentoo    Biscoe           46.2          14.9               221
+215    Gentoo    Biscoe           45.7          13.9               214
+216    Gentoo    Biscoe           54.3          15.7               231
+217    Gentoo    Biscoe           45.8          14.2               219
+218    Gentoo    Biscoe           49.8          16.8               230
+219    Gentoo    Biscoe           46.2          14.4               214
+220    Gentoo    Biscoe           49.5          16.2               229
+221    Gentoo    Biscoe           43.5          14.2               220
+222    Gentoo    Biscoe           50.7          15.0               223
+223    Gentoo    Biscoe           47.7          15.0               216
+224    Gentoo    Biscoe           46.4          15.6               221
+225    Gentoo    Biscoe           48.2          15.6               221
+226    Gentoo    Biscoe           46.5          14.8               217
+227    Gentoo    Biscoe           46.4          15.0               216
+228    Gentoo    Biscoe           48.6          16.0               230
+229    Gentoo    Biscoe           47.5          14.2               209
+230    Gentoo    Biscoe           51.1          16.3               220
+231    Gentoo    Biscoe           45.2          13.8               215
+232    Gentoo    Biscoe           45.2          16.4               223
+233    Gentoo    Biscoe           49.1          14.5               212
+234    Gentoo    Biscoe           52.5          15.6               221
+235    Gentoo    Biscoe           47.4          14.6               212
+236    Gentoo    Biscoe           50.0          15.9               224
+237    Gentoo    Biscoe           44.9          13.8               212
+238    Gentoo    Biscoe           50.8          17.3               228
+239    Gentoo    Biscoe           43.4          14.4               218
+240    Gentoo    Biscoe           51.3          14.2               218
+241    Gentoo    Biscoe           47.5          14.0               212
+242    Gentoo    Biscoe           52.1          17.0               230
+243    Gentoo    Biscoe           47.5          15.0               218
+244    Gentoo    Biscoe           52.2          17.1               228
+245    Gentoo    Biscoe           45.5          14.5               212
+246    Gentoo    Biscoe           49.5          16.1               224
+247    Gentoo    Biscoe           44.5          14.7               214
+248    Gentoo    Biscoe           50.8          15.7               226
+249    Gentoo    Biscoe           49.4          15.8               216
+250    Gentoo    Biscoe           46.9          14.6               222
+251    Gentoo    Biscoe           48.4          14.4               203
+252    Gentoo    Biscoe           51.1          16.5               225
+253    Gentoo    Biscoe           48.5          15.0               219
+254    Gentoo    Biscoe           55.9          17.0               228
+255    Gentoo    Biscoe           47.2          15.5               215
+256    Gentoo    Biscoe           49.1          15.0               228
+257    Gentoo    Biscoe           47.3          13.8               216
+258    Gentoo    Biscoe           46.8          16.1               215
+259    Gentoo    Biscoe           41.7          14.7               210
+260    Gentoo    Biscoe           53.4          15.8               219
+261    Gentoo    Biscoe           43.3          14.0               208
+262    Gentoo    Biscoe           48.1          15.1               209
+263    Gentoo    Biscoe           50.5          15.2               216
+264    Gentoo    Biscoe           49.8          15.9               229
+265    Gentoo    Biscoe           43.5          15.2               213
+266    Gentoo    Biscoe           51.5          16.3               230
+267    Gentoo    Biscoe           46.2          14.1               217
+268    Gentoo    Biscoe           55.1          16.0               230
+269    Gentoo    Biscoe           44.5          15.7               217
+270    Gentoo    Biscoe           48.8          16.2               222
+271    Gentoo    Biscoe           47.2          13.7               214
+272    Gentoo    Biscoe             NA            NA                NA
+273    Gentoo    Biscoe           46.8          14.3               215
+274    Gentoo    Biscoe           50.4          15.7               222
+275    Gentoo    Biscoe           45.2          14.8               212
+276    Gentoo    Biscoe           49.9          16.1               213
+277 Chinstrap     Dream           46.5          17.9               192
+278 Chinstrap     Dream           50.0          19.5               196
+279 Chinstrap     Dream           51.3          19.2               193
+280 Chinstrap     Dream           45.4          18.7               188
+281 Chinstrap     Dream           52.7          19.8               197
+282 Chinstrap     Dream           45.2          17.8               198
+283 Chinstrap     Dream           46.1          18.2               178
+284 Chinstrap     Dream           51.3          18.2               197
+285 Chinstrap     Dream           46.0          18.9               195
+286 Chinstrap     Dream           51.3          19.9               198
+287 Chinstrap     Dream           46.6          17.8               193
+288 Chinstrap     Dream           51.7          20.3               194
+289 Chinstrap     Dream           47.0          17.3               185
+290 Chinstrap     Dream           52.0          18.1               201
+291 Chinstrap     Dream           45.9          17.1               190
+292 Chinstrap     Dream           50.5          19.6               201
+293 Chinstrap     Dream           50.3          20.0               197
+294 Chinstrap     Dream           58.0          17.8               181
+295 Chinstrap     Dream           46.4          18.6               190
+296 Chinstrap     Dream           49.2          18.2               195
+297 Chinstrap     Dream           42.4          17.3               181
+298 Chinstrap     Dream           48.5          17.5               191
+299 Chinstrap     Dream           43.2          16.6               187
+300 Chinstrap     Dream           50.6          19.4               193
+301 Chinstrap     Dream           46.7          17.9               195
+302 Chinstrap     Dream           52.0          19.0               197
+303 Chinstrap     Dream           50.5          18.4               200
+304 Chinstrap     Dream           49.5          19.0               200
+305 Chinstrap     Dream           46.4          17.8               191
+306 Chinstrap     Dream           52.8          20.0               205
+307 Chinstrap     Dream           40.9          16.6               187
+308 Chinstrap     Dream           54.2          20.8               201
+309 Chinstrap     Dream           42.5          16.7               187
+310 Chinstrap     Dream           51.0          18.8               203
+311 Chinstrap     Dream           49.7          18.6               195
+312 Chinstrap     Dream           47.5          16.8               199
+313 Chinstrap     Dream           47.6          18.3               195
+314 Chinstrap     Dream           52.0          20.7               210
+315 Chinstrap     Dream           46.9          16.6               192
+316 Chinstrap     Dream           53.5          19.9               205
+317 Chinstrap     Dream           49.0          19.5               210
+318 Chinstrap     Dream           46.2          17.5               187
+319 Chinstrap     Dream           50.9          19.1               196
+320 Chinstrap     Dream           45.5          17.0               196
+321 Chinstrap     Dream           50.9          17.9               196
+322 Chinstrap     Dream           50.8          18.5               201
+323 Chinstrap     Dream           50.1          17.9               190
+324 Chinstrap     Dream           49.0          19.6               212
+325 Chinstrap     Dream           51.5          18.7               187
+326 Chinstrap     Dream           49.8          17.3               198
+327 Chinstrap     Dream           48.1          16.4               199
+328 Chinstrap     Dream           51.4          19.0               201
+329 Chinstrap     Dream           45.7          17.3               193
+330 Chinstrap     Dream           50.7          19.7               203
+331 Chinstrap     Dream           42.5          17.3               187
+332 Chinstrap     Dream           52.2          18.8               197
+333 Chinstrap     Dream           45.2          16.6               191
+334 Chinstrap     Dream           49.3          19.9               203
+335 Chinstrap     Dream           50.2          18.8               202
+336 Chinstrap     Dream           45.6          19.4               194
+337 Chinstrap     Dream           51.9          19.5               206
+338 Chinstrap     Dream           46.8          16.5               189
+339 Chinstrap     Dream           45.7          17.0               195
+340 Chinstrap     Dream           55.8          19.8               207
+341 Chinstrap     Dream           43.5          18.1               202
+342 Chinstrap     Dream           49.6          18.2               193
+343 Chinstrap     Dream           50.8          19.0               210
+344 Chinstrap     Dream           50.2          18.7               198
+    body_mass_g    sex year
+1          3750   male 2007
+2          3800 female 2007
+3          3250 female 2007
+4            NA   &lt;NA&gt; 2007
+5          3450 female 2007
+6          3650   male 2007
+7          3625 female 2007
+8          4675   male 2007
+9          3475   &lt;NA&gt; 2007
+10         4250   &lt;NA&gt; 2007
+11         3300   &lt;NA&gt; 2007
+12         3700   &lt;NA&gt; 2007
+13         3200 female 2007
+14         3800   male 2007
+15         4400   male 2007
+16         3700 female 2007
+17         3450 female 2007
+18         4500   male 2007
+19         3325 female 2007
+20         4200   male 2007
+21         3400 female 2007
+22         3600   male 2007
+23         3800 female 2007
+24         3950   male 2007
+25         3800   male 2007
+26         3800 female 2007
+27         3550   male 2007
+28         3200 female 2007
+29         3150 female 2007
+30         3950   male 2007
+31         3250 female 2007
+32         3900   male 2007
+33         3300 female 2007
+34         3900   male 2007
+35         3325 female 2007
+36         4150   male 2007
+37         3950   male 2007
+38         3550 female 2007
+39         3300 female 2007
+40         4650   male 2007
+41         3150 female 2007
+42         3900   male 2007
+43         3100 female 2007
+44         4400   male 2007
+45         3000 female 2007
+46         4600   male 2007
+47         3425   male 2007
+48         2975   &lt;NA&gt; 2007
+49         3450 female 2007
+50         4150   male 2007
+51         3500 female 2008
+52         4300   male 2008
+53         3450 female 2008
+54         4050   male 2008
+55         2900 female 2008
+56         3700   male 2008
+57         3550 female 2008
+58         3800   male 2008
+59         2850 female 2008
+60         3750   male 2008
+61         3150 female 2008
+62         4400   male 2008
+63         3600 female 2008
+64         4050   male 2008
+65         2850 female 2008
+66         3950   male 2008
+67         3350 female 2008
+68         4100   male 2008
+69         3050 female 2008
+70         4450   male 2008
+71         3600 female 2008
+72         3900   male 2008
+73         3550 female 2008
+74         4150   male 2008
+75         3700 female 2008
+76         4250   male 2008
+77         3700 female 2008
+78         3900   male 2008
+79         3550 female 2008
+80         4000   male 2008
+81         3200 female 2008
+82         4700   male 2008
+83         3800 female 2008
+84         4200   male 2008
+85         3350 female 2008
+86         3550   male 2008
+87         3800   male 2008
+88         3500 female 2008
+89         3950   male 2008
+90         3600 female 2008
+91         3550 female 2008
+92         4300   male 2008
+93         3400 female 2008
+94         4450   male 2008
+95         3300 female 2008
+96         4300   male 2008
+97         3700 female 2008
+98         4350   male 2008
+99         2900 female 2008
+100        4100   male 2008
+101        3725 female 2009
+102        4725   male 2009
+103        3075 female 2009
+104        4250   male 2009
+105        2925 female 2009
+106        3550   male 2009
+107        3750 female 2009
+108        3900   male 2009
+109        3175 female 2009
+110        4775   male 2009
+111        3825 female 2009
+112        4600   male 2009
+113        3200 female 2009
+114        4275   male 2009
+115        3900 female 2009
+116        4075   male 2009
+117        2900 female 2009
+118        3775   male 2009
+119        3350 female 2009
+120        3325   male 2009
+121        3150 female 2009
+122        3500   male 2009
+123        3450 female 2009
+124        3875   male 2009
+125        3050 female 2009
+126        4000   male 2009
+127        3275 female 2009
+128        4300   male 2009
+129        3050 female 2009
+130        4000   male 2009
+131        3325 female 2009
+132        3500   male 2009
+133        3500 female 2009
+134        4475   male 2009
+135        3425 female 2009
+136        3900   male 2009
+137        3175 female 2009
+138        3975   male 2009
+139        3400 female 2009
+140        4250   male 2009
+141        3400 female 2009
+142        3475   male 2009
+143        3050 female 2009
+144        3725   male 2009
+145        3000 female 2009
+146        3650   male 2009
+147        4250   male 2009
+148        3475 female 2009
+149        3450 female 2009
+150        3750   male 2009
+151        3700 female 2009
+152        4000   male 2009
+153        4500 female 2007
+154        5700   male 2007
+155        4450 female 2007
+156        5700   male 2007
+157        5400   male 2007
+158        4550 female 2007
+159        4800 female 2007
+160        5200   male 2007
+161        4400 female 2007
+162        5150   male 2007
+163        4650 female 2007
+164        5550   male 2007
+165        4650 female 2007
+166        5850   male 2007
+167        4200 female 2007
+168        5850   male 2007
+169        4150 female 2007
+170        6300   male 2007
+171        4800 female 2007
+172        5350   male 2007
+173        5700   male 2007
+174        5000 female 2007
+175        4400 female 2007
+176        5050   male 2007
+177        5000 female 2007
+178        5100   male 2007
+179        4100   &lt;NA&gt; 2007
+180        5650   male 2007
+181        4600 female 2007
+182        5550   male 2007
+183        5250   male 2007
+184        4700 female 2007
+185        5050 female 2007
+186        6050   male 2007
+187        5150 female 2008
+188        5400   male 2008
+189        4950 female 2008
+190        5250   male 2008
+191        4350 female 2008
+192        5350   male 2008
+193        3950 female 2008
+194        5700   male 2008
+195        4300 female 2008
+196        4750   male 2008
+197        5550   male 2008
+198        4900 female 2008
+199        4200 female 2008
+200        5400   male 2008
+201        5100 female 2008
+202        5300   male 2008
+203        4850 female 2008
+204        5300   male 2008
+205        4400 female 2008
+206        5000   male 2008
+207        4900 female 2008
+208        5050   male 2008
+209        4300 female 2008
+210        5000   male 2008
+211        4450 female 2008
+212        5550   male 2008
+213        4200 female 2008
+214        5300   male 2008
+215        4400 female 2008
+216        5650   male 2008
+217        4700 female 2008
+218        5700   male 2008
+219        4650   &lt;NA&gt; 2008
+220        5800   male 2008
+221        4700 female 2008
+222        5550   male 2008
+223        4750 female 2008
+224        5000   male 2008
+225        5100   male 2008
+226        5200 female 2008
+227        4700 female 2008
+228        5800   male 2008
+229        4600 female 2008
+230        6000   male 2008
+231        4750 female 2008
+232        5950   male 2008
+233        4625 female 2009
+234        5450   male 2009
+235        4725 female 2009
+236        5350   male 2009
+237        4750 female 2009
+238        5600   male 2009
+239        4600 female 2009
+240        5300   male 2009
+241        4875 female 2009
+242        5550   male 2009
+243        4950 female 2009
+244        5400   male 2009
+245        4750 female 2009
+246        5650   male 2009
+247        4850 female 2009
+248        5200   male 2009
+249        4925   male 2009
+250        4875 female 2009
+251        4625 female 2009
+252        5250   male 2009
+253        4850 female 2009
+254        5600   male 2009
+255        4975 female 2009
+256        5500   male 2009
+257        4725   &lt;NA&gt; 2009
+258        5500   male 2009
+259        4700 female 2009
+260        5500   male 2009
+261        4575 female 2009
+262        5500   male 2009
+263        5000 female 2009
+264        5950   male 2009
+265        4650 female 2009
+266        5500   male 2009
+267        4375 female 2009
+268        5850   male 2009
+269        4875   &lt;NA&gt; 2009
+270        6000   male 2009
+271        4925 female 2009
+272          NA   &lt;NA&gt; 2009
+273        4850 female 2009
+274        5750   male 2009
+275        5200 female 2009
+276        5400   male 2009
+277        3500 female 2007
+278        3900   male 2007
+279        3650   male 2007
+280        3525 female 2007
+281        3725   male 2007
+282        3950 female 2007
+283        3250 female 2007
+284        3750   male 2007
+285        4150 female 2007
+286        3700   male 2007
+287        3800 female 2007
+288        3775   male 2007
+289        3700 female 2007
+290        4050   male 2007
+291        3575 female 2007
+292        4050   male 2007
+293        3300   male 2007
+294        3700 female 2007
+295        3450 female 2007
+296        4400   male 2007
+297        3600 female 2007
+298        3400   male 2007
+299        2900 female 2007
+300        3800   male 2007
+301        3300 female 2007
+302        4150   male 2007
+303        3400 female 2008
+304        3800   male 2008
+305        3700 female 2008
+306        4550   male 2008
+307        3200 female 2008
+308        4300   male 2008
+309        3350 female 2008
+310        4100   male 2008
+311        3600   male 2008
+312        3900 female 2008
+313        3850 female 2008
+314        4800   male 2008
+315        2700 female 2008
+316        4500   male 2008
+317        3950   male 2008
+318        3650 female 2008
+319        3550   male 2008
+320        3500 female 2008
+321        3675 female 2009
+322        4450   male 2009
+323        3400 female 2009
+324        4300   male 2009
+325        3250   male 2009
+326        3675 female 2009
+327        3325 female 2009
+328        3950   male 2009
+329        3600 female 2009
+330        4050   male 2009
+331        3350 female 2009
+332        3450   male 2009
+333        3250 female 2009
+334        4050   male 2009
+335        3800   male 2009
+336        3525 female 2009
+337        3950   male 2009
+338        3650 female 2009
+339        3650 female 2009
+340        4000   male 2009
+341        3400 female 2009
+342        3775   male 2009
+343        4100   male 2009
+344        3775 female 2009</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>penguins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
+ 4 Adelie  Torgersen           NA            NA           NA      NA &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
+ 6 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 7 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
+ 8 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 9 Adelie  Torgersen           34.1          18.1        193    3475 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2        190    4250 &lt;NA&gt;   2007
+# … with 334 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>penguins <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="tibble-1" class="slide level2 smaller">
+<h2><code>tibble</code></h2>
+<ul>
+<li><p>{tibble} permite tener nombre de columnas que no son validos como nombres de objetos.</p></li>
+<li><p>pueden tener espacios o contener carácteres especiales.</p></li>
+</ul>
+<p>Por ejemplo</p>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Carácteres especiales</a></li><li><a href="#tabset-3-2">Incluso emojis</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>tb <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb20-2"><a href="#cb20-2"></a>      <span class="st">`</span><span class="at">1</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb20-3"><a href="#cb20-3"></a>     <span class="st">`</span><span class="at"> </span><span class="st">`</span> <span class="ot">=</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">1</span>,</span>
+<span id="cb20-4"><a href="#cb20-4"></a>     <span class="st">`</span><span class="at">país</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">5</span>)))</span>
+<span id="cb20-5"><a href="#cb20-5"></a>tb </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+    `1`   ` `  país
+  &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+1     1     5     0
+2     2     4     0
+3     3     3    -1
+4     4     2     1
+5     5     1     1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2">
+<p>`<code>{r} library(emo) paises &lt;- c(emo::ji('chile'),emo::ji('argentina'),emo::ji('brazil')) names(tb) &lt;- paises tb</code></p>
+</div>
+</div>
+</div>
+</section>
+<section id="tibble-indexación" class="slide level2">
+<h2><code>tibble:</code> Indexación</h2>
+<p><strong>Indexación:</strong> Extraer datos de un <code>tibble</code> (<code>[]</code>) siempre devuelve otro <code>tibble</code> y nunca un vector (a diferencia de los objetos <code>data.frame</code> estándar).</p>
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">data.frame()</a></li><li><a href="#tabset-4-2">tibble()</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">data.frame</span>(penguins)[,<span class="st">"species"</span>]  <span class="sc">|&gt;</span>  <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "factor"</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>penguins[,<span class="st">"species"</span>] <span class="sc">|&gt;</span>  <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="tibble-indexación-1" class="slide level2">
+<h2><code>tibble</code>: indexación</h2>
+<p><code>Coincidencia parcial:</code> la indexación de un tibble no permite la coincidencia parcial, es decir, siempre debe proporcionar el nombre completo de la columna.</p>
+<div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">data.frame()</a></li><li><a href="#tabset-5-2">tibble()</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">data.frame</span>(penguins)<span class="sc">$</span>spec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+  [8] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [15] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [22] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [29] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [36] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [43] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [50] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [57] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [64] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [71] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [78] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [85] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [92] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+ [99] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[106] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[113] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[120] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[127] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[134] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[141] Adelie    Adelie    Adelie    Adelie    Adelie    Adelie    Adelie   
+[148] Adelie    Adelie    Adelie    Adelie    Adelie    Gentoo    Gentoo   
+[155] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[162] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[169] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[176] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[183] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[190] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[197] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[204] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[211] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[218] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[225] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[232] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[239] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[246] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[253] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[260] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[267] Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo    Gentoo   
+[274] Gentoo    Gentoo    Gentoo    Chinstrap Chinstrap Chinstrap Chinstrap
+[281] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[288] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[295] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[302] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[309] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[316] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[323] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[330] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[337] Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap Chinstrap
+[344] Chinstrap
+Levels: Adelie Chinstrap Gentoo</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>penguins<span class="sc">$</span>spec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Unknown or uninitialised column: `spec`.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="pipes-r-base-magrittr" class="title-slide slide level1 center" data-background-color="darkblue">
+<h1>Pipes: <br> R-base: |&gt; <br> {magrittr}: %&gt;%</h1>
+
+</section>
+<section id="conceptos-sobre-los-pipes" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<ul>
+<li><p>El pipe de <code>{magrittr}</code> fue introducido alrededor del 2014 y ha sido ampliamente utilizado.</p></li>
+<li><p>Un esfuerzo conjunto entre R-core, el equipo de <code>{tidyverse}</code> y otros; han desarrollado un pipe <code>|&gt;</code> para R base, el que está disponible desde R 4.1.0 en 2021.</p></li>
+</ul>
+</section>
+<section id="conceptos-sobre-los-pipes-1" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<h3 id="por-qué-utilizar-los-pipes">¿Por qué utilizar los pipes?</h3>
+<p>Los operadores pipes proporcionan una alternativa a la llamada de funciones</p>
+<p>Un ejemplo simple</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">h</span>(<span class="fu">g</span>(<span class="fu">f</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Muchos encontramos este tipo de funciones anidadas difícil de leer.</p>
+<ul>
+<li><p>El orden en como se llama la función <code>f</code>, luego, <code>g</code>, luego, <code>h</code>.</p></li>
+<li><p>Es a la inversa de como aparece el código</p></li>
+</ul>
+<p>El codigo tiene que leerse desde dentro hacia afuera.</p>
+</section>
+<section id="conceptos-sobre-los-pipes-2" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<p>Usando el operador pipe para la expresión</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">h</span>(<span class="fu">g</span>(<span class="fu">f</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Se puede escribir como:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>x <span class="sc">|&gt;</span> <span class="fu">f</span>() <span class="sc">|&gt;</span> <span class="fu">g</span>() <span class="sc">|&gt;</span> <span class="fu">h</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Evaluando la expresión, el resultado LHS</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>x <span class="sc">|&gt;</span> <span class="fu">f</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>es implicitamente insertado como el primer argumento en RHS y evaluado como</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">f</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="conceptos-sobre-los-pipes-3" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<p>Una definición simplificada de los pipes</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="st">`</span><span class="at">|&gt;</span><span class="st">`</span> <span class="ot">=</span> <span class="cf">function</span>(LHS,RHS) <span class="fu">RHS</span>(LHS)</span>
+<span id="cb36-2"><a href="#cb36-2"></a></span>
+<span id="cb36-3"><a href="#cb36-3"></a>x <span class="sc">|&gt;</span> f <span class="ot">=</span> <span class="fu">f</span>(x)</span>
+<span id="cb36-4"><a href="#cb36-4"></a></span>
+<span id="cb36-5"><a href="#cb36-5"></a>x <span class="sc">|&gt;</span> <span class="fu">f</span>() <span class="sc">|&gt;</span> <span class="fu">g</span>() <span class="ot">=</span> <span class="fu">g</span>(<span class="fu">f</span>(x))</span>
+<span id="cb36-6"><a href="#cb36-6"></a></span>
+<span id="cb36-7"><a href="#cb36-7"></a>x <span class="sc">|&gt;</span> <span class="fu">f</span>() <span class="sc">|&gt;</span> <span class="fu">g</span>() <span class="sc">|&gt;</span> <span class="fu">h</span>() <span class="ot">=</span> <span class="fu">h</span>(<span class="fu">g</span>(<span class="fu">f</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="conceptos-sobre-los-pipes-4" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<p>Con un ejemplo</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>penguins[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">7</span>)] <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">subset</span>(<span class="at">select =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
+<span id="cb37-4"><a href="#cb37-4"></a>  <span class="fu">apply</span>(<span class="dv">2</span>,mean,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g 
+         38.79139          18.34636         189.95364        3700.66225 
+             year 
+       2008.01316 </code></pre>
+</div>
+</div>
+</section>
+<section id="conceptos-sobre-los-pipes-5" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<p>En formato de funciones anidadas esto sería:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">apply</span>(<span class="fu">subset</span>(<span class="fu">subset</span>(penguins[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">7</span>)],species <span class="sc">==</span> <span class="st">'Adelie'</span>),<span class="at">select =</span> <span class="sc">-</span>species),<span class="dv">2</span>,mean,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g 
+         38.79139          18.34636         189.95364        3700.66225 
+             year 
+       2008.01316 </code></pre>
+</div>
+</div>
+</section>
+<section id="conceptos-sobre-los-pipes-6" class="slide level2">
+<h2>Conceptos sobre los pipes</h2>
+<p>Otra forma de reducir el uso de funciones anidadas es con objetos temporales</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>temp1 <span class="ot">&lt;-</span> <span class="fu">subset</span>(penguins[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">7</span>)],species <span class="sc">==</span> <span class="st">'Adelie'</span>)</span>
+<span id="cb41-2"><a href="#cb41-2"></a>temp2 <span class="ot">&lt;-</span> <span class="fu">subset</span>(temp1, <span class="at">select =</span> <span class="sc">-</span>species) </span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="fu">apply</span>(temp2, <span class="dv">2</span>,mean,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g 
+         38.79139          18.34636         189.95364        3700.66225 
+             year 
+       2008.01316 </code></pre>
+</div>
+</div>
+<p>Es una opción, pero:</p>
+<ul>
+<li>el código luce más desordenado</li>
+<li>es realmente difícl encontrar buenos nombres para variables temporales</li>
+<li>usar nombres generico como <code>tmp</code> puede ser contraproducente</li>
+</ul>
+</section>
+<section id="magrittr-el-operador-pipe" class="slide level2" data-background-image="https://raw.githubusercontent.com/tidyverse/magrittr/master/man/figures/logo.png" data-background-position="95% 5%" data-background-size="7.5%" data-layout="true">
+<h2><code>{magrittr}:</code> el operador pipe</h2>
+<p><code>magrittr</code> viene con varios operadores:</p>
+<ul>
+<li><strong>Operador Pipe:</strong> <code>%&gt;%</code><br><br></li>
+<li><strong>Operador de asignación:</strong> <code>%&lt;&gt;%</code><br><br></li>
+<li><strong>Operador “Tee”:</strong> <code>%T&gt;%</code><br><br></li>
+<li><strong>Operador de exposición:</strong> <code>%$%</code></li>
+</ul>
+</section>
+<section id="magrittr-el-operador-pipe-1" class="slide level2" data-background-image="https://raw.githubusercontent.com/tidyverse/magrittr/master/man/figures/logo.png" data-background-position="95% 5%" data-background-size="7.5%" data-layout="true">
+<h2><code>{magrittr}:</code> el operador pipe</h2>
+<p>Esencialmente, estos operadores tienen como objetivo mejorar la legibilidad de su código de varias maneras:</p>
+<div>
+<ul>
+<li class="fragment">organice las operaciones en una tubería fácilmente legible de comandos encadenados (de izquierda a derecha),</li>
+<li class="fragment">evitar llamadas a funciones anidadas (de adentro hacia afuera),</li>
+<li class="fragment">minimizar el uso de asignaciones de variables locales (&lt;-) y definiciones de funciones, y</li>
+<li class="fragment">elimine fácilmente pasos en su tubería sin romper el código.</li>
+</ul>
+</div>
+</section>
+<section id="magrittr-el-operador-pipe-2" class="slide level2">
+<h2>4.1 <code>magrittr</code>: el operador pipe</h2>
+<p><strong>Pipe básico:</strong> enviar un valor u objeto (LHS) a la siguiente llamada de función (RHS) al <strong>primer</strong> argumento</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb43-2"><a href="#cb43-2"></a>x <span class="sc">%&gt;%</span> f                            <span class="co"># equivalente a: f(x)</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a>x <span class="sc">%&gt;%</span> <span class="fu">f</span>(y)                         <span class="co"># equivalente a: f(x, y)</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a>x <span class="sc">%&gt;%</span> f <span class="sc">%&gt;%</span> g <span class="sc">%&gt;%</span> h                <span class="co"># equivalente a: h(g(f(x)))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="magrittr-el-operador-pipe-3" class="slide level2">
+<h2><code>magrittr</code>: el operador pipe</h2>
+<p><strong>Pipe con marcador de posición:</strong> enviar un valor u objeto (LHS) a la siguiente llamada de función (RHS) a <strong>cualquier</strong> argumento</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>x <span class="sc">%&gt;%</span> <span class="fu">f</span>(.)                         <span class="co"># equivalente a: x %&gt;% f</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a>x <span class="sc">%&gt;%</span> <span class="fu">f</span>(y, .)                      <span class="co"># equivalente a: f(y, x)</span></span>
+<span id="cb44-3"><a href="#cb44-3"></a>x <span class="sc">%&gt;%</span> <span class="fu">f</span>(y, <span class="at">z =</span> .)                  <span class="co"># equivalente a: f(y, z = x)</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a>x <span class="sc">%&gt;%</span> <span class="fu">f</span>(<span class="at">y =</span> <span class="fu">nrow</span>(.), <span class="at">z =</span> <span class="fu">ncol</span>(.))  <span class="co"># equivalente a: f(x, y = nrow(x), z = ncol(x))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="magrittr-el-operador-pipe-4" class="slide level2">
+<h2><code>magrittr</code>: el operador pipe</h2>
+<p><strong>Creando funciones y pipelines:</strong> una secuencia de código que comienza con el marcador de posición (<code>.</code>) devuelve una función que se puede usar para aplicar posteriormente la canalización a valores concretos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>f <span class="ot">&lt;-</span> . <span class="sc">%&gt;%</span> cos <span class="sc">%&gt;%</span> sin             <span class="co"># equivalente a: f &lt;- function(.) sin(cos(.))</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="fu">f</span>(<span class="dv">20</span>)                              <span class="co"># equivalente a: el pipeline 20 %&gt;% cos %&gt;% sin</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><sup>1</sup></p>
+<aside><ol class="aside-footnotes"><li id="fn1" role="doc-endnote"><p><em>Nota: Encuentre más información sobre <code>%&gt;%</code> corriendo en R <code>vignette("magrittr")</code>. Tipear <code>%&gt;%</code> usando el atajo: Ctrl + Shift + M.</em></p></li></ol></aside></section>
+<section id="magrittr-el-operador-pipe-5" class="slide level2">
+<h2><code>magrittr</code>: el operador pipe</h2>
+<p><strong>Pregunta:</strong> ¿¿Cuál es la masa corporal promedio en gramos de todos los pingüinos observados en el año 2007 (después de excluir los valores faltantes)?</p>
+<p><strong>Sin pipes:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">mean</span>(<span class="fu">subset</span>(penguins, year <span class="sc">==</span> <span class="dv">2007</span>)<span class="sc">$</span>body_mass_g, <span class="at">na.rm =</span> T)</span>
+<span id="cb46-2"><a href="#cb46-2"></a></span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="co"># tambi+en:</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a>peng_bm_2007 <span class="ot">&lt;-</span> <span class="fu">subset</span>(penguins, year <span class="sc">==</span> <span class="dv">2007</span>)<span class="sc">$</span>body_mass_g</span>
+<span id="cb46-5"><a href="#cb46-5"></a><span class="fu">mean</span>(peng_bm_2007, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="magrittr-el-operador-pipe-6" class="slide level2">
+<h2><code>magrittr</code>: el operador pipe</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>En un mundo con pipes:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="#cb47-2"></a>  <span class="fu">subset</span>(year <span class="sc">==</span> <span class="dv">2007</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="#cb47-3"></a>  .<span class="sc">$</span>body_mass_g <span class="sc">%&gt;%</span> </span>
+<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">mean</span>(<span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>¡El estilo secuencial mejora la legibilidad!</li>
+<li>¡Menor complejidad que descifrar funciones anidadas!</li>
+<li>¡No es necesario almacenar resultados intermedios!</li>
+<li>¡Modificación modular paso-a-paso de pipes!</li>
+</ul>
+</div>
+</div>
+<p><sup>1</sup></p>
+<aside><ol class="aside-footnotes"><li id="fn2" role="doc-endnote"><p><em>Nota: A partir de la versión <code>4.1.0</code>, <code>R</code> base viene con un operador pipe nativo (<code>|&gt;</code>).</em></p></li></ol></aside></section>
+<section id="magrittr-el-operador-pipe-7" class="slide level2 smaller">
+<h2><code>magrittr</code>: el operador pipe</h2>
+<p><strong>Pipes avanzados:</strong> Utilice los operadores de tuberías más avanzados para agilizar aún más su flujo de trabajo.</p>
+<div class="panel-tabset">
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Tee Pipe</a></li><li><a href="#tabset-6-2">Pipe de exposición</a></li><li><a href="#tabset-6-3">Pipe de asignación</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1">
+<p><code>%T&gt;%</code> se puede utilizar para activar el efecto secundario de una función, por ejemplo, para trazar o imprimir resultados</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>penguins[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">c</span>(<span class="st">"island"</span>, <span class="st">"bill_length_mm"</span>)] <span class="sc">%T&gt;%</span> print <span class="sc">%&gt;%</span> .<span class="sc">$</span>bill_length_mm <span class="sc">%&gt;%</span> <span class="fu">mean</span>(<span class="at">na.rm=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  island    bill_length_mm
+  &lt;fct&gt;              &lt;dbl&gt;
+1 Torgersen           39.1
+2 Torgersen           39.5
+3 Torgersen           40.3
+4 Torgersen           NA  
+5 Torgersen           36.7</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 38.9</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2">
+<p><code>%$%</code> expone los nombres en el objeto LHS a la expresión RHS. Esto es útil si la expresión RHS no permite un argumento <code>data</code> separado.</p>
+<div class="cell" data-fig.asp="0.618">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb51-2"><a href="#cb51-2"></a>penguins <span class="sc">%$%</span> <span class="fu">plot</span>(species, bill_length_mm)  <span class="co"># equivalente a: plot(penguins$species, penguins$bill_length_mm)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img data-src="slides_tibbles_pipes_files/figure-revealjs/unnamed-chunk-31-1.png" width="576"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-3">
+<p><code>%&lt;&gt;%</code> se puede utilizar de forma equivalente al operador de asignación base <code>R</code> (<code>&lt;-</code>). Reasigna el resultado del pipeline a la variable inicial.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>var <span class="ot">&lt;-</span> penguins<span class="sc">$</span>bill_length_mm</span>
+<span id="cb52-2"><a href="#cb52-2"></a></span>
+<span id="cb52-3"><a href="#cb52-3"></a>var <span class="sc">%&lt;&gt;%</span> <span class="fu">mean</span>(<span class="at">na.rm=</span>T)</span>
+<span id="cb52-4"><a href="#cb52-4"></a></span>
+<span id="cb52-5"><a href="#cb52-5"></a>var</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43.92193</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="por-qué-un-pipe-base" class="slide level2">
+<h2>¿Por qué un pipe base?</h2>
+<p>El pipe de <code>{magrittr}</code> ha sido muy exitoso.</p>
+<p>Sin embargo, tiene algunos problemas:</p>
+<ul>
+<li><p>rastrear errores puede ser mas complejo de lo que uno esperaría</p></li>
+<li><p>hay mayor sobrecarga computacional que puede ser significativa</p></li>
+<li><p>hay un número de características que son raramente usadas y que agregan complejidad a la mantención.</p></li>
+</ul>
+</section>
+<section id="por-qué-un-pipe-base-1" class="slide level2">
+<h2>¿Por qué un pipe base?</h2>
+<p>Ahora que el concepto está bien fundado, fue rasonable incorporarlo a R base.</p>
+<ul>
+<li><p>permite crear código sin la dependencia de un paquete que contenga la función del operador.</p></li>
+<li><p>la idea principal de agregar un pipe a R base fue en primer lugar propuesta por varios miembros del equipo de <code>{tidyverse}</code></p></li>
+<li><p>el resultado a la fecha ha sido un esfuerzo colaborativo entre los equipo de <code>{tidyverse}</code>, R core y varios miembros de la comunidad R, en particular Duncan Murdoch.</p></li>
+</ul>
+</section>
+<section id="pasar-como-primer-argumento-al-pipe" class="slide level2 smaller">
+<h2>Pasar como primer argumento al pipe <code>%&gt;%</code></h2>
+<ul>
+<li>{magrittr}: %&gt;%
+<ul>
+<li>utiliza el punto (.)</li>
+<li>en un principio era necesario de utilizar siempre</li>
+<li>ahora solo se utiliza cuando no va como primer argumento</li>
+</ul></li>
+</ul>
+<div class="panel-tabset">
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Antes</a></li><li><a href="#tabset-7-2">Ahora</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="#cb54-2"></a>  <span class="fu">subset</span>(<span class="at">x =</span> ., species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3"></a>  <span class="fu">print</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 152 × 8
+  species island    bill_length_mm bill_depth_mm flipper_l…¹ body_…² sex    year
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;       &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7         181    3750 male   2007
+2 Adelie  Torgersen           39.5          17.4         186    3800 fema…  2007
+3 Adelie  Torgersen           40.3          18           195    3250 fema…  2007
+# … with 149 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="#cb56-2"></a>  <span class="fu">subset</span>(., species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3"><a href="#cb56-3"></a>  <span class="fu">print</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 152 × 8
+  species island    bill_length_mm bill_depth_mm flipper_l…¹ body_…² sex    year
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;       &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7         181    3750 male   2007
+2 Adelie  Torgersen           39.5          17.4         186    3800 fema…  2007
+3 Adelie  Torgersen           40.3          18           195    3250 fema…  2007
+# … with 149 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb58-2"><a href="#cb58-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 152 × 8
+   species island    bill_length_mm bill_depth_mm flipper_…¹ body_…² sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema…  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema…  2007
+ 4 Adelie  Torgersen           NA            NA           NA      NA &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3        193    3450 fema…  2007
+ 6 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 7 Adelie  Torgersen           38.9          17.8        181    3625 fema…  2007
+ 8 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 9 Adelie  Torgersen           34.1          18.1        193    3475 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2        190    4250 &lt;NA&gt;   2007
+# … with 142 more rows, and abbreviated variable names ¹​flipper_length_mm,
+#   ²​body_mass_g</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pasar-como-primer-argumento-al-pipe-1" class="slide level2 smaller">
+<h2>Pasar como primer argumento al pipe <code>|&gt;</code></h2>
+<ul>
+<li>En la versión 4.1.0 de R base: |&gt;</li>
+</ul>
+<p>Funciona bien asignando al primer argumento de la función <code>RHS</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb60-2"><a href="#cb60-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb60-3"><a href="#cb60-3"></a>  <span class="fu">subset</span>(<span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">7</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb60-4"><a href="#cb60-4"></a>  <span class="fu">apply</span>(<span class="dv">2</span>, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g 
+         38.79139          18.34636         189.95364        3700.66225 
+             year 
+       2008.01316 </code></pre>
+</div>
+</div>
+</section>
+<section id="otros-argumentos-a-los-pipes" class="slide level2 smaller">
+<h2>Otros argumentos a los pipes <code>|&gt;</code></h2>
+<div class="panel-tabset">
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">{magrittr} `%&gt;%</a></li><li><a href="#tabset-8-2">R 4.1.0 <code>|&gt;</code></a></li><li><a href="#tabset-8-3">R 4.2.0 <code>|&gt;</code></a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1">
+<p>El punto usado por <code>{magrittr}</code> puede no ser facilmente visible</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb62-2"><a href="#cb62-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = bill_length_mm ~ flipper_length_mm, data = .)
+
+Coefficients:
+      (Intercept)  flipper_length_mm  
+          13.5871             0.1327  </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2">
+<ul>
+<li><p>En la versión 4.1.0 de R base: |&gt;</p></li>
+<li><p>Implicitamente solo admite como primer argumento</p></li>
+<li><p>Para otros argumentos se debe realizar:</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb64-2"><a href="#cb64-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb64-3"><a href="#cb64-3"></a>  (\(d) <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, <span class="at">data =</span> d))()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = bill_length_mm ~ flipper_length_mm, data = d)
+
+Coefficients:
+      (Intercept)  flipper_length_mm  
+          13.5871             0.1327  </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-3">
+<ul>
+<li><p>En la versión 4.2.0 de R base: |&gt;</p></li>
+<li><p>Se introduce el marcador de posición (placeholder) como un guion bajo <code>_</code></p></li>
+<li><p>El <code>placeholder</code> debe ser pasado a la función como argumento nombrado (ej, <code>arg = _</code>)</p></li>
+<li><p>No admite -aún- la sintaxis de extracción estandar.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb66-2"><a href="#cb66-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb66-3"><a href="#cb66-3"></a>  <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, <span class="at">data =</span>_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = bill_length_mm ~ flipper_length_mm, data = subset(penguins, 
+    species == "Adelie"))
+
+Coefficients:
+      (Intercept)  flipper_length_mm  
+          13.5871             0.1327  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb68-2"><a href="#cb68-2"></a>  <span class="fu">subset</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb68-3"><a href="#cb68-3"></a>  <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, <span class="at">data =</span>_) <span class="sc">|&gt;</span> </span>
+<span id="cb68-4"><a href="#cb68-4"></a>  _<span class="sc">$</span>coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: pipe placeholder can only be used as a named argument</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<img src="logo_hemera.jpg" class="slide-logo r-stretch"><div class="footer footer-default">
+<p>DTSE1017|2-2022</p>
+</div>
+</section></section>
+
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="slides_tibbles_pipes_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        setTimeout(function() {
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          let href = ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+        tippyHover(ref, function() {
+          var popup = window.document.createElement('div');
+          cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    });
+    </script>
+    
+
+</body></html>

@@ -1,0 +1,411 @@
+---
+title: "R: {readr} y {tidyr}"
+author: "Dr. Francisco Zambrano"
+format: 
+  revealjs:
+    slide-number: true
+    #title-slide-attributes: 
+      #data-background-image: "https://media.giphy.com/media/GldXiKXeO7hpczEHxt/giphy.gif"
+      #data-background-size: "contain"
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: simple
+    echo: true
+---
+
+# `{readr}`:<br> Leer datos de texto rectangulares {background-color="brown"}
+
+## `{readr}`: r datos de texto rectangulares {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/readr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`{readr}` proporciona funciones de lectura y escritura para multiples formatos de archivo:\
+- `read_delim()`: archivos de delimitacion general\
+- `read_csv()`: archivos separados por coma (,)\
+- `read_csv2()`: idem pero separados por punto y coma (;)\
+- `read_tsv()`: archivos separados por tabulación\
+- `read_fwf()`: archivos de ancho fijo\
+- `read_table()`: archivos separados por espacios en blanco\
+- `read_log()`: archivos web log
+
+Convenientemente, las funciones `write_*()` funcionan de forma analógica. Además, utilice el paquete `{readxl}` para archivos de Excel, el paquete `{haven}` para archivos Stata, el paquete `{googlesheets4}` para Google Sheets o el paquete `{rvest}` para archivos HTML.
+
+## `{readr}`: r datos de texto rectangulares {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/readr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Probémoslo leyendo los datos de los pingüinos.
+
+Con el propósito de ilustrar el `{readr}`, los datos `penguins` se escriben en un archivo csv a priori usando `write_csv(penguins, file = "./data/penguins.csv")`.
+
+<br>
+
+```{r}
+library(readr)
+args(read_csv)
+```
+
+<br>
+
+::: panel-tabset
+## El caso base
+
+```{r}
+data <- read_csv(file = "./data/penguins.csv")
+```
+
+## seleccionar columnas
+
+```{r}
+data <- read_csv(file = "./data/penguins.csv", col_select = c(species, island))
+```
+
+## nombre de columnas
+
+```{r}
+data <- read_csv(file = "./data/penguins.csv", col_names = paste("Var", 1:8, sep = "_"))
+```
+
+## saltar filas
+
+```{r}
+data <- read_csv(file = "./data/penguins.csv", skip = 5)
+```
+:::
+
+<br> <i>Nota: Al r con alguna función `read_*()` devuelve un objeto de tipo `tbl_df(tibble)`.</i>
+
+## `{readr}`: Leer datos de texto rectangulares {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/readr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`{readr}` imprime las especificaciones de la columna después de la importación. De forma predeterminada, intenta inferir el tipo de columna (por ejemplo, `int`, `dbl`, `chr`, `fct`, `date`, `lgl`) de las primeras 1000 filas y analiza las columnas en consecuencia.
+
+¡Intente hacer explícitas las especificaciones de las columnas! Es probable que se familiarice más con sus datos y vea advertencias si algo cambia inesperadamente.
+
+::: panel-tabset
+## Opción 1
+
+```{r, eval=F}
+read_csv(
+  file = "./data/penguins.csv",
+  col_types = cols(
+    species = col_character(),
+    year = col_datetime(format = "%Y"),
+    island = col_skip())
+  )
+```
+
+## Opción 2
+
+```{r, eval=F}
+read_csv(
+  file = "./data/penguins.csv",
+  col_types =  "_f?di"  # skip, factor, guess, double, integer, ...
+  )
+```
+:::
+
+Analizar solo las primeras 1000 filas es eficiente, pero puede dar lugar a conjeturas erróneas:
+
+```{r, eval=F}
+read_csv(file = "./data/penguins.csv", guess_max = 2000)
+```
+
+*Nota: Encuentre más información de `{readr}` en el [cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/data-import.pdf).*
+
+## `{readr}`: Leer datos de texto rectangulares {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/readr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+::: columns
+::: {.column width="50%"}
+Eventualmente, querrá dejar de usar los archivos `.xlsx` y `.csv` ya que no son capaces de almacenar de manera confiable sus metadatos (por ejemplo, tipos de datos).
+
+```{r, echo=F, fig.align='center', out.height='60%', out.width='60%'}
+knitr::include_graphics("../img/excel.jpg")
+```
+:::
+
+::: {.column width="50%"}
+`write_rds()` y `read_rds()` proporcionan una buena alternativa para [serializar](https://en.wikipedia.org/wiki/Serialization) sus objetos `R` (por ejemplo, `tibbles`, modelos) y almacenar como archivos `.rds`.
+
+```{r}
+library(palmerpenguins)
+penguins |> 
+  write_rds(file = "./data/penguins.rds")
+```
+
+```{r}
+penguins <- read_rds(file = "./data/penguins.rds")
+```
+
+<br>
+
+Tenga en cuenta que:\
+- `write_rds()` solo se puede usar para guardar un objeto a la vez,\
+- un archivo `.rds` cargado debe almacenarse en una nueva variable, es decir, recibir un nuevo nombre,\
+- ¡`read_rds()` preserva los tipos de datos!
+:::
+:::
+
+## `{readr}`: Leer datos de texto rectangulares {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/readr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+### Cheat Sheet `{readr}`
+
+[Hoja de ayuda {readr} (aka: Cheat Sheet)](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf)
+
+##  {background-image="../img/readr_cheat_sheet1.png" background-size="contain"}
+
+##  {background-image="../img/readr_cheat_sheet2.png" background-size="contain"}
+
+## Ejercicios `{readr}` {background-image="https://media4.giphy.com/media/toXKzaJP3WIgM/giphy.gif?cid=ecf05e472ub5emwuq75yu943xkkigmmxejee5fj0qh2x03xm&rid=giphy.gif&ct=g" background-position="90% 10%" background-size="15%" layout="true"}
+
+1)  leer los datos agromet del taller 1 con `read_rds()` `({readr})`
+
+2)  guardarlos en formato `.csv` con `write_csv()`
+
+3)  leer el archivo en formato `.csv` con `read_csv()`
+
+4)  comparar el formato de los objetos en (1) y en (2)
+
+# `{tidyr}`:<br> Ordenar datos desordenados {background-color="lightgreen"}
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`tidyr` proporciona varias funciones que lo ayudan a llevar sus datos al formato *tidy* (por ejemplo, remodelar datos, dividir columnas, manejar valores faltantes o anidar datos).
+
+```{r}
+penguins
+```
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Pivotiar:** Convierte entre formato largo y ancho usando `pivot_longer()` y `pivot_wider()`.
+
+::: panel-tabset
+## `pivot_longer()`
+
+```{r}
+library(tidyr)
+
+long_penguins <- penguins |> 
+  pivot_longer(
+    cols = c(species, island),
+    names_to = "variable", values_to = "value"
+  )
+
+long_penguins |> pillar::glimpse()
+```
+
+## `pivot_wider()`
+
+```{r}
+long_penguins |> 
+  pivot_wider(
+    names_from = "variable", values_from = "value"
+  )  |> 
+  pillar::glimpse()
+```
+:::
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+```{r, echo=FALSE,out.width='60%',fig.pos = 'center'}
+knitr::include_graphics("../img/tidyr-longer-wider.gif")
+```
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+```{r, echo=F, out.height='80%', out.width='80%'}
+knitr::include_graphics("https://raw.githubusercontent.com/apreshill/teachthat/master/pivot/pivot_longer_smaller.gif")
+```
+
+[^1]
+
+[^1]: *Source: [Allison Hill](https://github.com/apreshill/teachthat/blob/master/pivot/pivot_longer_smaller.gif)*
+
+Nota: Encuentre más información sobre `pivot_*()` en la [pivoting vignette](https://tidyr.tidyverse.org/articles/pivot.html).
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Anidamiento (nesting):** agrupa datos similares de modo que cada grupo se convierte en una sola fila en un marco de datos.
+
+::: panel-tabset
+## Data original
+
+```{r}
+penguins
+```
+
+## Data anidada
+
+```{r}
+#| echo =TRUE
+nested_penguins <- 
+  penguins |> 
+    nest(nested_data = c(island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex))
+
+nested_penguins
+```
+:::
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Rectangular:** desenreda las estructuras de datos anidadas (p. ej., JSON, HTML) y las lleva al formato de *datos ordenados*.
+
+::: panel-tabset
+## Data original
+
+```{r}
+penguins
+```
+
+## Data anidada
+
+```{r}
+nested_penguins
+```
+
+## pluck()
+
+Extraiga objetos individuales de una estructura de datos anidados mediante `purrr::pluck()`.
+
+```{r}
+nested_penguins |> purrr::pluck("nested_data", 1)
+```
+
+## unnest()
+
+Aplane las estructuras de datos anidadas mediante `tidyr::unnest()`.
+
+```{r}
+nested_penguins |> unnest(cols = c(nested_data)) 
+```
+
+## hoist()
+
+Extraiga selectivamente componentes individuales de un objeto en una estructura de datos anidados a través de
+
+`tidyr::hoist()`.
+
+```{r}
+nested_penguins |> hoist(nested_data, hoisted_col = "bill_length_mm")
+```
+:::
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Dividir** y **Combinar:** transforma una columna de un solo carácter en varias columnas y viceversa.
+
+::: panel-tabset
+## Data original
+
+```{r}
+penguins 
+```
+
+## unite()
+
+Contraiga varias columnas en una sola columna.
+
+```{r}
+penguins |> unite(col = "species_gender", c(species, sex), sep = "_", remove = T)
+```
+
+## separate()
+
+Separe una sola columna, que contenga varios valores, en varias columnas.
+
+```{r}
+penguins |> separate(bill_length_mm, sep = 2, into = c("cm", "mm"))
+```
+
+## separate_rows()
+
+Separe una sola columna, que contenga varios valores, en varias filas.
+
+```{r}
+penguins |> separate_rows(island, sep = "s")
+```
+:::
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Manejo de valores faltantes:** Elimina o reemplaza valores faltantes explícitos o implícitos (`NA`).
+
+```{r, echo=F}
+incompl_penguins <- tibble(
+  species = c(rep("Adelie", 2), rep("Gentoo", 1), rep("Chinstrap", 1)),
+  year = c(2007, 2008, 2008, 2007),
+  measurement = c(rnorm(3, mean = 50, sd = 15), NA)
+)
+```
+
+::: panel-tabset
+## Caso
+
+```{r}
+incompl_penguins
+```
+
+## expand()
+
+```{r}
+incompl_penguins |> 
+  expand(species,year)
+```
+
+## complete()
+
+Hacer explícitos los valores perdidos implícitos.
+
+```{r}
+incompl_penguins |>  
+  complete(species, year, fill = list(measurement = NA))
+```
+
+## drop_na()
+
+Hacer implícitos los valores perdidos explícitos.
+
+```{r}
+incompl_penguins |> 
+  drop_na(measurement)
+```
+
+## fill()
+
+Reemplace los valores faltantes con el valor siguiente/anterior.
+
+```{r}
+incompl_penguins |> 
+  fill(measurement, .direction = "down")
+```
+
+## replace_na()
+
+Reemplace los valores faltantes con un valor predefinido.
+
+```{r}
+incompl_penguins |>
+  replace_na(replace = list(measurement = mean(incompl_penguins$measurement, na.rm = T)))
+```
+:::
+
+*Nota: Encuentre más información y funciones en `{tidyr}`[cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/data-import.pdf).*
+
+## `{tidyr}`: Ordenar datos desordenados {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/tidyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+### Cheat Sheet `{tidyr}`
+
+[Hoja de ayuda {tidyr} (aka: Cheat Sheet)](https://raw.githubusercontent.com/rstudio/cheatsheets/main/tidyr.pdf)
+
+##  {background-image="../img/cheat_sheet_tidyr.png" background-size="contain"}
+
+## Ejercicios `{tidyr}` {.smaller .scrollable background-image="https://media2.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif?cid=ecf05e472ub5emwuq75yu943xkkigmmxejee5fj0qh2x03xm&rid=giphy.gif&ct=g" background-position="90% 10%" background-size="15%" layout="true"}
+
+1)  con los datos de `agromet` cree datos anidados por estación (station_id) considerando todas las variables climáticas.
+
+2)  de la data anidada extraiga el primer valor de la variable humedad relativa de la estación que se encuetra en la posición 5.
+
+3)  agregue la variable precipitación extraida de la columna anidada como una variable adicional
+
+4)  aplane (desanide) la variable de precipitación anterior.
+
+5)  Haga explicitos los valores NA implicitos de precipitación. Comparé la cantidad de observaciones con la data original.
+
+6)  relicé el rellenado de los valores NA de precipitación horaria tomando el valor anterior.

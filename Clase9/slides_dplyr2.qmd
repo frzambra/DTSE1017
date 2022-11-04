@@ -1,0 +1,297 @@
+---
+title: "R: {dplyr} (parte 2)"
+author: "Dr. Francisco Zambrano"
+format: 
+  revealjs:
+    slide-number: true
+    #title-slide-attributes: 
+      #data-background-image: "https://media.giphy.com/media/GldXiKXeO7hpczEHxt/giphy.gif"
+      #data-background-size: "contain"
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: simple
+    echo: true
+---
+
+```{r 'setup'}
+#| include: false
+library(palmerpenguins)
+library(dplyr)
+```
+
+# `{dplyr}`: Una gramática de la manipulación de datos {background-color="brown"}
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `rename()` cambia el nombre de las columnas
+
+Cambiar el nombre de la columna `body_mass_g` a `bm` y `sex` a `gender`.
+
+```{r}
+penguins |> rename(bm = body_mass_g, gender = sex) |>  
+  colnames()
+```
+
+Convertir el nombre de las columnas que incluyen el texto `"mm"` a mayuscula
+
+```{r}
+penguins |>  rename_with(.fn = toupper, .cols = contains("mm")) |>  
+  colnames()
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `relocate()` cambia el orden de las columnas
+
+::: columns
+::: {.column width="50%"}
+Cambiar el orden de las columnas en el `tibble` de acuerdo al siguiente squema:\
+1. colocar `species` despues de `body_mass_g`\
+2. colocar `sex` antes de `species`\
+3. colocar `island` al final
+
+```{r}
+penguins |>  
+  relocate(species, .after = body_mass_g) |> 
+  relocate(sex, .before = species) |> 
+  relocate(island, .after = last_col())  |> 
+  colnames()
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo=F, out.height='40%', out.width='40%', dpi=100, out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics(
+  "https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_relocate.png"
+)
+```
+:::
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `mutate()` transforma el valor de una columnas y/o crea una nueva columna.
+
+Crear una nueva variable `bm_kg` que refleje el `body_mass_g` en kilogramos.
+
+```{r}
+penguins |>  
+  mutate(bm_kg = body_mass_g / 1000, .keep = "all", .after = island)  |>  
+  slice_head(n = 5)
+```
+
+-   Use el argumento `.keep` para especificar que columnas mantener despues de la manipulación.
+-   Use el argumento `.before`/`.after` para especificar la posición de la nueva columna.
+-   Para sobrescribir una columna, sólo utilice el mismo nombre de columna.
+-   Para mantener sólo la columna nueva utilice `dplyr::transmute()`.
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `mutate()` transforma el valor de una columnas y/o crea una nueva columna.
+
+::: columns
+::: {.column width="50%"}
+Crear a *one-hot encoded* variable para `sex`.
+
+```{r}
+#| eval: false
+penguins |>  
+  mutate(
+    sex_binary = case_when(
+      sex == "male" ~ 1,
+      sex == "female" ~ 0),
+    .keep = "all", .after = island
+  ) |> 
+  slice_head(n = 3)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo=F, out.height='40%', out.width='40%', dpi=100, out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics(
+  "https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_case_when.png"
+)
+```
+:::
+:::
+
+```{r}
+#| echo: false
+penguins |>  
+  mutate(
+    sex_binary = case_when(
+      sex == "male" ~ 1,
+      sex == "female" ~ 0),
+    .keep = "all", .after = island
+  ) |> 
+  slice_head(n = 3)
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `mutate()` transforma el valor de una columnas y/o crea una nueva columna.
+
+::: columns
+::: {.column width="50%"}
+Transformar variables de mediciones a metros
+
+```{r}
+#| eval: false
+penguins |>  
+  mutate(
+    across(contains("mm"), .fns = \(x) x / 1000),
+    .keep = "all"
+  ) |>  
+  slice_head(n = 3)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo=F, out.height='40%', out.width='40%', out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics(
+  "https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_across.png"
+)
+```
+:::
+:::
+
+```{r}
+#| echo: false
+penguins |>  
+  mutate(
+    across(contains("mm"), .fns = \(x) x / 1000),
+    .keep = "all"
+  ) |>  
+  slice_head(n = 3)
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:**
+
+`across`:
+
+-   aplica la misma transformación a través de multiples columnas
+-   permite usar la sintaxis que se conoce de la función `select()`
+-   no requiere que explicitamente especifique un nombre de columna, ya que solo transforma columnas existentes
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `mutate()` transforma el valor de una columnas y/o crea una nueva columna.
+
+Definir `species`, `island` y `sex` como variables categóricas (ej. *factors*), usando `across()`.
+
+::: columns
+::: {.column width="50%"}
+Transformar variables de mediciones a metros
+
+```{r}
+#| eval: false
+penguins  |>  
+  mutate(
+    across(where(is.character), as.factor),
+    .keep = "all"
+  ) |>  
+  slice_head(n = 3)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo=F, out.height='40%', out.width='40%', out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics(
+  "https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_across.png"
+)
+```
+:::
+:::
+
+```{r}
+#| echo: false
+penguins  |>  
+  mutate(
+    across(where(is.character), as.factor),
+    .keep = "all"
+  ) |>  
+  slice_head(n = 3)
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en datos agrupados:** `group_by()` particiona los datos basado en una o varias columnas.
+
+```{r}
+penguins |> group_by(species)
+```
+
+Use `group_keys()`, `group_indices()` and `group_vars()` para acceder a las llaves de grupos, indices de grupos por filas y variables de grupos.
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en datos agrupados:** `group_by()` particiona los datos basado en una o varias columnas.
+
+Internamente `group_by()` cambia la representación del `tibble` y lo trasnforma en un data frame agrupado (`grouped_df`). Esto permite operar en los subgrupos individualmente usando `summarise()`.
+
+**Operaciones en datos agrupados:** `summarise()` reduce datods agrupados en una sóla fila.
+
+::: panel-tabset
+## univariado
+
+```{r}
+penguins |>  group_by(species) |>  summarise(count = n(), .groups = "drop")
+```
+
+## bivariado
+
+```{r}
+penguins |>  group_by(species, sex)  |>  summarise(count = n(), .groups = "drop")
+```
+:::
+
+use `.groups =` para indicar que pasa con los grupos después de hacer el summarizado
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en datos agrupados:** `group_by()` particiona los datos basado en una o varias columnas.
+
+```{r}
+penguins |> 
+  group_by(species)  |> 
+  summarise(
+    across(contains("mm"), \(x) mean( x, na.rm = T), .names = "{.col}_avg"),
+    .groups = "drop"
+  )
+```
+
+Usando `group_by()`, seguido de `summarise()` y `ungroup()` refleja el paradigma **`dividir-aplicar-combinar`** en análisis de datos: Dividr los datos en partes, aplicar alguna función a los datos y luego unir los resultados.
+
+-   el verdadero potencial se desata si combina `group_by` y `summarise`
+-   Paradigma `dividir-aplicar-combinar` particularmente útil en procesamiento paralelo
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller .scrollable background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en datos agrupados:** `group_by()` particiona los datos basado en una o varias columnas.
+
+::: columns
+::: {.column width="60%"}
+```{r, echo=F, out.height='60%', out.width='60%', out.extra='style="float:left; padding:10px"', dpi=100}
+knitr::include_graphics("https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/group_by_ungroup.png")
+```
+:::
+
+::: {.column width="40%"}
+-   Nota: En lugar de usar `ungroup()`, también puede establecer el argumento `.groups` en `summarise()` igual a "drop".
+
+-   ¡Pero nunca olvide desagrupar sus datos, de lo contrario, puede encontrar errores más adelante en su análisis!
+:::
+:::
+
+## Ejercicios
+
+1.  Agrupe los datos de las climáticos de agromet por estación (`group_by`)
+2.  Haga un sumarizado de promedio mensual de las variables de temperatura para cada estación (`group_by`, `summarize` y `across`).
+3.  Renombre y reordene las variables como `temp_prom`, `temp_max` y `Temp_min` (`rename_with` y \`relocate\`\`)
+4.  Cree las columnas `var_temp` y `temp`, en formato largo que contenga las variables de `temp_prom`, `temp_max` y `Temp_min` y sus valores. (`pivot_longer`)
+5.  Ordene los datos anteriores de mayor a menor.
+6.  Vuelva a formato ancho los datos del punto anterior.
+7.  Caclule cuantos datos no faltantes (!is.na) tiene cada estacion para cada una de las variables.

@@ -1,0 +1,349 @@
+---
+title: "R: {dplyr}"
+author: "Dr. Francisco Zambrano"
+format: 
+  revealjs:
+    slide-number: true
+    #title-slide-attributes: 
+      #data-background-image: "https://media.giphy.com/media/GldXiKXeO7hpczEHxt/giphy.gif"
+      #data-background-size: "contain"
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: simple
+    echo: true
+---
+
+```{r 'setup'}
+#| include: false
+library(palmerpenguins)
+library(dplyr)
+```
+
+# `{dplyr}`: Una gramática de la manipulación de datos {background-color="brown"}
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`{dplyr}` proporciona un conjuntio de funciones para manipulación de data frames (ej. tibbles) mientras se basa en una gramática consistente. Las funciones se representan intuitivamente mediante "verbos" que reflejan las operaciones subyacentes y siempre generan un tibble nuevo o modificado.
+
+**Operaciones en filas:**\
+- `filter()` elige filas que cumplen uno o varios criterios lógicos\
+- `slice()` elige filas en función de su ubicación en los datos\
+- `arrange()` cambia el orden de las filas
+
+**Operaciones en columnas:**\
+- `select()` escoge respectivamente y elimina ciertas columnas\
+- `rename()` cambia los nombres de las columnas\
+- `relocate()` cambia el orden de las columnas\
+- `mutate()` transforma los valores de la columna y/o crea nuevas columnas
+
+**Operaciones en data agrupada:**\
+- `group_by()` divide los datos en función de una o varias columnas\
+- `summarise()` reduce un grupo de datos en una sola fila
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+::: columns
+::: {.column width="50%"}
+**Operaciones en filas:** `filter()` elige filas que cumplen uno o varios criterios lógicos
+
+Filtrar todos los pinguinos de `species` "Adelie".
+
+```{r, eval=F}
+penguins |> 
+  filter(species == "Adelie")
+```
+
+Filtrar para todos los pinguinos con un valor faltantes (NAs) en la columna `bill_length_mm`.
+
+```{r, eval=F}
+penguins |>  
+  filter(is.na(bill_length_mm))
+  # filter(!is.na(bill_length_mm))
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo=F, out.height='40%', out.width='40%', dpi=100, out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics(
+  "https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_filter.jpg"
+)
+```
+:::
+:::
+
+Filtre para todos los pingüinos observados antes del `año` 2008 o posteriores al `año` 2008 y donde la masa corporal (`body_mass_g`) esté entre 3.800 y 4.000 gramos.
+
+```{r, eval=F}
+penguins |>  
+  filter(between(body_mass_g, 3800, 4000) & (year < 2008 | year > 2008))
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en filas:** `slice()` elige filas en función de su ubicación en los datos
+
+::: panel-tabset
+## `slice()`
+
+Elige filas basads en el índice
+
+```{r}
+penguins |> 
+  slice(23:27)
+```
+
+## `slice_head()`
+
+Elige las primeras `n` filas (vice versa para `slice_tail()`).
+
+```{r}
+penguins |>  
+  slice_head(n = 5)  # alternativamente: slice_head(frac = 0.05)
+```
+
+## `slice_sample()`
+
+Elige una muestra aleatoria de `n` filas (con o sin remplazo).
+
+```{r}
+penguins |>  
+  slice_sample(n = 5)
+```
+
+## `slice_max()`
+
+Elige las `n` filas con los valores mayores (vice versa para `slice_min()`).
+
+```{r}
+penguins |>  
+  slice_max(bill_length_mm, n = 5)
+```
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en filas:** `arrange()` cambia el orden de las filas
+
+::: panel-tabset
+## Ascendente
+
+Devuleve las primeras cinco filas con la menor masa corporal (body mass)
+
+```{r}
+penguins |> 
+  arrange(body_mass_g)  |>  
+  slice_head(n = 5)  # equivalente a: slice_min(body_mass_g, n = 3)
+```
+
+## Descendente
+
+Devuleve los cinco pingüinos con la mayor masa corporal (body mass).
+
+```{r}
+penguins |>  
+  arrange(desc(body_mass_g)) |>  
+  slice_head(n = 5)  # equivalente a: slice_max(body_mass_g, n = 3)
+```
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `select()` escoge respectivamente y elimina ciertas columnas
+
+::: panel-tabset
+## `select()` por índice
+
+```{r}
+penguins |>  
+  select(1:3) |>  
+  glimpse()
+```
+
+## `select()` por nombre
+
+```{r}
+penguins |>  
+  select(species, island, bill_length_mm) |>  
+  glimpse()
+```
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `select()` escoge respectivamente y elimina ciertas columnas
+
+::: panel-tabset
+## `everything()`
+
+Selecciona todas las columnas
+
+```{r}
+penguins |>  
+  select(everything()) |> 
+  glimpse()
+```
+
+## `last_col()`
+
+Selecciona la última columna en el data frame
+
+```{r}
+penguins |>  
+  select(last_col())  |>  
+  glimpse()
+```
+
+## `starts_with()`
+
+Selecciona las columnas en que el nombre empieza por cierto texto
+
+```{r}
+penguins |>  
+  select(starts_with("bill")) |>  
+  glimpse()
+```
+
+## `ends_with()`
+
+Selecciona las columnas en que el nombre termina por cierto texto
+
+```{r}
+penguins |> 
+  select(ends_with("mm")) |>  
+  glimpse()
+```
+
+## `contains()`
+
+Selecciona las columnas cuyo conmbre contiene cierto texto
+
+```{r}
+penguins |>  
+  select(contains("e") & contains("a")) |>  
+  glimpse()
+```
+
+## `machtes()`
+
+Selecciona columnas basadas en una regular expression ([regex](https://www.rexegg.com/regex-quickstart.html)).
+
+```{r}
+penguins |>  
+  select(matches("_\\w*_mm$")) |>  
+  glimpse()
+```
+
+## `where()`
+
+Selecciona columnas para las cuales una función se evalua como `TRUE`
+
+```{r}
+penguins |>  
+  select(where(is.numeric)) |> 
+  glimpse()
+```
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller background-image="https://raw.githubusercontent.com/tidyverse/dplyr/master/man/figures/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Operaciones en columnas:** `select()` escoge respectivamente y elimina ciertas columnas
+
+¿Qué columnas serán devueltas por las siguientes consultas?
+
+```{r, eval=FALSE}
+penguins |> 
+  select(starts_with("s"))
+```
+
+<br>
+
+```{r, eval=FALSE}
+penguins |>  
+  select(ends_with("mm"))
+```
+
+<br>
+
+```{r, eval=FALSE}
+penguins |>  
+  select(contains("mm"))
+```
+
+<br>
+
+```{r, eval=FALSE}
+penguins |>  
+  select(-contains("mm"))
+```
+
+<br>
+
+```{r, eval=FALSE}
+penguins |>  
+  select(where(is.numeric) %>%  # equivalent to: select(where(is.numeric))
+  select(where(mean(na.rm = T) > 1000))
+```
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller}
+
+**Algunas consideraciones importantes utilizando fucniones**
+
+Diferencias entre `%>%` y `|>`
+
+Crear una función que seleccione las columnas que tienen al menos un `NA`
+
+::: panel-tabset
+## `%>%`
+
+```{r}
+#| echo: true
+penguins %>%   
+  dplyr::select(where(~any(is.na(.)))) %>% 
+  glimpse()
+```
+
+## `|>` (Crear una función)
+
+```{r}
+#| echo: true
+f <- function(x) any(is.na(x))
+
+penguins |>   
+  dplyr::select(where(fn = f)) |> 
+  glimpse()
+```
+
+## `|>` (función anónima 1)
+
+```{r}
+#| echo: true
+
+penguins |>   
+  dplyr::select(where(fn = function(x) any(is.na(x)))) |> 
+  glimpse()
+```
+
+## `|>` (función anónima 2)
+
+```{r}
+#| echo: true
+
+penguins |>   
+  dplyr::select(where(fn = \(x) any(is.na(x)))) |> 
+  glimpse()
+```
+:::
+
+## `{dplyr}`: Una gramática de la manipulación de datos {.smaller}
+
+**Ejercicios**
+
+1- Filtrar con los datos de agromet para las estaciones asignadas (ej., Pablo, Jessica y Lucas)\
+2- Filtrar los datos para los meses de Mayo a Julio en las estaciones asignadas.\
+3. Tome una muestra de 1000 filas de forma aleatoria sin reemplazo.\
+4. Para cada estación seleccione los valores máximos de precipitación horaria.\
+5. Identifique las estaciones que tienen los mayores valores de precipitación horaria.\
+6. Idem, pero para cada estación.\
+7. Seleccione las columnas que tienen temperatura.\
+8. Seleccione las columnas que tienen valores no numéricos.

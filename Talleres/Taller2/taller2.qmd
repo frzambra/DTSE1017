@@ -1,0 +1,111 @@
+---
+title: "Taller 2: Ordenar datos anidados"
+subtitle: "Minería de datos (DTSE1017)"
+author: "Francisco Zambrano"
+format:
+  html:
+    number-sections: true
+    number-depth: 3
+    smooth-scroll: true
+    code-fold: show
+    toc: true
+    html-math-method: katex
+    self-contained: true
+execute: 
+  cache: false
+editor: visual
+---
+
+## Descripción
+
+Durante el curso trabajaremos un problema de análisis de datos que deberán ir resolviendo en varios talleres. Este problema tiene como etapas la importación, ordenamiento, transformación, visualización, modelado y comunicación de los datos [(Whickam et al., 2022)](https://es.r4ds.hadley.nz/domardatos-intro.html)
+
+![](https://es.r4ds.hadley.nz/diagrams_w_text_as_path/es/data-science-wrangle.svg){align="center"}
+
+Los datos con los que trabajaremos corresponden a datos obtenidos de estaciones climáticas a lo largo de Chile. Estos tienen información sobre diferentes variables como: precipitación, temperatura, velocidad del viento, dirección del viento, radiación solar, humedad relativa, humedad de suelo, entre otras. Esta información es recolectada desde estaciones ubicadas en diferentes puntos a lo largo de Chile. La posición de cada estación está definida por una coordenada geográfica (longitud y latitud). Los datos obtenidos desde estas estaciones corresponden a series temporales de las diferentes variables.
+
+El mapa de abajo muestra la ubicación de las dos redes de estaciones con las que trabajaremos.
+
+```{r}
+#| echo: false
+#| message: false
+library(agrometR)
+library(agvAPI)
+library(sf)
+library(tidyr)
+library(tmap)
+
+data1_sf <- estaciones_agromet |> 
+  st_as_sf(coords = c('longitud','latitud'),crs = 4326)
+
+data2_sf <- estaciones_garces |> dplyr::filter(!is.na(lat)) |> 
+  st_as_sf(coords = c('lon','lat'),crs = 4326)
+
+tmap_mode('view')
+tm_shape(data1_sf$geometry) +
+  tm_dots(col='red',group = 'Estaciones AgrometR') +
+  tm_shape(data2_sf$geometry) +
+  tm_dots(col='blue',group = 'Estaciones Red privada')
+```
+
+## Data
+
+En el campus virtual en la sección `Actividades-> Talleres -> Taller 1` se encuentran los siguientes datos:
+
+-   `data_estaciones_agrometAPI.rds` : datos en las estaciones de la red [AGROMET](https://www.agromet.cl/) del `Ministerio de Agricultura` para el año 2021.
+
+-   `metadata_estaciones_agrometAPI.rds` : datos con información sobre las estaciones (ej: coordenadas, código ema, institución, region)
+
+-   `data_estaciones_agvAPI.rds` : datos en las estaciones de una red privada entre el `2022-09-01` y el `2022-09-06`
+
+-   `metadata_estaciones_agvAPI.rds` : datos con información sobre las estaciones (ej: coordenadas, serial)
+
+## Problema
+
+Para acceder a los datos de las dos redes de estaciones, se realiza mediante una [API](https://es.wikipedia.org/wiki/Web_API) (interfaz de programación de aplicaciones). Así, mediante programación (ej., paquete de R) es posible descargar los datos. En algunos casos el uso de las API permite la obtención de datos bien estructurados, sin embargo, no siempre sucede así. En este caso trabajaremos con dos escenarios:
+
+1)  datos estructurados obtenidos mediante API (agrometR)
+2)  datos desordenados obtenidos con diferentes estructuras (API AGV privada)
+
+El objetivo de los talleres del curso es poder importar, ordenar, transformar, visualizar y modelar estos dos set de datos.
+
+## Objetivos del taller 2
+
+El objetivo de este taller es poder ordenar datos obtenidos en forma de listas anidadas en R y llevarlos a un formato de datos `tidy` (ordenados).
+
+## Lo que debe entregar
+
+1)  Cada uno de los alumnos deberá trabajar con diferentes estaciones de `agromet` y `AGV`. La selección de estaciones se realizó de forma aleatoria. Los codigos de las estaciones para cada alumno se encuentra disponible en el campus virtual y es la siguiente
+
+    i)  Pablo: `station_id_agromet_Pablo.rds` y `station_id_agv_Pablo.rds`
+    ii) Lucas: `station_id_agromet_Lucas.rds` y `station_id_agv_Lucas.rds`
+    iii) Jesica: `station_id_agromet_Jesica.rds` y `station_id_agv_Jesica.rds`
+
+2) (30 pts) Debe crear un proyecto en `RStudio`. Este proyecto de RStudio debe tener las siguientes carpetas:
+  - `data\data_raw` :guardar datos brutos (ej. .csv)
+  - `data\data_proceseed` :guardar datos procesados en formato `tidy` (ej. .rds)
+  - `scripts\` :guardar los script en R con nombre en formato numerado (ej. 01_cargar_datos.R)
+  - `R\` :guardar las funciones creadas en R
+  - `reports\` :guardar los reportes creados en quarto
+  
+3) (30 pts) Debe agregar el proyecto de `RStudio` a un repositorio remoto en `github`. El repositorio en `github` debe tener dos ramas: 1) main y 2) gh-pages. La rama `main` debe tener "la menos" los siguientes archivos:
+  - `.gitignore` :preconfigurado para R y que no incluya la carpeta de data
+  - `reports/`*.qmd` :archivo quarto con las respuestas del taller
+  - `reports/`*.html` :archivo html generado con quarto
+  - `scripts/*.R` :script en R
+  - `R/*.R` :funciones creadas en R en caso de haber
+La rama `gh-pages` debe tener el archivo `*.html`
+
+4) (150pts) Utilizando `R-base`, `readr`, `tidyr` y lo visto de `{dplyr}` Debe extraer los datos de humedad de suelo a tres profundidades (30cm, 60cm y 90cm) desde el set de datos  `data_agvAPI.rds` y utilizar el set de datos `metadata_estaciones_agvAPI.rds` para extaer la información necesaria de las estaciones. Debe realizarlo con todas las estaciones asignadas a usted. Debe crear un set de datos `tidy` (ej, tibble) que tenga las columnas de: serial, profundidad, fecha_hora, valor. Este set de datos debe contener los datos de humedad de suelo de todas las estaciones `AGV` asignadas a usted.
+
+5) (20pts) El set de datos obtenido en el punto anterior lo debe ordenar de mayor a menor utilizando la función `dplyr::arrange`. 
+
+6) (20pts) Utilice la función `tidyr::separate` para crear una columna de `fecha` y otra de `hora`, a partir de la columnas `fecha_hora.`
+
+7) (40pts) Haga un análisis de los valores faltantes (NAs) explicitos e implicitos. Utilice el paquete `{tidyr}`. Lo importante es saber si se encuentran valores para todas las fechas y en caso que no saber cuantos datos faltan.
+
+
+
+## Entrega
+
+Viernes 21 de octubre hasta las 14:00

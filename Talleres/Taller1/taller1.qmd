@@ -1,0 +1,109 @@
+---
+title: "Taller 1: Tipos y estructuras de datos en R"
+subtitle: "Minería de datos (DTSE1017)"
+author: "Francisco Zambrano"
+format:
+  html:
+    number-sections: true
+    number-depth: 3
+    smooth-scroll: true
+    code-fold: show
+    toc: true
+    html-math-method: katex
+    self-contained: true
+execute: 
+  cache: false
+editor: visual
+---
+
+## Descripción
+
+Durante el curso trabajaremos un problema de análisis de datos que deberán ir resolviendo en varios talleres. Este problema tiene como etapas la importación, ordenamiento, transformación, visualización, modelado y comunicación de los datos [(Whickam et al., 2022)](https://es.r4ds.hadley.nz/domardatos-intro.html)
+
+![](https://es.r4ds.hadley.nz/diagrams_w_text_as_path/es/data-science-wrangle.svg){align="center"}
+
+Los datos con los que trabajaremos corresponden a datos obtenidos de estaciones climáticas a lo largo de Chile. Estos tienen información sobre diferentes variables como: precipitación, temperatura, velocidad del viento, dirección del viento, radiación solar, humedad relativa, humedad de suelo, entre otras. Esta información es recolectada desde estaciones ubicadas en diferentes puntos a lo largo de Chile. La posición de cada estación está definida por una coordenada geográfica (longitud y latitud). Los datos obtenidos desde estas estaciones corresponden a series temporales de las diferentes variables.
+
+El mapa de abajo muestra la ubicación de las dos redes de estaciones con las que trabajaremos.
+
+```{r}
+#| echo: false
+#| message: false
+library(agrometR)
+library(agvAPI)
+library(sf)
+library(tidyr)
+library(tmap)
+
+data1_sf <- estaciones_agromet |> 
+  st_as_sf(coords = c('longitud','latitud'),crs = 4326)
+
+data2_sf <- estaciones_garces |> dplyr::filter(!is.na(lat)) |> 
+  st_as_sf(coords = c('lon','lat'),crs = 4326)
+
+tmap_mode('view')
+tm_shape(data1_sf$geometry) +
+  tm_dots(col='red',group = 'Estaciones AgrometR') +
+  tm_shape(data2_sf$geometry) +
+  tm_dots(col='blue',group = 'Estaciones Red privada')
+```
+
+## Data
+
+En el campus virtual en la sección `Actividades-> Talleres -> Taller 1` se encuentran los siguientes datos:
+
+-   `data_estaciones_agrometAPI.rds` : datos en las estaciones de la red [AGROMET](https://www.agromet.cl/) del `Ministerio de Agricultura` para el año 2021.
+
+-   `metadata_estaciones_agrometAPI.rds` : datos con información sobre las estaciones (ej: coordenadas, código ema, institución, region)
+
+-   `data_estaciones_agvAPI.rds` : datos en las estaciones de una red privada entre el `2022-09-01` y el `2022-09-06`
+
+-   `metadata_estaciones_agvAPI.rds` : datos con información sobre las estaciones (ej: coordenadas, serial)
+
+## Problema
+
+Para acceder a los datos de las dos redes de estaciones, se realiza mediante una [API](https://es.wikipedia.org/wiki/Web_API) (interfaz de programción de aplicaciones). Así, mediante programación (ej., paquete de R) es posible descargar los datos. En algunos casos el uso de las API permite la obtención de datos bien estructurados, sin embargo, no siempre sucede así. En este caso trabajaremos con dos escenarios:
+
+1)  datos estructurados obtenidos mediante API (agrometR)
+2)  datos desordenados obtenidos con diferentes estructuras (API AGV privada)
+
+El objetivo de los talleres del curso es poder importar, ordenar, transformar, visualizar y modelar estos dos set de datos.
+
+## Objetivos del taller 1
+
+El principal objetivo de este taller es familiarizarse con los datos que vamos a trabajar durante el curso. Además, de poder generar set de datos ordenados (tidy).
+
+## Lo que debe entregar
+
+0)  Cada uno de los alumnos deberá trabajar con diferentes estaciones de `agromet` y `AGV`. La selección de estaciones se realizó de forma aleatoria. Los codigos de las estaciones para cada alumno se encuentra disponible en el campus virtual y es la siguiente
+
+    i)  Pablo: `station_id_agromet_Pablo.rds` y `station_id_agv_Pablo.rds`
+    ii) Lucas: `station_id_agromet_Lucas.rds` y `station_id_agv_Lucas.rds`
+    iii) Jesica: `station_id_agromet_Jesica.rds` y `station_id_agv_Jesica.rds`
+
+1)  Reconocer los tipos y estructuras de datos en los que están almacenados los datos de `agromet` y `AGV` en R (ej: data.frame, lista, matrix, character, etc). Entregar una descripción para los dos set de datos.
+
+2)  Para los set de datos `data_agvAPI` cree una función `apply` (`apply`,`lapply`,`sapply`) que permita determinar la cantidad de variables que tiene cada estación. Cree un `data.frame` con una columna indicando el serial de cada estación y otra columna con el número de variables para cada estación.
+
+3)  Para los datos `data_agrometAPI` cree una función `apply` (`apply`,`lapply`,`sapply`) que permita calcular la suma diaria de precipitación y los promedios diarios de temperatura (máxima, mínima, promedio).
+
+4)  A partir del set de datos de `agromet` debe crear un set de datos `data.frame` de tipo `tibble` para todas las estaciones, con variable de precipitación acumulada diaria, temperatura promedio, maxíma y mínima diaria
+
+5)  A partir del set de datos de `AGV` debe crear dos data.frame de tipo `tibble` para todas las estaciones, con las siguientes características:
+
+    i)  set de datos 1: variable humedad de suelo promedio diaria a 30cm, 60cm y 90cm
+    ii) set de datos 2: variable de temperatura promedio, maxíma y mínima diaria; y precipitación acumulada diaria.
+
+6)  Entregar información resumida de los datos como: variables, cantidad de `NAs`, resumen estadístico (min, max, 1er quartil, 3er quartil)
+
+7)  Buscar información sobre los formatos de datos `parquet` y `arrow`, y el paquete de R [{arrow}](https://cran.r-project.org/web/packages/arrow/index.html).
+
+8)  Guardar los datos en formato parquet (.pq) y realizar un benmarching (ver [michrobenmark](https://cran.r-project.org/web/packages/microbenchmark/index.html)) comparando la performance de lectura respecto a la lectura en formato `.rds` y `.csv`.
+
+9)  Preparar un documento html en [Quarto](https://quarto.org/) utilizando RStudio, que permita reproducir lo que usted ha realizado en el taller 1.
+
+10) Crear un repositorio en [github](www.github.com) en donde estén almacenados los scripts y el documento en Quarto (.qmd).
+
+## Entrega
+
+Viernes 16 de septiembre hasta las 23:59

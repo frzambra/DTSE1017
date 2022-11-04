@@ -1,0 +1,249 @@
+---
+title: "R: {lubridate}"
+author: "Dr. Francisco Zambrano"
+format: 
+  revealjs:
+    slide-number: true
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: simple
+    echo: true
+---
+
+```{r 'setup'}
+#| include: false
+library(palmerpenguins)
+library(dplyr)
+```
+
+# `{lubridate}`: Obtener y ajustar fecha y horas {background-color="brown"}
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+::: columns
+::: {.column width="50%"}
+-   Crear objetos de tipo fecha, hora, y fecha-hora.
+-   Extraer componentes (ej, año, mes, dia, dia de la semana)
+-   Como cambiar zonas horarias.
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+knitr::include_graphics('https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-artwork/lubridate.png?raw=true')
+```
+:::
+:::
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Para empezar
+
+```{r}
+install.packages('lubridate')
+library(lubridate)
+library(tidyverse)
+```
+
+Trabajaremos con los datos climáticos de `agromet`
+
+```{r}
+data <- read_csv('data_estaciones_agrometAPI.csv',n_max=100,guess_max = 0)
+data |> glimpse()
+```
+
+# ¿Por qué es un desafio cuando trabajamos con fechas y horas?
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+```{r out.width=600,fig.align='center'}
+#| echo: false
+knitr::include_graphics('https://upload.wikimedia.org/wikipedia/commons/4/45/Blue_Marble_rotating.gif?20210412180052')
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+#### Fecha y hora en R
+
+Pueden ser:
+
+1.  Una fecha (<date>)
+2.  Un tiempo (<time>)
+3.  Una fecha-hora (<dttm>), una fecha más hora
+
+Se pueden construir a partir de:
+
+-   Textos: "09/10/2010"
+-   Objetos existentes de fecha/hora
+-   Alguna componente de fecha u hora (ej, año=1990, mes=12, dia = 4)
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Analizar fecha y horas usando funciones de ayuda (`helpers`)
+
+```{r}
+#| echo: false
+#| out-width: "500px"
+#| fig-align: "center"
+knitr::include_graphics("https://laurielbaker.github.io/r-studio-instructor-training/slides/images/lubridate_ymd.png")
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Analizar fecha y horas usando funciones de ayuda (`helpers`)
+
+-   Identifica el orden en el que el año (y), el mes (m) y día (d) aparece en tus fechas.
+-   Por ejemplo para hoy, 26 de octubre 2022
+
+```{r}
+dmy("26102022")
+ymd("20221022")
+```
+
+¿En este caso?
+
+```{r}
+#| eval: false
+___("2022-10-22")
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Analizar fecha y horas usando funciones de ayuda (`helpers`)
+
+-   Para fecha-hora podemos agregar un guion abajo y uno o más h (hora), minuto (m) o segundo (s) a nuestra función de transformación.
+
+-   ¿Qué función debería utilizar si la fecha para el 26 de octubre vene en este formato?
+
+```{r}
+#| eval: false
+___("26/10/2022 14:30:00")
+```
+
+. . .
+
+```{r}
+dmy_hms("26/10/2022 14:30:00")
+```
+
+El tiempo es entrega en UTC (tiempo universal coordinado), al menos que especifiquemos una zona horaria (tz).
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Con los datos de `agromet`
+
+```{r}
+data |> glimpse()
+dataT <- data |> 
+  mutate(date = as_datetime(fecha_hora)) |> 
+  pull(date) |> glimpse()
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Analizar fecha y horas usando funciones de ayuda (`helpers`)
+
+Podemos extraer partes individuales de la fecha con las funciones accesorias:
+
+-   year, month, day
+-   mday, yday, wday
+-   hour, minute, second
+
+```{r}
+#| eval: false
+data |> 
+  mutate(d_fecha = as_datetime(fecha_hora)) |> 
+  mutate(d_agno = year(d_fecha),
+         d_mes = month(d_fecha),
+         d_dia = day(d_fecha),
+         d_mday = mday(d_fecha),
+         d_yday = yday(d_fecha),
+         d_wday = wday(d_fecha)) |> 
+  select(starts_with('d_')) |>
+  slice_sample(n = 6) |> 
+  head()
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Analizar fecha y horas usando funciones de ayuda (`helpers`)
+
+```{r}
+#| echo: false
+data |> 
+  mutate(d_fecha = as_datetime(fecha_hora)) |> 
+  mutate(d_agno = year(d_fecha),
+         d_mes = month(d_fecha),
+         d_dia = day(d_fecha),
+         d_mday = mday(d_fecha),
+         d_yday = yday(d_fecha),
+         d_wday = wday(d_fecha)) |> 
+  select(starts_with('d_')) |>
+  slice_sample(n = 20) |> 
+  head(n = 20)
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Analizar fecha y horas usando funciones de ayuda (`helpers`)
+
+En el caso de `wday` podemos utilizar los argumentos `abbr` y `label`
+
+```{r}
+fechas <- seq(ymd("20221024"),ymd("20221030"),by = "1 day")
+wday(fechas,label = TRUE, abbr = FALSE)
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Podemos crear fecha-hora combinando diferentes componentes con `make_date` y `make_datetime`.
+
+```{r}
+data |> 
+  mutate(d_fecha = as_date(fecha_hora),
+         nueva_fecha = make_datetime(
+           year = year(d_fecha),
+           month = month(d_fecha),
+           day = day(fecha_hora),
+           tz = "America/Santiago"
+         )) |> 
+  select(fecha_hora,nueva_fecha)
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Pero, ¿Qué pasa si quiero cambiar la fecha/hora a la de otra zona horaria?
+
+```{r}
+data_fecha <- data |> 
+  mutate(d_fecha = as_date(fecha_hora),
+         nueva_fecha = make_datetime(
+           year = year(d_fecha),
+           month = month(d_fecha),
+           day = day(fecha_hora),
+           tz = "Europe/Amsterdam"))
+data_fecha
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Pero, ¿Qué pasa si quiero cambiar la fecha/hora a la de otra zona horaria?
+
+```{r}
+with_tz(data_fecha, tz = 'America/Santiago')
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+Pero, ¿si no me se las zonas horarias?
+
+```{r}
+OlsonNames()
+```
+
+## `{lubridate}`: Obtener y ajustar fecha y horas {.smaller .scrollable background-image="https://lubridate.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+También tenemos la hoja de ayuda (cheat sheet)
+
+[Hoja de ayuda](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_lubridate.pdf)
