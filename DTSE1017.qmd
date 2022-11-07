@@ -32,6 +32,7 @@ En este repositorio se pone a disposición de los alumnos de la carrera de Cienc
 10. [R {dplyr} (parte 2)](Clase9/slides_dplyr2.html)
 11. [R {dplyr} (parte 3)](Clase10/slides_dplyr3.html)
 12. [R {lubridate}](Clase11/slides_lubridate.html)
+13. [R {ggplot2}](Clase12/slides_ggplot2.html)
 
 ## Talleres
 

@@ -33,6 +33,7 @@ editor: visual
 4.  Para cada estación seleccione los valores máximos de precipitación horaria.\
 5. Seleccione las columnas que tienen temperatura, además de station_id y fecha_hora.
 6.  Seleccione las columnas que tienen valores no numéricos.
+7. Cree una función y usela con la función `where` y `select`, luego eleccione las columnas que tienen valores menores a 0
 
 ## Ejercicios {dplyr} (parte 2)
 
