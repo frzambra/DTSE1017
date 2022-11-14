@@ -1,0 +1,87 @@
+---
+title: "Taller 4: Transformación de datos y visualización"
+subtitle: "Minería de datos (DTSE1017)"
+author: "Francisco Zambrano"
+format:
+  html:
+    number-sections: true
+    number-depth: 3
+    smooth-scroll: true
+    code-fold: show
+    toc: true
+    html-math-method: katex
+    self-contained: true
+execute: 
+  cache: false
+editor: visual
+---
+
+## Ejercicios funciones
+
+### Eliminar valores anómalos 
+
+- Cree una función nombrada en R que permita tranformar en NA los valores anómalos de una variable `x`, si se encuentra fuera del rango:
+
+$$Q_{25} -1.5\cdot IQR < x < Q_{75}+IQR$$
+
+dónde $Q_{25}$: cuantil $25\%$, $IQR$: rango intercuartil y $Q_{75}$: cuantil $75\%$
+
+La función debe transformar en NA los valores que se encuentran fuera del rango.
+
+- Pruebe la función con un vector numérico creado por usted.
+
+- Pruebe la función utilizando `mutate` con el set de datos `iris`
+
+- Transforme la función en una función anónima (lambda) y úsela con `mutate` con los datos `iris`
+
+- Utilice la función para eliminar valores anómalos del set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
+
+### Resumir por rangos tipo categórica
+
+- Cree una función que identifique tres grupos para un vector numérico `x`, alto, medio y bajo. Use la función `cut` y rangos de igual tamaño
+
+- Pruebe la función con un vector numérico creado por usted.
+
+- Pruebe la función utilizando `summarize` con el set de datos `iris`
+
+- Transforme la función en una función anónima (lambda) y úsela con `summarize` con los datos `iris`
+
+- Utilice la función para clasificar los set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
+
+### Coeficiente de variación
+
+- Cree una función que permita seleccionar las variables numéricas cuyos valores son mayores o igual que 0.
+
+- Aplique la función como nombrada al set de datos agromet.
+
+- Aplique la función anónima (lambda) al set de datos agromet.
+
+- Cree una función que obtenga el coeficiente de variación en que la dispersión de valores es menor al 30% del coeficiente de variación:
+
+
+
+- Aplique la función a las variables numéricas del set de datos `iris`.
+
+- Cree una función que permita identificar 
+
+## Ejercicios transformación y visualización
+
+### Comparar distribuciones
+
+- Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.
+
+### Agromet
+
+- Visualice la cantidad de NAs implicitos diarios por estación para todas las variables. Utilice gráficos de tipo heatmap (`geom_tile`).
+
+- Visualice la variación de la temperatura media diaria para todo Chile. Use tipo de gráfico `boxplot` (`geom_boxplot`).
+
+- Cree un gráfico en ggplot para visualizar la variación de la temperatura media mensual para las diferentes regiones de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
+
+- Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de `densidad` (`geom_density`)
+
+- Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile.
+
+### AGV 
+
+- Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables. Utilice gráficos de tipo heatmap (`geom_tile`).

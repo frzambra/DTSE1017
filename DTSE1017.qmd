@@ -39,6 +39,7 @@ En este repositorio se pone a disposición de los alumnos de la carrera de Cienc
 1.  [Taller 1: R: Tipos y estructura de datos](Talleres/Taller1/taller1.html)\
 2.  [Taller 2: Ordenar datos anidados](Talleres/Taller2/taller2.html)\
 3.  [Taller 3: Ejercicios {readr},{tidyr} y {dplyr}](Talleres/Taller3/taller3.html)\
+3.  [Taller 4: Transformación de datos y visualización](Talleres/Taller4/taller4.html)\
 
     
 ## Material
