@@ -2473,14 +2473,15 @@ vertical-align: -.125em;
   <li><a href="#ejercicios-funciones" id="toc-ejercicios-funciones" class="nav-link active" data-scroll-target="#ejercicios-funciones"> <span class="header-section-number">1</span> Ejercicios funciones</a>
   <ul class="collapse">
   <li><a href="#eliminar-valores-anómalos" id="toc-eliminar-valores-anómalos" class="nav-link" data-scroll-target="#eliminar-valores-anómalos"> <span class="header-section-number">1.1</span> Eliminar valores anómalos</a></li>
-  <li><a href="#resumir-por-rangos-tipo-categórica" id="toc-resumir-por-rangos-tipo-categórica" class="nav-link" data-scroll-target="#resumir-por-rangos-tipo-categórica"> <span class="header-section-number">1.2</span> Resumir por rangos tipo categórica</a></li>
-  <li><a href="#coeficiente-de-variación" id="toc-coeficiente-de-variación" class="nav-link" data-scroll-target="#coeficiente-de-variación"> <span class="header-section-number">1.3</span> Coeficiente de variación</a></li>
+  <li><a href="#función-para-dplyr-ej.-mutate-con-multiples-columnas-como-argumentos" id="toc-función-para-dplyr-ej.-mutate-con-multiples-columnas-como-argumentos" class="nav-link" data-scroll-target="#función-para-dplyr-ej.-mutate-con-multiples-columnas-como-argumentos"> <span class="header-section-number">1.2</span> Función para <code>{dplyr}</code> (ej., <code>mutate</code>) con multiples columnas como argumentos</a></li>
+  <li><a href="#resumir-por-rangos-tipo-categórica" id="toc-resumir-por-rangos-tipo-categórica" class="nav-link" data-scroll-target="#resumir-por-rangos-tipo-categórica"> <span class="header-section-number">1.3</span> Resumir por rangos tipo categórica</a></li>
+  <li><a href="#coeficiente-de-variación" id="toc-coeficiente-de-variación" class="nav-link" data-scroll-target="#coeficiente-de-variación"> <span class="header-section-number">1.4</span> Coeficiente de variación</a></li>
   </ul></li>
   <li><a href="#ejercicios-transformación-y-visualización" id="toc-ejercicios-transformación-y-visualización" class="nav-link" data-scroll-target="#ejercicios-transformación-y-visualización"> <span class="header-section-number">2</span> Ejercicios transformación y visualización</a>
   <ul class="collapse">
   <li><a href="#comparar-distribuciones" id="toc-comparar-distribuciones" class="nav-link" data-scroll-target="#comparar-distribuciones"> <span class="header-section-number">2.1</span> Comparar distribuciones</a></li>
-  <li><a href="#agromet" id="toc-agromet" class="nav-link" data-scroll-target="#agromet"> <span class="header-section-number">2.2</span> Agromet</a></li>
-  <li><a href="#agv" id="toc-agv" class="nav-link" data-scroll-target="#agv"> <span class="header-section-number">2.3</span> AGV</a></li>
+  <li><a href="#valores-anómalos" id="toc-valores-anómalos" class="nav-link" data-scroll-target="#valores-anómalos"> <span class="header-section-number">2.2</span> Valores anómalos</a></li>
+  <li><a href="#variación-variables" id="toc-variación-variables" class="nav-link" data-scroll-target="#variación-variables"> <span class="header-section-number">2.3</span> Variación variables</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -2527,8 +2528,16 @@ vertical-align: -.125em;
 <li><p>Utilice la función para eliminar valores anómalos del set de datos <code>agromet</code> en todas las variables climáticas, salvo en <code>grados_dias</code> y <code>horas_frio</code>, use la función como anónima.</p></li>
 </ul>
 </section>
-<section id="resumir-por-rangos-tipo-categórica" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="resumir-por-rangos-tipo-categórica"><span class="header-section-number">1.2</span> Resumir por rangos tipo categórica</h3>
+<section id="función-para-dplyr-ej.-mutate-con-multiples-columnas-como-argumentos" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="función-para-dplyr-ej.-mutate-con-multiples-columnas-como-argumentos"><span class="header-section-number">1.2</span> Función para <code>{dplyr}</code> (ej., <code>mutate</code>) con multiples columnas como argumentos</h3>
+<ul>
+<li><p>Utilizando el set de datos <code>iris</code> y <code>mutate</code> haga el calculo en que cada columna numérica sea dividida por la raiz cuadrada de el promedio de <code>Sepal.Lenght</code>.</p></li>
+<li><p>Utilice <code>across</code> y <code>mutate</code> junto con una función anónima (lambda)</p></li>
+<li><p>Utilice <code>across</code> y <code>mutate</code> junto con una función nombrada (lambda)</p></li>
+</ul>
+</section>
+<section id="resumir-por-rangos-tipo-categórica" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="resumir-por-rangos-tipo-categórica"><span class="header-section-number">1.3</span> Resumir por rangos tipo categórica</h3>
 <ul>
 <li><p>Cree una función que identifique tres grupos para un vector numérico <code>x</code>, alto, medio y bajo. Use la función <code>cut</code> y rangos de igual tamaño</p></li>
 <li><p>Pruebe la función con un vector numérico creado por usted.</p></li>
@@ -2537,15 +2546,17 @@ vertical-align: -.125em;
 <li><p>Utilice la función para clasificar los set de datos <code>agromet</code> en todas las variables climáticas, salvo en <code>grados_dias</code> y <code>horas_frio</code>, use la función como anónima.</p></li>
 </ul>
 </section>
-<section id="coeficiente-de-variación" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="coeficiente-de-variación"><span class="header-section-number">1.3</span> Coeficiente de variación</h3>
+<section id="coeficiente-de-variación" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="coeficiente-de-variación"><span class="header-section-number">1.4</span> Coeficiente de variación</h3>
 <ul>
-<li><p>Cree una función que permita seleccionar las variables numéricas cuyos valores son mayores o igual que 0.</p></li>
-<li><p>Aplique la función como nombrada al set de datos agromet.</p></li>
-<li><p>Aplique la función anónima (lambda) al set de datos agromet.</p></li>
-<li><p>Cree una función que obtenga el coeficiente de variación en que la dispersión de valores es menor al 30% del coeficiente de variación:</p></li>
-<li><p>Aplique la función a las variables numéricas del set de datos <code>iris</code>.</p></li>
-<li><p>Cree una función que permita identificar</p></li>
+<li>Cree una función que permita seleccionar las variables numéricas cuyos valores son menores a un coeficiente de variación (CV) de 0.3 (30%).</li>
+</ul>
+<p><span class="math display"> CV = \frac{\sigma}{\bar{x}}</span></p>
+<ul>
+<li><p>Cree una función nombrada y apliquela a un vector aleatorio.</p></li>
+<li><p>Aplique la función con <code>apply</code> a las columnas numéricas del set de datos <code>iris</code></p></li>
+<li><p>Aplique la función con <code>where</code> para seleccionar columnas del set de datos <code>iris</code></p></li>
+<li><p>Aplique la función al set de datos agromet en el que se filtraron los valores anómalos.</p></li>
 </ul>
 </section>
 </section>
@@ -2554,23 +2565,23 @@ vertical-align: -.125em;
 <section id="comparar-distribuciones" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="comparar-distribuciones"><span class="header-section-number">2.1</span> Comparar distribuciones</h3>
 <ul>
-<li>Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.</li>
+<li><p>Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.</p></li>
+<li><p>Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de <code>densidad</code> (<code>geom_density</code>)</p></li>
 </ul>
 </section>
-<section id="agromet" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="agromet"><span class="header-section-number">2.2</span> Agromet</h3>
+<section id="valores-anómalos" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="valores-anómalos"><span class="header-section-number">2.2</span> Valores anómalos</h3>
 <ul>
-<li><p>Visualice la cantidad de NAs implicitos diarios por estación para todas las variables. Utilice gráficos de tipo heatmap (<code>geom_tile</code>).</p></li>
+<li><p>Visualice la cantidad de NAs implicitos diarios por estación para todas las variables de los datos <code>agromet</code>. Utilice gráficos de tipo heatmap (<code>geom_tile</code>).</p></li>
+<li><p>Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables del set de datos ordenados de <code>agv</code>. Utilice gráficos de tipo heatmap (<code>geom_tile</code>).</p></li>
+</ul>
+</section>
+<section id="variación-variables" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="variación-variables"><span class="header-section-number">2.3</span> Variación variables</h3>
+<ul>
 <li><p>Visualice la variación de la temperatura media diaria para todo Chile. Use tipo de gráfico <code>boxplot</code> (<code>geom_boxplot</code>).</p></li>
 <li><p>Cree un gráfico en ggplot para visualizar la variación de la temperatura media mensual para las diferentes regiones de Chile. Use tipo de gráfico <code>scatterplot</code> (<code>geom_point</code>) con barra de error (<code>geom_error_bar</code>).</p></li>
-<li><p>Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de <code>densidad</code> (<code>geom_density</code>)</p></li>
-<li><p>Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile.</p></li>
-</ul>
-</section>
-<section id="agv" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="agv"><span class="header-section-number">2.3</span> AGV</h3>
-<ul>
-<li>Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables. Utilice gráficos de tipo heatmap (<code>geom_tile</code>).</li>
+<li><p>Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile. Use tipo de gráfico <code>scatterplot</code> (<code>geom_point</code>) con barra de error (<code>geom_error_bar</code>).</p></li>
 </ul>
 </section>
 </section>

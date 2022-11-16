@@ -36,6 +36,15 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 - Utilice la función para eliminar valores anómalos del set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
 
+### Función para `{dplyr}` (ej., `mutate`) con multiples columnas como argumentos
+
+- Utilizando el set de datos `iris` y `mutate` haga el calculo en que cada columna numérica sea dividida por la raiz cuadrada de el promedio de `Sepal.Lenght`.
+
+- Utilice `across` y `mutate` junto con una función anónima (lambda)
+
+- Utilice `across` y `mutate` junto con una función nombrada (lambda)
+
+
 ### Resumir por rangos tipo categórica
 
 - Cree una función que identifique tres grupos para un vector numérico `x`, alto, medio y bajo. Use la función `cut` y rangos de igual tamaño
@@ -50,19 +59,17 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 ### Coeficiente de variación
 
-- Cree una función que permita seleccionar las variables numéricas cuyos valores son mayores o igual que 0.
+- Cree una función que permita seleccionar las variables numéricas cuyos valores son menores a un coeficiente de variación (CV) de 0.3 (30\%).
 
-- Aplique la función como nombrada al set de datos agromet.
+$$ CV = \frac{\sigma}{\bar{x}}$$
 
-- Aplique la función anónima (lambda) al set de datos agromet.
+- Cree una función nombrada y apliquela a un vector aleatorio.
 
-- Cree una función que obtenga el coeficiente de variación en que la dispersión de valores es menor al 30% del coeficiente de variación:
+- Aplique la función con `apply` a las columnas numéricas del set de datos `iris`
 
+- Aplique la función con `where` para seleccionar columnas del set de datos `iris`
 
-
-- Aplique la función a las variables numéricas del set de datos `iris`.
-
-- Cree una función que permita identificar 
+- Aplique la función al set de datos agromet en el que se filtraron los valores anómalos.
 
 ## Ejercicios transformación y visualización
 
@@ -70,18 +77,20 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 - Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.
 
-### Agromet
+- Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de `densidad` (`geom_density`)
 
-- Visualice la cantidad de NAs implicitos diarios por estación para todas las variables. Utilice gráficos de tipo heatmap (`geom_tile`).
+
+### Valores anómalos
+
+- Visualice la cantidad de NAs implicitos diarios por estación para todas las variables de los datos `agromet`. Utilice gráficos de tipo heatmap (`geom_tile`).
+
+- Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables del set de datos ordenados de `agv`. Utilice gráficos de tipo heatmap (`geom_tile`).
+
+### Variación variables
 
 - Visualice la variación de la temperatura media diaria para todo Chile. Use tipo de gráfico `boxplot` (`geom_boxplot`).
 
 - Cree un gráfico en ggplot para visualizar la variación de la temperatura media mensual para las diferentes regiones de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
 
-- Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de `densidad` (`geom_density`)
 
-- Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile.
-
-### AGV 
-
-- Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables. Utilice gráficos de tipo heatmap (`geom_tile`).
+- Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
