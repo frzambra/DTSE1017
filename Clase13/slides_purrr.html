@@ -607,7 +607,7 @@ Coefficients:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">sum</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -3.776061</code></pre>
+<pre><code>[1] -4.406288</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">sum</span>(<span class="fu">list</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">z =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
@@ -636,13 +636,13 @@ Coefficients:
 <span id="cb24-3"><a href="#cb24-3"></a><span class="fu">map</span>(x_list, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$x
-[1] 0.4250039
+[1] -0.5520892
 
 $y
-[1] 0.4223223
+[1] 0.2411607
 
 $z
-[1] 0.05698219</code></pre>
+[1] 0.1822928</code></pre>
 </div>
 </div>
 </section>
@@ -714,7 +714,8 @@ $Petal.Width
 <ol type="1">
 <li>pasarla directamente a <code>map</code> como función nombrada</li>
 <li>usar una función anónima<br>
-3- usar ~</li>
+</li>
+<li>usar ~</li>
 </ol>
 <div class="panel-tabset">
 <ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">1. directamente</a></li><li><a href="#tabset-3-2">2. función anónima 1</a></li><li><a href="#tabset-3-3">3. función anónima 2</a></li></ul>
@@ -784,9 +785,9 @@ $Petal.Width
 </section>
 <section id="purrr-programación-funcional-en-r-13" class="slide level2 smaller scrollable" data-background-image="https://purrr.tidyverse.org/logo.png" data-background-position="97.5% 2.5%" data-background-size="7.5%" data-layout="true">
 <h2><code>{purrr}</code>: Programación funcional en R</h2>
-<p>**Retomando el ejemplo de las regresiones con <code>iris</code></p>
+<p><strong>Retomando el ejemplo de las regresiones con <code>iris</code></strong></p>
 <div class="panel-tabset">
-<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">Opción 1: respuesta lista</a></li><li><a href="#tabset-4-2">Opción 2: respuesta lista anidada</a></li></ul>
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">Opción 1: respuesta lista</a></li><li><a href="#tabset-4-2">Opción 2: respuesta lista anidada</a></li><li><a href="#tabset-4-3">Opción 3: respuesta lista anidada 2</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1">
 <div class="cell">
@@ -833,9 +834,27 @@ Coefficients:
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>iris_lms <span class="ot">&lt;-</span> iris <span class="sc">|&gt;</span> </span>
 <span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span> </span>
 <span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">nest</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">mutate</span>(<span class="at">lms=</span> <span class="fu">map</span>(<span class="at">.x =</span> data,<span class="at">.f =</span> <span class="sc">~</span><span class="fu">lm</span>(Sepal.Length<span class="sc">~</span>Petal.Length,.x)))</span>
-<span id="cb40-5"><a href="#cb40-5"></a></span>
-<span id="cb40-6"><a href="#cb40-6"></a>iris_lms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">mutate</span>(<span class="at">lms=</span> <span class="fu">map</span>(<span class="at">.x =</span> data,<span class="at">.f =</span> \(x) <span class="fu">lm</span>(Sepal.Length<span class="sc">~</span>Petal.Length,x)))</span>
+<span id="cb40-5"><a href="#cb40-5"></a>iris_lms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+# Groups:   Species [3]
+  Species    data              lms   
+  &lt;fct&gt;      &lt;list&gt;            &lt;list&gt;
+1 setosa     &lt;tibble [50 × 4]&gt; &lt;lm&gt;  
+2 versicolor &lt;tibble [50 × 4]&gt; &lt;lm&gt;  
+3 virginica  &lt;tibble [50 × 4]&gt; &lt;lm&gt;  </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>iris_lms <span class="ot">&lt;-</span> iris <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span> </span>
+<span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">nest</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb42-4"><a href="#cb42-4"></a>  <span class="fu">mutate</span>(<span class="at">lms=</span> <span class="fu">map</span>(<span class="at">.x =</span> data,<span class="at">.f =</span> <span class="sc">~</span><span class="fu">lm</span>(Sepal.Length<span class="sc">~</span>Petal.Length,.x)))</span>
+<span id="cb42-5"><a href="#cb42-5"></a></span>
+<span id="cb42-6"><a href="#cb42-6"></a>iris_lms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
 # Groups:   Species [3]

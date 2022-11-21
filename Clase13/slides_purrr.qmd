@@ -5,7 +5,7 @@ format:
   revealjs:
     slide-number: true
     title-block-banner: true
-    logo: "../img/logo_hemera.jpg"
+    logo: "logo_hemera.jpg"
     footer: "DTSE1017|2-2022"
     theme: simple
     echo: true
@@ -208,7 +208,7 @@ Tres maneras de pasar funciones a `map`
 
 1. pasarla directamente a `map` como función nombrada
 2. usar una función anónima  
-3- usar ~
+3. usar ~
 
 ::: panel-tabset
 
@@ -240,7 +240,7 @@ iris |>
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
-**Retomando el ejemplo de las regresiones con `iris`
+**Retomando el ejemplo de las regresiones con `iris`**
 
 ::: panel-tabset
 
@@ -262,7 +262,7 @@ iris_lms <- iris |>
   group_by(Species) |> 
   nest() |> 
   mutate(lms= map(.x = data,.f = \(x) lm(Sepal.Length~Petal.Length,x)))
-
+iris_lms
 ```
 
 ## Opción 3: respuesta lista anidada 2
@@ -271,7 +271,7 @@ iris_lms <- iris |>
 iris_lms <- iris |> 
   group_by(Species) |> 
   nest() |> 
-  mutate(lms= map(.x = data,.f = lm(Sepal.Length~Petal.Length,.x)))
+  mutate(lms= map(.x = data,.f = ~lm(Sepal.Length~Petal.Length,.x)))
 
 iris_lms
 ```
