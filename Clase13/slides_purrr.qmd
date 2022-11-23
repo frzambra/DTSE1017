@@ -16,6 +16,7 @@ format:
 library(palmerpenguins)
 library(dplyr)
 ```
+
 # `{purrr}`: Programación funcional en R {background-color="brown"}
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
@@ -47,7 +48,6 @@ ggplot(iris,aes(Petal.Length,Sepal.Length)) +
 **Ahora, si queremos hacer la regresión por grupo de `Species`**
 
 ::: panel-tabset
-
 ## Filtrando por grupo
 
 ```{r}
@@ -61,6 +61,7 @@ m1
 m2
 m3
 ```
+
 ## for() loop
 
 ```{r}
@@ -79,7 +80,7 @@ models[[1]]
 
 ## lapply() con `nested_list`
 
-Con listas por grupo 
+Con listas por grupo
 
 ```{r}
 library(tidyr)
@@ -94,7 +95,7 @@ iris_nest$data |>
 
 ## lapply() con `dplyr`
 
-Con listas por grupo 
+Con listas por grupo
 
 ```{r}
 library(tidyr)
@@ -108,28 +109,27 @@ iris_lm
 
 iris_lm$lm[[1]]
 ```
-
 :::
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
-* `R`, en esencia, es un lenguaje de programación funcional (FP). Esto significa que proporciona muchas herramientas para la creación y manipulación de funciones.
+-   `R`, en esencia, es un lenguaje de programación funcional (FP). Esto significa que proporciona muchas herramientas para la creación y manipulación de funciones.
 
-* `{purrr}` facilita la programación funcional (FP) con objetos `data.frame` en R. 
+-   `{purrr}` facilita la programación funcional (FP) con objetos `data.frame` en R.
 
-* Conjunto completo y consistente de herramientas para trabajar con `funciones` y `vectores`.
+-   Conjunto completo y consistente de herramientas para trabajar con `funciones` y `vectores`.
 
-* Una alternativa a `lapply` que facilita el trabajo con el entorno `{tidyverse}`.
+-   Una alternativa a `lapply` que facilita el trabajo con el entorno `{tidyverse}`.
 
-* Problemas que se quieren resolver con `{purrr}`:
+-   Problemas que se quieren resolver con `{purrr}`:
 
-  - Hacer el código más claro
-  - Hacer el código más seguro
-  - Trabajar con listas y data.frames
+    -   Hacer el código más claro
+    -   Hacer el código más seguro
+    -   Trabajar con listas y data.frames
 
 ## `{purrr}`: Programación funcional en R {background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
-- Las funciones vectorizadas no funcionan con listas
+-   Las funciones vectorizadas no funcionan con listas
 
 ```{r}
 #| error: true
@@ -139,13 +139,14 @@ sum(list(x = rnorm(10), y = rnorm(10), z = rnorm(10)))
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
-* Siempre que quiera utilizar un `bucle-for` para resolver un problema iterativo, la familia de funciones `map_*()` le permite reformular su problema como un flujo pipe `{tidyverse}`.
+-   Siempre que quiera utilizar un `bucle-for` para resolver un problema iterativo, la familia de funciones `map_*()` le permite reformular su problema como un flujo pipe `{tidyverse}`.
 
-* `purrr::map(.x,.f,...)`: toma como entrada `.x` y aplica `.f` a cada elemento de `.x`
-  - `.x`: puede ser un vector, una lista o un data.frame
-  - `.f`: es una función
-  - devuelve como resultado una `list`
-  
+-   `purrr::map(.x,.f,...)`: toma como entrada `.x` y aplica `.f` a cada elemento de `.x`
+
+    -   `.x`: puede ser un vector, una lista o un data.frame
+    -   `.f`: es una función
+    -   devuelve como resultado una `list`
+
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
 **Un ejemplo**
@@ -154,7 +155,7 @@ sum(list(x = rnorm(10), y = rnorm(10), z = rnorm(10)))
 library(purrr)
 x_list <- list(x = rnorm(10), y = rnorm(10), z = rnorm(10))
 map(x_list, mean)
-```  
+```
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
@@ -173,8 +174,8 @@ knitr::include_graphics("../img/purr_x_input.png")
 **`map` en un `data.frame`**
 
 ::: panel-tabset
-
 ## `purrr`
+
 ```{r}
 iris |> 
   select(where(is.numeric)) |> 
@@ -195,23 +196,21 @@ apply(2,mean)
 iris |> 
   summarise(across(where(is.numeric),mean))
 ```
-
 :::
 
 ## `{purrr}`: Programación funcional en R {background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
-### >Si copia y pega su código tres veces, es hora de escribir una función
+### \>Si copia y pega su código tres veces, es hora de escribir una función
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
 Tres maneras de pasar funciones a `map`
 
-1. pasarla directamente a `map` como función nombrada
-2. usar una función anónima  
-3. usar ~
+1.  pasarla directamente a `map` como función nombrada
+2.  usar una función anónima\
+3.  usar \~
 
 ::: panel-tabset
-
 ## 1. directamente
 
 ```{r}
@@ -235,7 +234,6 @@ iris |>
   select(where(is.numeric)) |> 
   map(.f = ~mean(.x))
 ```
-
 :::
 
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
@@ -243,7 +241,6 @@ iris |>
 **Retomando el ejemplo de las regresiones con `iris`**
 
 ::: panel-tabset
-
 ## Opción 1: respuesta lista
 
 ```{r}
@@ -277,21 +274,19 @@ iris_lms
 ```
 :::
 
-
 ## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
 
-**Cuatro tipo de funciones `map_*()`:**  
+**Cuatro tipo de funciones `map_*()`:**
 
-- `map(.x, .f, ...)` toma como input `.x` y aplica `.f` a cada elemento de `.x`.  
-- `map2(.x, .y, .f, ...)` toma como inputs `.x` e `.y` y aplica `.f` a  `.x` e `.y` en paralelo.  
-- `pmap(.l, .f, ...)` toma una lista `.l` de inputs y aplica `.f` a cada elemtno de `.l` en paralelo  
-- `group_map(.data, .f, ...)` toma un `tibble` agrupado y aplica `.f` a cada sub-grupo.
-
+-   `map(.x, .f, ...)` toma como input `.x` y aplica `.f` a cada elemento de `.x`.\
+-   `map2(.x, .y, .f, ...)` toma como inputs `.x` e `.y` y aplica `.f` a `.x` e `.y` en paralelo.\
+-   `pmap(.l, .f, ...)` toma una lista `.l` de inputs y aplica `.f` a cada elemtno de `.l` en paralelo\
+-   `group_map(.data, .f, ...)` toma un `tibble` agrupado y aplica `.f` a cada sub-grupo.
 
 Por defecto `map()` devuelve una lista. Si quieres cambiar el tipo de objeto de respuesta se puede utilizar:
 
-- `map_lgl()` devuelve un vector lógico,
-- `map_chr()` devuelve un vector de carácter,
-- `map_int()` devuleve un vector entero,
-- `map_dbl()` devuleve un vector tipo double,
-- `map_df()` devuelce un data.frame.
+-   `map_lgl()` devuelve un vector lógico,
+-   `map_chr()` devuelve un vector de carácter,
+-   `map_int()` devuleve un vector entero,
+-   `map_dbl()` devuleve un vector tipo double,
+-   `map_df()` devuelce un data.frame.

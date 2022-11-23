@@ -1,0 +1,198 @@
+---
+title: "R: {purrr} (parte 2)"
+author: "Dr. Francisco Zambrano"
+format: 
+  revealjs:
+    slide-number: true
+    title-block-banner: true
+    logo: "logo_hemera.jpg"
+    footer: "DTSE1017|2-2022"
+    theme: simple
+    echo: true
+---
+
+```{r 'setup'}
+#| include: false
+library(palmerpenguins)
+library(dplyr)
+```
+
+# `{purrr}`: Diferencia entre `map` y `walk` {background-color="brown"}
+
+## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`walk:` Es como `purrr:map()` excepto que se llama por sus efectos secundarios y devuelve `.x` para su uso posterior (en una estructura \|\>).
+
+**`map`**
+
+```{r}
+library(purrr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+iris_split <- iris |> 
+  group_by(Species) |> 
+  group_split()
+
+res_map <- iris_split |> 
+  map(.f = \(x,factor){
+    x |> 
+      ggplot(aes(Sepal.Length,Sepal.Width)) +
+      geom_point() +
+      geom_smooth(method = 'lm') +
+      theme_bw()
+        }) 
+```
+
+## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**`map`**
+
+```{r}
+class(res_map)
+res_map
+```
+
+## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**`walk`**
+
+```{r}
+library(purrr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+iris_split <- iris |> 
+  group_by(Species) |> 
+  group_split()
+
+res_walk <- iris_split |> 
+  walk(.f = \(x,factor){
+    x |> 
+      ggplot(aes(Sepal.Length,Sepal.Width)) +
+      geom_point() +
+      geom_smooth(method = 'lm') +
+      theme_bw()
+        }) 
+```
+
+## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**`walk`**
+
+```{r}
+class(res_walk)
+res_walk
+```
+
+## `{purrr}`: Programación funcional en R {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**`map`**
+
+```{r}
+#| error: true
+res_map |> 
+    map(\(x) mutate(x,new_var = Sepal.Length / Petal.Length))
+```
+
+**`walk`**
+
+```{r}
+res_walk |> 
+    map(\(x) mutate(x,new_var = Sepal.Length / Petal.Length))
+```
+
+# `purrr::map` útil para análisis de regresiones {background-color="blue"}
+
+## Regresión lineal con `dplyr` y `purrr` {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+::: panel-tabset
+## `lapply`
+
+```{r}
+iris_lm <- iris |> 
+  group_by(Species) |> 
+  nest() |> 
+  mutate(lm =lapply(data,\(x) lm(Sepal.Length~Petal.Length, data = x)))
+iris_lm
+```
+
+## `purrr::map`
+
+```{r}
+iris_lm <- iris |> 
+  group_by(Species) |> 
+  nest() |> 
+  mutate(lm = map(data,\(x) lm(Sepal.Length~Petal.Length, data = x)))
+iris_lm
+```
+:::
+
+## Regresión lineal con `dplyr` y `purrr` {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Extraer los coeficientes de la regresión**
+
+```{r}
+iris_lm |> 
+  mutate(coefs = map(lm,\(x) {
+    summary(x)$coefficients |> as_tibble()
+  }))
+```
+
+## Regresión lineal con `dplyr` y `purrr` {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+**Extraer los coeficientes de la regresión**
+
+```{r}
+iris_lm |> 
+  mutate(coefs = map(lm,\(x) {
+    summary(x)$coefficients |> as_tibble()
+  })) |> 
+  unnest(coefs)
+```
+
+# `purrr` control de errores {background-color="ocean"}
+
+## control de errores {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`purrr::possibly()` devuelve una lista que contiene el resultado de la función respectivamente o un valor definido por el usuario si ocurre un error.
+
+```{r}
+#| error: true
+list("a", 10, 100) |> 
+  map_dbl(log)
+```
+
+```{r}
+#| error: true
+list("a", 10, 100) |> 
+  map_dbl(possibly(log,NA))
+```
+
+## control de errores {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+`purrr::safely()` devuelve una lista con nombre que contiene el resultado de la función (o de lo contrario, si se produce un error), así como un objeto de error que captura el mensaje de error.
+
+```{r}
+#| error: true
+list("a", 10, 100) |> 
+  map(safely(log,otherwise = NULL))
+```
+
+## Ejercicios {.smaller .scrollable background-image="https://purrr.tidyverse.org/logo.png" background-position="97.5% 2.5%" background-size="7.5%" layout="true"}
+
+-   Crear una función con `purrr::map` que permita leer los archivos csv que se encuentra en el camous virtual correspondientes a las estaciones agromet que tiene asignadas.
+
+-   Filtrar lo valores anómalos de todas las variables climpaticas menos `grados días` y `horas frio` con la función creada en el taller 4.
+
+-   Crear una función con `purrr::map` que permita calcular la regresión lineal entre precipitación acumulada diaria y la humedad realtiva promedio diaria.
+
+-   Crear una función con `purrr::map` que permita extraer los valores de $R^2$ para cada una de las regresiones.
+
+-   Haga un gráfico con `ggplot2` de la variación de $R^2$ entre las estaciones.
+
+-   Calcule la métrica de bondad de ajuste RMSE para cada una de las regresiones.
+
+-   Haga un gráfico con `ggplot2` que permita comprara la diferencia entre los valores de RMSE entre estaciones.
