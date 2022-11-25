@@ -1,0 +1,94 @@
+---
+title: "Evaluación 2"
+subtitle: "Minería de Datos (DTSE1017)"
+author: "Dr. Francisco Zambrano"
+format: 
+  html:
+    number-sections: true
+    toc: true
+execute: 
+  echo: false
+  eval: false
+editor: visual
+---
+
+## Primer parte: corrección de errores
+
+Utilizando el pipe nativo de R `|>`, `{dplyr}` y `{tidyr}` corrija los errores de los siguientes scripts
+
+1.  Se desea calcular el promedio de todas las columnas de tipo `double`
+
+```{r}
+#| echo: true
+#| eval: true
+#| error: true
+#| message: false
+library(palmerpenguins)
+library(dplyr)
+iris |> 
+  summarize(everything(),mean)
+```
+
+```{r}
+penguins |> 
+  summarize(across(where(is.double),\(x) mean(x)))
+```
+
+2.  Se desea utilizar la función `quantile` para calcular los percentiles a las probabilidades de `seq(0, 1, 0.25)` para cada grupo de especies de pingüinos.
+
+```{r}
+#| echo: true
+#| error: true
+#| eval: true
+penguins |> 
+  group_by(species) |> 
+  mutate(q =quantile(flipper_length_mm,na.rm=TRUE))
+```
+
+3.  Se desea calcular el modelo de regresión lineal $bill\_length = \beta_0+\beta_1\cdot flipper\_length$
+
+```{r}
+#| echo: true
+#| eval: true
+#| error: true
+penguins |> 
+  filter(species == 'Adelie') |> 
+  lm(bill_length_mm~flipper_length_mm, _)
+```
+
+4. Se desea calcular la desviación estandar de todas las variables numéricas
+
+```{r}
+#| echo: true
+#| eval: true
+#| error: true
+penguins |> 
+  group_by(species) |> 
+  summarise(across(where(is.numeric),sd(x)))
+```
+
+## Segunda parte: creación de funciones
+
+1.  Para el set de datos `palmerpenguins::penguins`. Cree una función nombrada que calcule la suma de `flipper_length_mm` y `bill_length_mm` si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva `new_var` con `dplyr::mutate`.
+
+```{r}
+f <- function(fl,bl,sex){
+  i_mal <- which(sex == 'male')
+  i_fem <- which(sex == 'female')
+  x <- rep(NA,length(fl))
+  x[i_mal] <- fl[i_mal] + bl[i_mal]
+  x[i_fem] <- fl[i_fem] - bl[i_fem]
+  return(x)
+}
+
+penguins |> 
+  #group_by(species) |> 
+  mutate(new_var = f(flipper_length_mm,bill_length_mm,sex))
+```
+
+2. Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva `TRUE` en otro caso `FALSE`. Utilice esta función con las funciones de `select` y `where` para seleccionar las variables del set de datos `palmerpenguins::penguins`.
+
+## Tercera parte: transformación de datos y visualización
+
+
+

@@ -18,9 +18,9 @@ editor: visual
 
 ## Ejercicios funciones
 
-### Eliminar valores anómalos 
+### Eliminar valores anómalos
 
-- Cree una función nombrada en R que permita tranformar en NA los valores anómalos de una variable `x`, si se encuentra fuera del rango:
+-   Cree una función nombrada en R que permita tranformar en NA los valores anómalos de una variable `x`, si se encuentra fuera del rango:
 
 $$Q_{25} -1.5\cdot IQR < x < Q_{75}+IQR$$
 
@@ -28,69 +28,66 @@ dónde $Q_{25}$: cuantil $25\%$, $IQR$: rango intercuartil y $Q_{75}$: cuantil $
 
 La función debe transformar en NA los valores que se encuentran fuera del rango.
 
-- Pruebe la función con un vector numérico creado por usted.
+-   Pruebe la función con un vector numérico creado por usted.
 
-- Pruebe la función utilizando `mutate` con el set de datos `iris`
+-   Pruebe la función utilizando `mutate` con el set de datos `iris`
 
-- Transforme la función en una función anónima (lambda) y úsela con `mutate` con los datos `iris`
+-   Transforme la función en una función anónima (lambda) y úsela con `mutate` con los datos `iris`
 
-- Utilice la función para eliminar valores anómalos del set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
+-   Utilice la función para eliminar valores anómalos del set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
 
 ### Función para `{dplyr}` (ej., `mutate`) con multiples columnas como argumentos
 
-- Utilizando el set de datos `iris` y `mutate` haga el calculo en que cada columna numérica sea dividida por la raiz cuadrada de el promedio de `Sepal.Lenght`.
+-   Utilizando el set de datos `iris` y `mutate` haga el calculo en que cada columna numérica sea dividida por la raiz cuadrada de el promedio de `Sepal.Lenght`.
 
-- Utilice `across` y `mutate` junto con una función anónima (lambda)
+-   Utilice `across` y `mutate` junto con una función anónima (lambda)
 
-- Utilice `across` y `mutate` junto con una función nombrada (lambda)
-
+-   Utilice `across` y `mutate` junto con una función nombrada (lambda)
 
 ### Resumir por rangos tipo categórica
 
-- Cree una función que identifique tres grupos para un vector numérico `x`, alto, medio y bajo. Use la función `cut` y rangos de igual tamaño
+-   Cree una función que identifique tres grupos para un vector numérico `x`, alto, medio y bajo. Use la función `cut` y rangos de igual tamaño
 
-- Pruebe la función con un vector numérico creado por usted.
+-   Pruebe la función con un vector numérico creado por usted.
 
-- Pruebe la función utilizando `summarize` con el set de datos `iris`
+-   Pruebe la función utilizando `mutate` con el set de datos `iris`
 
-- Transforme la función en una función anónima (lambda) y úsela con `summarize` con los datos `iris`
+-   Transforme la función en una función anónima (lambda) y úsela con `mutate` con los datos `iris`
 
-- Utilice la función para clasificar los set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
+-   Utilice la función para clasificar los set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
 
 ### Coeficiente de variación
 
-- Cree una función que permita seleccionar las variables numéricas cuyos valores son menores a un coeficiente de variación (CV) de 0.3 (30\%).
+-   Cree una función que permita seleccionar las variables numéricas cuyos valores son menores a un coeficiente de variación (CV) de 0.3 (30%).
 
 $$ CV = \frac{\sigma}{\bar{x}}$$
 
-- Cree una función nombrada y apliquela a un vector aleatorio.
+-   Cree una función nombrada y apliquela a un vector aleatorio.
 
-- Aplique la función con `apply` a las columnas numéricas del set de datos `iris`
+-   Aplique la función con `apply` a las columnas numéricas del set de datos `iris`
 
-- Aplique la función con `where` para seleccionar columnas del set de datos `iris`
+-   Aplique la función con `where` para seleccionar columnas del set de datos `iris`
 
-- Aplique la función al set de datos agromet en el que se filtraron los valores anómalos.
+-   Aplique la función al set de datos agromet en el que se filtraron los valores anómalos.
 
 ## Ejercicios transformación y visualización
 
 ### Comparar distribuciones
 
-- Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.
+-   Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.
 
-- Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de `densidad` (`geom_density`)
-
+-   Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de `densidad` (`geom_density`)
 
 ### Valores anómalos
 
-- Visualice la cantidad de NAs implicitos diarios por estación para todas las variables de los datos `agromet`. Utilice gráficos de tipo heatmap (`geom_tile`).
+-   Visualice la cantidad de NAs implicitos diarios por estación para todas las variables de los datos `agromet`. Utilice gráficos de tipo heatmap (`geom_tile`).
 
-- Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables del set de datos ordenados de `agv`. Utilice gráficos de tipo heatmap (`geom_tile`).
+-   Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables del set de datos ordenados de `agv`. Utilice gráficos de tipo heatmap (`geom_tile`).
 
 ### Variación variables
 
-- Visualice la variación de la temperatura media diaria para todo Chile. Use tipo de gráfico `boxplot` (`geom_boxplot`).
+-   Visualice la variación de la temperatura media diaria para todo Chile. Use tipo de gráfico `boxplot` (`geom_boxplot`).
 
-- Cree un gráfico en ggplot para visualizar la variación de la temperatura media mensual para las diferentes regiones de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
+-   Cree un gráfico en ggplot para visualizar la variación de la temperatura media mensual para las diferentes regiones de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
 
-
-- Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
+-   Cree una visualización para la variación latitudinal de la radiación solar mensual para el año 2021 a lo largo de Chile. Use tipo de gráfico `scatterplot` (`geom_point`) con barra de error (`geom_error_bar`).
