@@ -140,7 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="1" class="anchored" data-anchor-id="primer-parte-corrección-de-errores"><span class="header-section-number">1</span> Primer parte: corrección de errores</h2>
 <p>Utilizando el pipe nativo de R <code>|&gt;</code>, <code>{dplyr}</code> y <code>{tidyr}</code> corrija los errores de los siguientes scripts</p>
 <ol type="1">
-<li>Se desea calcular el promedio de todas las columnas de tipo <code>double</code></li>
+<li>(20 pts) Se desea calcular el promedio de todas las columnas de tipo <code>double</code></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
@@ -159,7 +159,7 @@ Caused by error:
 
 </div>
 <ol start="2" type="1">
-<li>Se desea utilizar la función <code>quantile</code> para calcular los percentiles a las probabilidades de <code>seq(0, 1, 0.25)</code> para cada grupo de especies de pingüinos.</li>
+<li>(40 pts) Se desea utilizar la función <code>quantile</code> para calcular los percentiles a las probabilidades de <code>seq(0, 1, 0.25)</code> para cada grupo de especies de pingüinos.</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
@@ -174,7 +174,7 @@ Caused by error:
 </div>
 </div>
 <ol start="3" type="1">
-<li>Se desea calcular el modelo de regresión lineal <span class="math inline">\(bill\_length = \beta_0+\beta_1\cdot flipper\_length\)</span></li>
+<li>(30 pts) Se desea calcular el modelo de regresión lineal <span class="math inline">\(bill\_length = \beta_0+\beta_1\cdot flipper\_length\)</span></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
@@ -185,7 +185,7 @@ Caused by error:
 </div>
 </div>
 <ol start="4" type="1">
-<li>Se desea calcular la desviación estandar de todas las variables numéricas</li>
+<li>(30 pts) Se desea calcular la desviación estandar de todas las variables numéricas</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
@@ -203,17 +203,71 @@ Caused by error in `is.data.frame()`:
 <section id="segunda-parte-creación-de-funciones" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="segunda-parte-creación-de-funciones"><span class="header-section-number">2</span> Segunda parte: creación de funciones</h2>
 <ol type="1">
-<li>Para el set de datos <code>palmerpenguins::penguins</code>. Cree una función nombrada que calcule la suma de <code>flipper_length_mm</code> y <code>bill_length_mm</code> si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva <code>new_var</code> con <code>dplyr::mutate</code>.</li>
+<li>(100 pts) Para el set de datos <code>palmerpenguins::penguins</code>. Cree una función nombrada que calcule la suma de <code>flipper_length_mm</code> y <code>bill_length_mm</code> si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva <code>new_var</code> con <code>dplyr::mutate</code>.</li>
 </ol>
 <div class="cell">
 
 </div>
 <ol start="2" type="1">
-<li>Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva <code>TRUE</code> en otro caso <code>FALSE</code>. Utilice esta función con las funciones de <code>select</code> y <code>where</code> para seleccionar las variables del set de datos <code>palmerpenguins::penguins</code>.</li>
+<li>(60 pts) Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva <code>TRUE</code> en otro caso <code>FALSE</code>. Utilice esta función con las funciones de <code>select</code> y <code>where</code> para seleccionar las variables del set de datos <code>palmerpenguins::penguins</code>.</li>
 </ol>
 </section>
 <section id="tercera-parte-transformación-de-datos-y-visualización" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="tercera-parte-transformación-de-datos-y-visualización"><span class="header-section-number">3</span> Tercera parte: transformación de datos y visualización</h2>
+<ol type="1">
+<li>El archivo <code>fluorescencia.txt</code> contiene mediciones de fluorescencia en árboles de cerezo. La fluorescencia es un parámetro que se obtienen a partir de la radiación electromagnética que recieben las plantas. La <code>fluorescencia</code> sirve para evaluar la influencia del estrés sobre el estado fisiológico del aparato fotosintético de las plantas. El archivo <code>fluorescencia.txt</code> contiene en las columnas mediciones realizadas en diferentes momentos y en la filas se tienen diferentes variables derivadas de la fluorescencia.</li>
+</ol>
+<ul>
+<li>(30 pts) Utilice <code>{readr}</code> para leer el archivo.</li>
+</ul>
+<div class="cell">
+
+</div>
+<ul>
+<li>(70 pts) Utilice <code>{tidyr}</code> para trasponer el set de datos, es decir intercambiar filas por columnas. Debería quedar como el ejemplo de abajo.</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 39
+  name    Bckg    Fo    Fj    Fi    Fm    Fv    Vj    Vi `Fm/Fo` `Fv/Fo` `Fv/Fm`
+  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1 11:39…   682  9298 22108 37095 44150 34852 0.368 0.798    4.75    3.75   0.789
+2 11:39…  1137  7543 15866 25749 33747 26204 0.318 0.695    4.47    3.47   0.776
+3 11:40…   422  7218 17166 29748 38753 31535 0.315 0.714    5.37    4.37   0.814
+4 11:41…   520  9493 23375 41516 48799 39306 0.353 0.815    5.14    4.14   0.805
+5 11:42…   390  7510 21554 33486 41386 33876 0.415 0.767    5.51    4.51   0.819
+6 11:43…   325  7835 19701 33876 42394 34559 0.343 0.754    5.41    4.41   0.815
+# … with 27 more variables: Mo &lt;dbl&gt;, Area &lt;dbl&gt;, `Fix Area` &lt;dbl&gt;,
+#   `HACH Area` &lt;dbl&gt;, Sm &lt;dbl&gt;, Ss &lt;dbl&gt;, N &lt;dbl&gt;, Phi_Po &lt;dbl&gt;, Psi_o &lt;dbl&gt;,
+#   Phi_Eo &lt;dbl&gt;, Phi_Do &lt;dbl&gt;, Phi_Pav &lt;dbl&gt;, Pi_Abs &lt;dbl&gt;, `ABS/RC` &lt;dbl&gt;,
+#   `TRo/RC` &lt;dbl&gt;, `ETo/RC` &lt;dbl&gt;, `DIo/RC` &lt;dbl&gt;,
+#   `FLASH-Wavelength [nm]` &lt;dbl&gt;, `FLASH-Percent [%]` &lt;dbl&gt;,
+#   `FLASH-Intensity [uE]` &lt;dbl&gt;, `SUPER-Wavelength [nm]` &lt;dbl&gt;,
+#   `SUPER-Percent [%]` &lt;dbl&gt;, `SUPER-Intensity [uE]` &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Cada momento de la medición se realizó en diferentes tratamientos de riego en un ensayo de riego deficitario controlado (RDC). Los tratamientos son cuatro de T1 (mayor riego) a T4 (menor riego). El archivo <code>fluorescencia_tratamientos.csv</code> contiene a que tratamiento de riego corresponde cada medición.</p></li>
+<li><p>(40 pts) Agregue las etiquetas de los tratamientos al set de datos. Utilizando <code>{dplyr}</code> y <code>{tidyr}</code> seleccione las variables están entre <code>name</code> y <code>DIo/RC</code>, luego elimine las filas con valores <code>NA</code>.</p></li>
+<li><p>(40 pts) Utilizando <code>{dplyr}</code> calcule cuantas mediciones se realizaron para cada tratamiento.</p></li>
+</ul>
+<div class="cell">
+
+</div>
+<ul>
+<li>(80 pts) Calcule la mediana (no la media) y la desviación estandar para cada tratamiento en todas las variables. Los nombres de las nuevas variables deben de ser de la forma <code>{.col}_med</code> y <code>{.col}_sd</code>. <code>Nota:</code> el argumento <code>.fns</code> de <code>across</code> permite usar como argumento multiples funciones como listas.</li>
+</ul>
+<div class="cell">
+
+</div>
+<ul>
+<li>(60 pts) Utilice <code>ggplot2</code> para hacer un gráfico que permita mostrar la variación de todas las variables que contienen una <code>Fm</code> en su nombre.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Evaluacion2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 
 </main>

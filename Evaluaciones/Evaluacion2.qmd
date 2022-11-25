@@ -16,7 +16,7 @@ editor: visual
 
 Utilizando el pipe nativo de R `|>`, `{dplyr}` y `{tidyr}` corrija los errores de los siguientes scripts
 
-1.  Se desea calcular el promedio de todas las columnas de tipo `double`
+1. (20 pts)  Se desea calcular el promedio de todas las columnas de tipo `double`
 
 ```{r}
 #| echo: true
@@ -34,7 +34,7 @@ penguins |>
   summarize(across(where(is.double),\(x) mean(x)))
 ```
 
-2.  Se desea utilizar la función `quantile` para calcular los percentiles a las probabilidades de `seq(0, 1, 0.25)` para cada grupo de especies de pingüinos.
+2. (40 pts)  Se desea utilizar la función `quantile` para calcular los percentiles a las probabilidades de `seq(0, 1, 0.25)` para cada grupo de especies de pingüinos.
 
 ```{r}
 #| echo: true
@@ -45,7 +45,7 @@ penguins |>
   mutate(q =quantile(flipper_length_mm,na.rm=TRUE))
 ```
 
-3.  Se desea calcular el modelo de regresión lineal $bill\_length = \beta_0+\beta_1\cdot flipper\_length$
+3.  (30 pts) Se desea calcular el modelo de regresión lineal $bill\_length = \beta_0+\beta_1\cdot flipper\_length$
 
 ```{r}
 #| echo: true
@@ -56,7 +56,7 @@ penguins |>
   lm(bill_length_mm~flipper_length_mm, _)
 ```
 
-4. Se desea calcular la desviación estandar de todas las variables numéricas
+4. (30 pts) Se desea calcular la desviación estandar de todas las variables numéricas
 
 ```{r}
 #| echo: true
@@ -69,7 +69,7 @@ penguins |>
 
 ## Segunda parte: creación de funciones
 
-1.  Para el set de datos `palmerpenguins::penguins`. Cree una función nombrada que calcule la suma de `flipper_length_mm` y `bill_length_mm` si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva `new_var` con `dplyr::mutate`.
+1. (100 pts) Para el set de datos `palmerpenguins::penguins`. Cree una función nombrada que calcule la suma de `flipper_length_mm` y `bill_length_mm` si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva `new_var` con `dplyr::mutate`.
 
 ```{r}
 f <- function(fl,bl,sex){
@@ -86,9 +86,83 @@ penguins |>
   mutate(new_var = f(flipper_length_mm,bill_length_mm,sex))
 ```
 
-2. Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva `TRUE` en otro caso `FALSE`. Utilice esta función con las funciones de `select` y `where` para seleccionar las variables del set de datos `palmerpenguins::penguins`.
+2. (60 pts) Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva `TRUE` en otro caso `FALSE`. Utilice esta función con las funciones de `select` y `where` para seleccionar las variables del set de datos `palmerpenguins::penguins`.
 
 ## Tercera parte: transformación de datos y visualización
 
+1. El archivo `fluorescencia.txt` contiene mediciones de fluorescencia en árboles de cerezo. La fluorescencia es un parámetro que se obtienen a partir de la radiación electromagnética que recieben las plantas. La `fluorescencia` sirve para evaluar la influencia del estrés sobre el estado fisiológico del aparato fotosintético de las plantas.  El archivo `fluorescencia.txt` contiene en las columnas mediciones realizadas en diferentes momentos y en la filas se tienen diferentes variables derivadas de la fluorescencia.
 
+- (30 pts) Utilice `{readr}` para leer el archivo.
 
+```{r}
+#| eval: true
+#| message: false
+
+library(readr)
+data <- read_delim('../data/fluorescencia.txt')
+```
+- (70 pts) Utilice `{tidyr}` para trasponer el set de datos, es decir intercambiar filas por columnas. Debería quedar como el ejemplo de abajo.
+
+```{r}
+#| eval: true
+
+library(tidyr)
+
+dataT <- data |> 
+  pivot_longer(-time) |> 
+  pivot_wider(names_from = 'time',values_from = 'value') 
+dataT |> head()
+```
+- Cada momento de la medición se realizó en diferentes tratamientos de riego en un ensayo de riego deficitario controlado (RDC). Los tratamientos son cuatro de T1 (mayor riego) a T4 (menor riego). El archivo `fluorescencia_tratamientos.csv` contiene a que tratamiento de riego corresponde cada medición.
+
+- (40 pts) Agregue las etiquetas de los tratamientos al set de datos. Utilizando `{dplyr}` y `{tidyr}` seleccione las variables están entre `name` y `DIo/RC`, luego elimine las filas con valores `NA`.
+
+- (40 pts) Utilizando `{dplyr}` calcule cuantas mediciones se realizaron para cada tratamiento.
+
+```{r}
+#| eval: true
+#| message: false
+etiquetas <- read_csv2('../data/fluorescencia_tratamientos.csv')
+count <- dataT |> 
+  select(`name`:`DIo/RC`) |> 
+  drop_na() |> 
+  mutate(tratamiento = etiquetas$codigo) |> 
+  group_by(tratamiento) |> 
+  summarize(n())
+```
+- (80 pts) Calcule la mediana (no la media) y la desviación estandar para cada tratamiento en todas las variables. Los nombres de las nuevas variables deben de ser de la forma `{.col}_med` y `{.col}_sd`. `Nota:` el argumento `.fns` de `across` permite usar como argumento multiples funciones como listas. 
+  
+```{r}
+#| eval: true
+
+data_sum <- dataT |> 
+  select(`name`:`DIo/RC`) |> 
+  drop_na() |> 
+  mutate(tratamiento = etiquetas$codigo) |> 
+  relocate(tratamiento,.before = name) |> 
+  group_by(tratamiento) |> 
+  summarize(across(where(is.numeric),list(med = median,sd = sd),.names = '{.col}_{.fn}'))
+```
+- (60 pts) Utilice `ggplot2` para hacer un gráfico que permita mostrar la variación de todas las variables que contienen una `Fm` en su nombre. 
+
+```{r}
+#| eval: true
+
+library(ggplot2)
+library(tidyr)
+data_sum |> 
+  select(tratamiento,contains('Fm')) |>
+  #mutate(err_min =)
+  pivot_longer(contains('med'),names_to = 'var',values_to ='med') |>
+  pivot_longer(contains('sd'),names_to = 'var2',values_to = 'sd') |> 
+  select(-var2) |> 
+  mutate(err_sup = med + sd,err_inf = med - sd) |> 
+  ggplot(aes(tratamiento,med,group=1)) +
+  geom_line() +
+  #geom_errorbar(aes(ymax = err_sup,ymin = err_inf)) +
+  facet_grid(var~.,scales = 'free') +
+  theme_bw()
+
+    
+  
+```
