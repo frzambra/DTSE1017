@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -54,7 +59,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -67,7 +72,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -101,13 +106,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc">
+  <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#primer-parte-corrección-de-errores" id="toc-primer-parte-corrección-de-errores" class="nav-link active" data-scroll-target="#primer-parte-corrección-de-errores"> <span class="header-section-number">1</span> Primer parte: corrección de errores</a></li>
-  <li><a href="#segunda-parte-creación-de-funciones" id="toc-segunda-parte-creación-de-funciones" class="nav-link" data-scroll-target="#segunda-parte-creación-de-funciones"> <span class="header-section-number">2</span> Segunda parte: creación de funciones</a></li>
-  <li><a href="#tercera-parte-transformación-de-datos-y-visualización" id="toc-tercera-parte-transformación-de-datos-y-visualización" class="nav-link" data-scroll-target="#tercera-parte-transformación-de-datos-y-visualización"> <span class="header-section-number">3</span> Tercera parte: transformación de datos y visualización</a></li>
+  <li><a href="#primer-parte-corrección-de-errores" id="toc-primer-parte-corrección-de-errores" class="nav-link active" data-scroll-target="#primer-parte-corrección-de-errores"><span class="toc-section-number">1</span>  Primer parte: corrección de errores</a></li>
+  <li><a href="#segunda-parte-creación-de-funciones" id="toc-segunda-parte-creación-de-funciones" class="nav-link" data-scroll-target="#segunda-parte-creación-de-funciones"><span class="toc-section-number">2</span>  Segunda parte: creación de funciones</a></li>
+  <li><a href="#tercera-parte-transformación-de-datos-y-visualización" id="toc-tercera-parte-transformación-de-datos-y-visualización" class="nav-link" data-scroll-target="#tercera-parte-transformación-de-datos-y-visualización"><span class="toc-section-number">3</span>  Tercera parte: transformación de datos y visualización</a></li>
   </ul>
 </nav>
 </div>
@@ -155,16 +160,22 @@ Caused by error:
 ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-selection-context.html&gt;.</code></pre>
 </div>
 </div>
+<p><strong>Solución:</strong></p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.double),\(x) <span class="fu">mean</span>(x,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width
+1     5.843333    3.057333        3.758    1.199333</code></pre>
+</div>
 </div>
 <ol start="2" type="1">
 <li>(40 pts) Se desea utilizar la función <code>quantile</code> para calcular los percentiles a las probabilidades de <code>seq(0, 1, 0.25)</code> para cada grupo de especies de pingüinos.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">q =</span><span class="fu">quantile</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">q =</span><span class="fu">quantile</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in `mutate()`:
 ! Problem while computing `q = quantile(flipper_length_mm, na.rm =
@@ -173,24 +184,71 @@ Caused by error:
 ℹ The error occurred in group 1: species = Adelie.</code></pre>
 </div>
 </div>
+<p><strong>Solución:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">q =</span><span class="fu">quantile</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'species'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 2
+# Groups:   species [3]
+   species       q
+   &lt;fct&gt;     &lt;dbl&gt;
+ 1 Adelie      172
+ 2 Adelie      186
+ 3 Adelie      190
+ 4 Adelie      195
+ 5 Adelie      210
+ 6 Chinstrap   178
+ 7 Chinstrap   191
+ 8 Chinstrap   196
+ 9 Chinstrap   201
+10 Chinstrap   212
+11 Gentoo      203
+12 Gentoo      212
+13 Gentoo      216
+14 Gentoo      221
+15 Gentoo      231</code></pre>
+</div>
+</div>
 <ol start="3" type="1">
 <li>(30 pts) Se desea calcular el modelo de regresión lineal <span class="math inline">\(bill\_length = \beta_0+\beta_1\cdot flipper\_length\)</span></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: pipe placeholder can only be used as a named argument</code></pre>
+</div>
+</div>
+<p><strong>Solución:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">'Adelie'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(bill_length_mm<span class="sc">~</span>flipper_length_mm, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = bill_length_mm ~ flipper_length_mm, data = filter(penguins, 
+    species == "Adelie"))
+
+Coefficients:
+      (Intercept)  flipper_length_mm  
+          13.5871             0.1327  </code></pre>
 </div>
 </div>
 <ol start="4" type="1">
 <li>(30 pts) Se desea calcular la desviación estandar de todas las variables numéricas</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric),<span class="fu">sd</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric),<span class="fu">sd</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in `summarise()`:
 ! Problem while computing `..1 = across(where(is.numeric), sd(x))`.
@@ -199,34 +257,113 @@ Caused by error in `is.data.frame()`:
 ! objeto 'x' no encontrado</code></pre>
 </div>
 </div>
+<p><strong>Solución:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric),sd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 6
+  species   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g  year
+  &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
+1 Adelie             NA            NA                NA            NA  0.822
+2 Chinstrap           3.34          1.14              7.13        384. 0.863
+3 Gentoo             NA            NA                NA            NA  0.792</code></pre>
+</div>
+</div>
 </section>
 <section id="segunda-parte-creación-de-funciones" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="segunda-parte-creación-de-funciones"><span class="header-section-number">2</span> Segunda parte: creación de funciones</h2>
 <ol type="1">
 <li>(100 pts) Para el set de datos <code>palmerpenguins::penguins</code>. Cree una función nombrada que calcule la suma de <code>flipper_length_mm</code> y <code>bill_length_mm</code> si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva <code>new_var</code> con <code>dplyr::mutate</code>.</li>
 </ol>
+<p><strong>Solución:</strong></p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(fl,bl,sex){</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  i_mal <span class="ot">&lt;-</span> <span class="fu">which</span>(sex <span class="sc">==</span> <span class="st">'male'</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  i_fem <span class="ot">&lt;-</span> <span class="fu">which</span>(sex <span class="sc">==</span> <span class="st">'female'</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="fu">length</span>(fl))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  x[i_mal] <span class="ot">&lt;-</span> fl[i_mal] <span class="sc">+</span> bl[i_mal]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  x[i_fem] <span class="ot">&lt;-</span> fl[i_fem] <span class="sc">-</span> bl[i_fem]</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#group_by(species) |&gt; </span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">new_var =</span> <span class="fu">f</span>(flipper_length_mm,bill_length_mm,sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 9
+   species island    bill_length_mm bill_d…¹ flipp…² body_…³ sex    year new_var
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;    &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;   &lt;dbl&gt;
+ 1 Adelie  Torgersen           39.1     18.7     181    3750 male   2007    220.
+ 2 Adelie  Torgersen           39.5     17.4     186    3800 fema…  2007    146.
+ 3 Adelie  Torgersen           40.3     18       195    3250 fema…  2007    155.
+ 4 Adelie  Torgersen           NA       NA        NA      NA &lt;NA&gt;   2007     NA 
+ 5 Adelie  Torgersen           36.7     19.3     193    3450 fema…  2007    156.
+ 6 Adelie  Torgersen           39.3     20.6     190    3650 male   2007    229.
+ 7 Adelie  Torgersen           38.9     17.8     181    3625 fema…  2007    142.
+ 8 Adelie  Torgersen           39.2     19.6     195    4675 male   2007    234.
+ 9 Adelie  Torgersen           34.1     18.1     193    3475 &lt;NA&gt;   2007     NA 
+10 Adelie  Torgersen           42       20.2     190    4250 &lt;NA&gt;   2007     NA 
+# … with 334 more rows, and abbreviated variable names ¹​bill_depth_mm,
+#   ²​flipper_length_mm, ³​body_mass_g</code></pre>
+</div>
 </div>
 <ol start="2" type="1">
 <li>(60 pts) Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva <code>TRUE</code> en otro caso <code>FALSE</code>. Utilice esta función con las funciones de <code>select</code> y <code>where</code> para seleccionar las variables del set de datos <code>palmerpenguins::penguins</code>.</li>
 </ol>
+<p><strong>Solución:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.numeric</span>(x)){</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(<span class="fu">all</span>(x <span class="sc">&gt;=</span> <span class="fl">13.1</span> <span class="sc">&amp;</span> x <span class="sc">&lt;=</span> <span class="dv">60</span>,<span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="cn">TRUE</span>,<span class="cn">FALSE</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cn">FALSE</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(f1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 2
+   bill_length_mm bill_depth_mm
+            &lt;dbl&gt;         &lt;dbl&gt;
+ 1           39.1          18.7
+ 2           39.5          17.4
+ 3           40.3          18  
+ 4           NA            NA  
+ 5           36.7          19.3
+ 6           39.3          20.6
+ 7           38.9          17.8
+ 8           39.2          19.6
+ 9           34.1          18.1
+10           42            20.2
+# … with 334 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="tercera-parte-transformación-de-datos-y-visualización" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="tercera-parte-transformación-de-datos-y-visualización"><span class="header-section-number">3</span> Tercera parte: transformación de datos y visualización</h2>
+<p>El archivo <code>fluorescencia.txt</code> contiene mediciones de fluorescencia en árboles de cerezo. La fluorescencia es un parámetro que se obtienen a partir de la radiación electromagnética que recieben las plantas. La <code>fluorescencia</code> sirve para evaluar la influencia del estrés sobre el estado fisiológico del aparato fotosintético de las plantas. El archivo <code>fluorescencia.txt</code> contiene en las columnas mediciones realizadas en diferentes momentos y en la filas se tienen diferentes variables derivadas de la fluorescencia.</p>
 <ol type="1">
-<li>El archivo <code>fluorescencia.txt</code> contiene mediciones de fluorescencia en árboles de cerezo. La fluorescencia es un parámetro que se obtienen a partir de la radiación electromagnética que recieben las plantas. La <code>fluorescencia</code> sirve para evaluar la influencia del estrés sobre el estado fisiológico del aparato fotosintético de las plantas. El archivo <code>fluorescencia.txt</code> contiene en las columnas mediciones realizadas en diferentes momentos y en la filas se tienen diferentes variables derivadas de la fluorescencia.</li>
-</ol>
-<ul>
 <li>(30 pts) Utilice <code>{readr}</code> para leer el archivo.</li>
-</ul>
+</ol>
+<p><strong>Solución:</strong></p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">'../data/fluorescencia.txt'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
+<ol start="2" type="1">
 <li>(70 pts) Utilice <code>{tidyr}</code> para trasponer el set de datos, es decir intercambiar filas por columnas. Debería quedar como el ejemplo de abajo.</li>
-</ul>
+</ol>
+<p><strong>Solución:</strong></p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>dataT <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>time) <span class="sc">|&gt;</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">'time'</span>,<span class="at">values_from =</span> <span class="st">'value'</span>) </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>dataT <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 39
   name    Bckg    Fo    Fj    Fi    Fm    Fv    Vj    Vi `Fm/Fo` `Fv/Fo` `Fv/Fm`
@@ -246,26 +383,55 @@ Caused by error in `is.data.frame()`:
 #   `SUPER-Percent [%]` &lt;dbl&gt;, `SUPER-Intensity [uE]` &lt;dbl&gt;, …</code></pre>
 </div>
 </div>
-<ul>
+<ol start="3" type="1">
 <li><p>Cada momento de la medición se realizó en diferentes tratamientos de riego en un ensayo de riego deficitario controlado (RDC). Los tratamientos son cuatro de T1 (mayor riego) a T4 (menor riego). El archivo <code>fluorescencia_tratamientos.csv</code> contiene a que tratamiento de riego corresponde cada medición.</p></li>
 <li><p>(40 pts) Agregue las etiquetas de los tratamientos al set de datos. Utilizando <code>{dplyr}</code> y <code>{tidyr}</code> seleccione las variables están entre <code>name</code> y <code>DIo/RC</code>, luego elimine las filas con valores <code>NA</code>.</p></li>
 <li><p>(40 pts) Utilizando <code>{dplyr}</code> calcule cuantas mediciones se realizaron para cada tratamiento.</p></li>
-</ul>
+</ol>
+<p><strong>Solución:</strong></p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>etiquetas <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(<span class="st">'../data/fluorescencia_tratamientos.csv'</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> dataT <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">name</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">DIo/RC</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tratamiento =</span> etiquetas<span class="sc">$</span>codigo) <span class="sc">|&gt;</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tratamiento) <span class="sc">|&gt;</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
+<ol start="6" type="1">
 <li>(80 pts) Calcule la mediana (no la media) y la desviación estandar para cada tratamiento en todas las variables. Los nombres de las nuevas variables deben de ser de la forma <code>{.col}_med</code> y <code>{.col}_sd</code>. <code>Nota:</code> el argumento <code>.fns</code> de <code>across</code> permite usar como argumento multiples funciones como listas.</li>
-</ul>
+</ol>
+<p><strong>Solución:</strong></p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>data_sum <span class="ot">&lt;-</span> dataT <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">name</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">DIo/RC</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tratamiento =</span> etiquetas<span class="sc">$</span>codigo) <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(tratamiento,<span class="at">.before =</span> name) <span class="sc">|&gt;</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tratamiento) <span class="sc">|&gt;</span> </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric),<span class="fu">list</span>(<span class="at">med =</span> median,<span class="at">sd =</span> sd),<span class="at">.names =</span> <span class="st">'{.col}_{.fn}'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
+<ol start="7" type="1">
 <li>(60 pts) Utilice <code>ggplot2</code> para hacer un gráfico que permita mostrar la variación de todas las variables que contienen una <code>Fm</code> en su nombre.</li>
-</ul>
+</ol>
+<p><strong>Solución:</strong></p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>data_sum <span class="sc">|&gt;</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tratamiento,<span class="fu">contains</span>(<span class="st">'Fm'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mutate(err_min =)</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">'med'</span>),<span class="at">names_to =</span> <span class="st">'var'</span>,<span class="at">values_to =</span><span class="st">'med'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">'sd'</span>),<span class="at">names_to =</span> <span class="st">'var2'</span>,<span class="at">values_to =</span> <span class="st">'sd'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>var2) <span class="sc">|&gt;</span> </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">err_sup =</span> med <span class="sc">+</span> sd,<span class="at">err_inf =</span> med <span class="sc">-</span> sd) <span class="sc">|&gt;</span> </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(tratamiento,med,<span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_errorbar(aes(ymax = err_sup,ymin = err_inf)) +</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(var<span class="sc">~</span>.,<span class="at">scales =</span> <span class="st">'free'</span>) <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Evaluacion2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<p><img src="Evaluacion2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -341,7 +507,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

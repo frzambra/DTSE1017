@@ -7,8 +7,8 @@ format:
     number-sections: true
     toc: true
 execute: 
-  echo: false
-  eval: false
+  echo: true
+  eval: true
 editor: visual
 ---
 
@@ -16,7 +16,7 @@ editor: visual
 
 Utilizando el pipe nativo de R `|>`, `{dplyr}` y `{tidyr}` corrija los errores de los siguientes scripts
 
-1. (20 pts)  Se desea calcular el promedio de todas las columnas de tipo `double`
+1.  (20 pts) Se desea calcular el promedio de todas las columnas de tipo `double`
 
 ```{r}
 #| echo: true
@@ -29,12 +29,13 @@ iris |>
   summarize(everything(),mean)
 ```
 
+**Solución:**
 ```{r}
-penguins |> 
-  summarize(across(where(is.double),\(x) mean(x)))
+iris |> 
+  summarize(across(where(is.double),\(x) mean(x,na.rm = TRUE)))
 ```
 
-2. (40 pts)  Se desea utilizar la función `quantile` para calcular los percentiles a las probabilidades de `seq(0, 1, 0.25)` para cada grupo de especies de pingüinos.
+2.  (40 pts) Se desea utilizar la función `quantile` para calcular los percentiles a las probabilidades de `seq(0, 1, 0.25)` para cada grupo de especies de pingüinos.
 
 ```{r}
 #| echo: true
@@ -45,6 +46,13 @@ penguins |>
   mutate(q =quantile(flipper_length_mm,na.rm=TRUE))
 ```
 
+**Solución:**
+
+```{r}
+penguins |> 
+  group_by(species) |> 
+  summarize(q =quantile(flipper_length_mm,na.rm=TRUE))
+```
 3.  (30 pts) Se desea calcular el modelo de regresión lineal $bill\_length = \beta_0+\beta_1\cdot flipper\_length$
 
 ```{r}
@@ -56,7 +64,17 @@ penguins |>
   lm(bill_length_mm~flipper_length_mm, _)
 ```
 
-4. (30 pts) Se desea calcular la desviación estandar de todas las variables numéricas
+**Solución:**
+```{r}
+#| echo: true
+#| eval: true
+#| error: true
+penguins |> 
+  filter(species == 'Adelie') |> 
+  lm(bill_length_mm~flipper_length_mm, data = _)
+```
+
+4.  (30 pts) Se desea calcular la desviación estandar de todas las variables numéricas
 
 ```{r}
 #| echo: true
@@ -67,10 +85,22 @@ penguins |>
   summarise(across(where(is.numeric),sd(x)))
 ```
 
+**Solución:**
+
+```{r}
+#| echo: true
+#| eval: true
+#| error: true
+penguins |> 
+  group_by(species) |> 
+  summarise(across(where(is.numeric),sd))
+```
+
 ## Segunda parte: creación de funciones
 
-1. (100 pts) Para el set de datos `palmerpenguins::penguins`. Cree una función nombrada que calcule la suma de `flipper_length_mm` y `bill_length_mm` si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva `new_var` con `dplyr::mutate`.
+1.  (100 pts) Para el set de datos `palmerpenguins::penguins`. Cree una función nombrada que calcule la suma de `flipper_length_mm` y `bill_length_mm` si el sexo de la especie es masculino y la resta si el sexo es femenino. Utilice la función para crear una variable nueva `new_var` con `dplyr::mutate`.
 
+**Solución:**
 ```{r}
 f <- function(fl,bl,sex){
   i_mal <- which(sex == 'male')
@@ -86,13 +116,31 @@ penguins |>
   mutate(new_var = f(flipper_length_mm,bill_length_mm,sex))
 ```
 
-2. (60 pts) Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva `TRUE` en otro caso `FALSE`. Utilice esta función con las funciones de `select` y `where` para seleccionar las variables del set de datos `palmerpenguins::penguins`.
+2.  (60 pts) Defina una función que permita identificar si un vector es numérico y si se encuentra entre 13,10 y 60, en caso de ser así devuelva `TRUE` en otro caso `FALSE`. Utilice esta función con las funciones de `select` y `where` para seleccionar las variables del set de datos `palmerpenguins::penguins`.
 
+**Solución:**
+
+```{r}
+
+f1 <- function(x){
+  if(is.numeric(x)){
+    ifelse(all(x >= 13.1 & x <= 60,na.rm = TRUE),TRUE,FALSE)
+  } else FALSE
+}
+
+library(palmerpenguins)
+library(dplyr)
+penguins |> 
+  select(where(f1))
+
+```
 ## Tercera parte: transformación de datos y visualización
 
-1. El archivo `fluorescencia.txt` contiene mediciones de fluorescencia en árboles de cerezo. La fluorescencia es un parámetro que se obtienen a partir de la radiación electromagnética que recieben las plantas. La `fluorescencia` sirve para evaluar la influencia del estrés sobre el estado fisiológico del aparato fotosintético de las plantas.  El archivo `fluorescencia.txt` contiene en las columnas mediciones realizadas en diferentes momentos y en la filas se tienen diferentes variables derivadas de la fluorescencia.
+ El archivo `fluorescencia.txt` contiene mediciones de fluorescencia en árboles de cerezo. La fluorescencia es un parámetro que se obtienen a partir de la radiación electromagnética que recieben las plantas. La `fluorescencia` sirve para evaluar la influencia del estrés sobre el estado fisiológico del aparato fotosintético de las plantas. El archivo `fluorescencia.txt` contiene en las columnas mediciones realizadas en diferentes momentos y en la filas se tienen diferentes variables derivadas de la fluorescencia.
 
-- (30 pts) Utilice `{readr}` para leer el archivo.
+1.   (30 pts) Utilice `{readr}` para leer el archivo.
+
+**Solución:**
 
 ```{r}
 #| eval: true
@@ -101,7 +149,10 @@ penguins |>
 library(readr)
 data <- read_delim('../data/fluorescencia.txt')
 ```
-- (70 pts) Utilice `{tidyr}` para trasponer el set de datos, es decir intercambiar filas por columnas. Debería quedar como el ejemplo de abajo.
+
+2.   (70 pts) Utilice `{tidyr}` para trasponer el set de datos, es decir intercambiar filas por columnas. Debería quedar como el ejemplo de abajo.
+
+**Solución:**
 
 ```{r}
 #| eval: true
@@ -113,11 +164,14 @@ dataT <- data |>
   pivot_wider(names_from = 'time',values_from = 'value') 
 dataT |> head()
 ```
-- Cada momento de la medición se realizó en diferentes tratamientos de riego en un ensayo de riego deficitario controlado (RDC). Los tratamientos son cuatro de T1 (mayor riego) a T4 (menor riego). El archivo `fluorescencia_tratamientos.csv` contiene a que tratamiento de riego corresponde cada medición.
 
-- (40 pts) Agregue las etiquetas de los tratamientos al set de datos. Utilizando `{dplyr}` y `{tidyr}` seleccione las variables están entre `name` y `DIo/RC`, luego elimine las filas con valores `NA`.
+3.   Cada momento de la medición se realizó en diferentes tratamientos de riego en un ensayo de riego deficitario controlado (RDC). Los tratamientos son cuatro de T1 (mayor riego) a T4 (menor riego). El archivo `fluorescencia_tratamientos.csv` contiene a que tratamiento de riego corresponde cada medición.
 
-- (40 pts) Utilizando `{dplyr}` calcule cuantas mediciones se realizaron para cada tratamiento.
+4.  (40 pts) Agregue las etiquetas de los tratamientos al set de datos. Utilizando `{dplyr}` y `{tidyr}` seleccione las variables están entre `name` y `DIo/RC`, luego elimine las filas con valores `NA`.
+
+5.   (40 pts) Utilizando `{dplyr}` calcule cuantas mediciones se realizaron para cada tratamiento.
+
+**Solución:**
 
 ```{r}
 #| eval: true
@@ -130,8 +184,11 @@ count <- dataT |>
   group_by(tratamiento) |> 
   summarize(n())
 ```
-- (80 pts) Calcule la mediana (no la media) y la desviación estandar para cada tratamiento en todas las variables. Los nombres de las nuevas variables deben de ser de la forma `{.col}_med` y `{.col}_sd`. `Nota:` el argumento `.fns` de `across` permite usar como argumento multiples funciones como listas. 
-  
+
+6.   (80 pts) Calcule la mediana (no la media) y la desviación estandar para cada tratamiento en todas las variables. Los nombres de las nuevas variables deben de ser de la forma `{.col}_med` y `{.col}_sd`. `Nota:` el argumento `.fns` de `across` permite usar como argumento multiples funciones como listas.
+
+**Solución:**
+
 ```{r}
 #| eval: true
 
@@ -143,7 +200,10 @@ data_sum <- dataT |>
   group_by(tratamiento) |> 
   summarize(across(where(is.numeric),list(med = median,sd = sd),.names = '{.col}_{.fn}'))
 ```
-- (60 pts) Utilice `ggplot2` para hacer un gráfico que permita mostrar la variación de todas las variables que contienen una `Fm` en su nombre. 
+
+7.  (60 pts) Utilice `ggplot2` para hacer un gráfico que permita mostrar la variación de todas las variables que contienen una `Fm` en su nombre.
+
+**Solución:**
 
 ```{r}
 #| eval: true
@@ -162,7 +222,4 @@ data_sum |>
   #geom_errorbar(aes(ymax = err_sup,ymin = err_inf)) +
   facet_grid(var~.,scales = 'free') +
   theme_bw()
-
-    
-  
 ```

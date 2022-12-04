@@ -81,30 +81,29 @@ El objetivo de este taller es poder ordenar datos obtenidos en forma de listas a
     ii) Lucas: `station_id_agromet_Lucas.rds` y `station_id_agv_Lucas.rds`
     iii) Jesica: `station_id_agromet_Jesica.rds` y `station_id_agv_Jesica.rds`
 
-2) (30 pts) Debe crear un proyecto en `RStudio`. Este proyecto de RStudio debe tener las siguientes carpetas:
-  - `data\data_raw` :guardar datos brutos (ej. .csv)
-  - `data\data_proceseed` :guardar datos procesados en formato `tidy` (ej. .rds)
-  - `scripts\` :guardar los script en R con nombre en formato numerado (ej. 01_cargar_datos.R)
-  - `R\` :guardar las funciones creadas en R
-  - `reports\` :guardar los reportes creados en quarto
-  
-3) (30 pts) Debe agregar el proyecto de `RStudio` a un repositorio remoto en `github`. El repositorio en `github` debe tener dos ramas: 1) main y 2) gh-pages. La rama `main` debe tener "la menos" los siguientes archivos:
-  - `.gitignore` :preconfigurado para R y que no incluya la carpeta de data
-  - `reports/`*.qmd` :archivo quarto con las respuestas del taller
-  - `reports/`*.html` :archivo html generado con quarto
-  - `scripts/*.R` :script en R
-  - `R/*.R` :funciones creadas en R en caso de haber
-La rama `gh-pages` debe tener el archivo `*.html`
+2)  (30 pts) Debe crear un proyecto en `RStudio`. Este proyecto de RStudio debe tener las siguientes carpetas:
 
-4) (150pts) Utilizando `R-base`, `readr`, `tidyr` y lo visto de `{dplyr}` Debe extraer los datos de humedad de suelo a tres profundidades (30cm, 60cm y 90cm) desde el set de datos  `data_agvAPI.rds` y utilizar el set de datos `metadata_estaciones_agvAPI.rds` para extaer la información necesaria de las estaciones. Debe realizarlo con todas las estaciones asignadas a usted. Debe crear un set de datos `tidy` (ej, tibble) que tenga las columnas de: serial, profundidad, fecha_hora, valor. Este set de datos debe contener los datos de humedad de suelo de todas las estaciones `AGV` asignadas a usted.
+-   `data\data_raw` :guardar datos brutos (ej. .csv)
+-   `data\data_proceseed` :guardar datos procesados en formato `tidy` (ej. .rds)
+-   `scripts\` :guardar los script en R con nombre en formato numerado (ej. 01_cargar_datos.R)
+-   `R\` :guardar las funciones creadas en R
+-   `reports\` :guardar los reportes creados en quarto
 
-5) (20pts) El set de datos obtenido en el punto anterior lo debe ordenar de mayor a menor utilizando la función `dplyr::arrange`. 
+3)  (30 pts) Debe agregar el proyecto de `RStudio` a un repositorio remoto en `github`. El repositorio en `github` debe tener dos ramas: 1) main y 2) gh-pages. La rama `main` debe tener "la menos" los siguientes archivos:
 
-6) (20pts) Utilice la función `tidyr::separate` para crear una columna de `fecha` y otra de `hora`, a partir de la columnas `fecha_hora.`
+-   `.gitignore` :preconfigurado para R y que no incluya la carpeta de data
+-   `reports/`\*.qmd\` :archivo quarto con las respuestas del taller
+-   `reports/`\*.html\` :archivo html generado con quarto
+-   `scripts/*.R` :script en R
+-   `R/*.R` :funciones creadas en R en caso de haber La rama `gh-pages` debe tener el archivo `*.html`
 
-7) (40pts) Haga un análisis de los valores faltantes (NAs) explicitos e implicitos. Utilice el paquete `{tidyr}`. Lo importante es saber si se encuentran valores para todas las fechas y en caso que no saber cuantos datos faltan.
+4)  (150pts) Utilizando `R-base`, `readr`, `tidyr` y lo visto de `{dplyr}` Debe extraer los datos de humedad de suelo a tres profundidades (30cm, 60cm y 90cm) desde el set de datos `data_agvAPI.rds` y utilizar el set de datos `metadata_estaciones_agvAPI.rds` para extaer la información necesaria de las estaciones. Debe realizarlo con todas las estaciones asignadas a usted. Debe crear un set de datos `tidy` (ej, tibble) que tenga las columnas de: serial, profundidad, fecha_hora, valor. Este set de datos debe contener los datos de humedad de suelo de todas las estaciones `AGV` asignadas a usted.
 
+5)  (20pts) El set de datos obtenido en el punto anterior lo debe ordenar de mayor a menor utilizando la función `dplyr::arrange`.
 
+6)  (20pts) Utilice la función `tidyr::separate` para crear una columna de `fecha` y otra de `hora`, a partir de la columnas `fecha_hora.`
+
+7)  (40pts) Haga un análisis de los valores faltantes (NAs) explicitos e implicitos. Utilice el paquete `{tidyr}`. Lo importante es saber si se encuentran valores para todas las fechas y en caso que no saber cuantos datos faltan.
 
 ## Entrega
 

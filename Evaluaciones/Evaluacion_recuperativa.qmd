@@ -1,0 +1,33 @@
+---
+title: "Evaluación Recuperativa"
+subtitle: "Minería de Datos (DTSE1017)"
+author: "Dr. Francisco Zambrano"
+format: 
+  html:
+    number-sections: true
+    toc: true
+execute: 
+  echo: false
+  eval: false
+editor: visual
+---
+
+## Crear funciones
+
+### Iteración `for` vs funciones vectorizadas
+
+1.  Cree una función que mediante un ciclo `for` haga la suma de los n elementos de un vector. Aplique la función sobre el vector `x <- rnorm(1e9)`. Use la función `system.time` para conocer el tiempo quese demoro en hacer la operación.
+
+2. Utilice la operación vectorizada `sum` para hacer la suma del vector `x`. Use la función `system.time` para conocer el tiempo quese demoro en hacer la operación.
+
+3. Cuál de las dos alternativas realiza el cálculo en menor tiempo.
+
+## `apply` 
+
+1. Para los datos `agromet` cree una función `apply` (`apply`,`lapply`,`sapply`) que permita calcular la suma diaria de precipitación y los promedios diarios de temperatura (máxima, mínima, promedio).
+
+
+
+## Transformación de datos `{tidyr}, {dplyr},{purrr}`
+
+## Visualización de datos `{ggplot2}`
