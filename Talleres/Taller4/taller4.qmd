@@ -18,7 +18,7 @@ editor: visual
 
 ## Ejercicios funciones
 
-### Eliminar valores anómalos
+### Eliminar valores anómalos (40pts)
 
 -   Cree una función nombrada en R que permita tranformar en NA los valores anómalos de una variable `x`, si se encuentra fuera del rango:
 
@@ -36,7 +36,7 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 -   Utilice la función para eliminar valores anómalos del set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
 
-### Función para `{dplyr}` (ej., `mutate`) con multiples columnas como argumentos
+### Función para `{dplyr}` (ej., `mutate`) con multiples columnas como argumentos (30 pts)
 
 -   Utilizando el set de datos `iris` y `mutate` haga el calculo en que cada columna numérica sea dividida por la raiz cuadrada de el promedio de `Sepal.Lenght`.
 
@@ -44,7 +44,7 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 -   Utilice `across` y `mutate` junto con una función nombrada (lambda)
 
-### Resumir por rangos tipo categórica
+### Resumir por rangos tipo categórica (50pts)
 
 -   Cree una función que identifique tres grupos para un vector numérico `x`, alto, medio y bajo. Use la función `cut` y rangos de igual tamaño
 
@@ -56,7 +56,7 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 -   Utilice la función para clasificar los set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
 
-### Coeficiente de variación
+### Coeficiente de variación (50pts)
 
 -   Cree una función que permita seleccionar las variables numéricas cuyos valores son menores a un coeficiente de variación (CV) de 0.3 (30%).
 
@@ -72,7 +72,7 @@ $$ CV = \frac{\sigma}{\bar{x}}$$
 
 ## Ejercicios transformación y visualización
 
-### Comparar distribuciones
+### Comparar distribuciones (40pts)
 
 -   Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.
 
@@ -84,7 +84,7 @@ $$ CV = \frac{\sigma}{\bar{x}}$$
 
 -   Visualice la cantidad de NAs implicitos diarios por sesnor y profundidad para todas las variables del set de datos ordenados de `agv`. Utilice gráficos de tipo heatmap (`geom_tile`).
 
-### Variación variables
+### Variación variables (60pts)
 
 -   Visualice la variación de la temperatura media diaria para todo Chile. Use tipo de gráfico `boxplot` (`geom_boxplot`).
 

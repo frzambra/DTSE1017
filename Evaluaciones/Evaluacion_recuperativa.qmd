@@ -8,26 +8,135 @@ format:
     toc: true
 execute: 
   echo: false
-  eval: false
+  eval: true
 editor: visual
 ---
 
 ## Crear funciones
 
-### Iteración `for` vs funciones vectorizadas
+**Iteración `for` vs funciones vectorizadas**
 
-1.  Cree una función que mediante un ciclo `for` haga la suma de los n elementos de un vector. Aplique la función sobre el vector `x <- rnorm(1e9)`. Use la función `system.time` para conocer el tiempo quese demoro en hacer la operación.
+1.  Cree una función que mediante un ciclo `for` haga la suma de los n elementos de un vector. Aplique la función sobre el vector `x <- rnorm(1e9)`. Use la función `system.time` para conocer el tiempo quese demoro en hacer la operación. (30pts)
 
-2. Utilice la operación vectorizada `sum` para hacer la suma del vector `x`. Use la función `system.time` para conocer el tiempo quese demoro en hacer la operación.
+2.  Utilice la operación vectorizada `sum` para hacer la suma del vector `x`. Use la función `system.time` para conocer el tiempo quese demoró en hacer la operación. Cuál de las dos alternativas realiza el cálculo en menor tiempo. (10 pts)
 
-3. Cuál de las dos alternativas realiza el cálculo en menor tiempo.
+## `apply/lapply`
 
-## `apply` 
+1.  Para los datos `agromet`, utiliznado R-base seleccione la estación que tiene como nombre `"Andacollo"`. Cree una función `apply` (`apply`,`lapply`,`sapply`) que permita calcular la suma diaria de precipitación. (50pts)
 
-1. Para los datos `agromet` cree una función `apply` (`apply`,`lapply`,`sapply`) que permita calcular la suma diaria de precipitación y los promedios diarios de temperatura (máxima, mínima, promedio).
+2.  Para el siguiente `tibble`:
 
+```{r}
+#| message: false
+library(dplyr)
+library(tidyr)
 
+data <- iris |> 
+  group_by(Species) |> 
+  nest() |> 
+  ungroup()
+```
 
-## Transformación de datos `{tidyr}, {dplyr},{purrr}`
+i.  Utilice `lapply` sobre la columna `list-column` que permita obtener la dimensión de cada `data.frame` anidado. (10pts)
+
+ii. Utilice `lapply` sobre la columna `list-column` `data` que permita obtener los nombres de cada `data.frame` anidado. (10pts)
+
+iii. Utilice `lapply` sobre la columna `list-column` `data` que permita obtener la primera y cuarta columna de cada `data.frame` anidado. (30pts)
+
+## Transformación de datos `{tidyr} y {dplyr}`
+
+1.  Utilice los datos de agromet, filtre las siguientes cinco estaciones (20pts)
+
+```{r}
+library(readr)
+data_agromet <- read_rds('data/data_estaciones_agrometAPI.rds')
+```
+
+```{r}
+#| echo: true
+set.seed(4321)
+ids <- data_agromet |> 
+  slice_sample(n=5) |> 
+  select(station_id) |> 
+  pull(station_id)
+ids
+```
+
+2.  Seleccione los datos entre `station_id` `temp_maxima` (10pts)
+
+```{r}
+data_agromet <- data_agromet |> 
+  filter(station_id %in% ids) |> 
+  select(station_id:temp_maxima)
+
+data_agromet |> glimpse()
+```
+
+3.  Anide los datos entre `fecha_hora` y `temp_maxima` para cada estación en la columna `data`. (20 pts)
+
+```{r}
+data_nest <- data_agromet |> 
+  group_by(station_id) |> 
+  nest() |> 
+  ungroup()
+data_nest
+```
+
+4.  Utilice funciones de `tidyr` para extraer las columnas de `fecha_hora`,`temp_promedio_aire`, `temp_minima` y `temp_maxima`. (50pts)
+
+```{r}
+data_unnest <- data_nest |>  
+  hoist(data,
+        fecha_hora = 'fecha_hora',
+        temp_prom = 'temp_promedio_aire',
+        temp_max = 'temp_maxima',
+        temp_min = 'temp_minima') |> 
+  unnest(cols = c(fecha_hora,temp_prom,temp_max,temp_min)) |> 
+  select(-data)
+data_unnest
+```
+
+5.  Calcule el promedio mensual de todas las temperaturas para cada estación. (40pts)
+
+```{r}
+#| message: false
+library(lubridate)
+
+data_mes <- data_unnest |> 
+  group_by(station_id, mes = floor_date(fecha_hora, '1 month')) |> 
+  summarize(across(contains('temp'),mean,na.rm = TRUE))
+data_mes
+```
+
+6.  Convierta la data mensual en data en formato largo. (30pts)
+
+```{r}
+data_long <- data_mes |> 
+  pivot_longer(3:5)
+data_long
+```
+
+7.  Lea los datos de metadata de agromet y agregue la columna de nombre de la estación. (30pts)
+
+```{r}
+met <- read_rds('data/metadata_estaciones_agrometAPI.rds')
+
+data_long <- data_long |> 
+  left_join(select(met,c(ema,nombre_ema)), by = c('station_id' = 'ema'))
+data_long |> glimpse()
+```
 
 ## Visualización de datos `{ggplot2}`
+
+1.  Cree un gráfico de la serie de tiempo de temperaturas para cada estación. (50pts)
+
+```{r fig.asp=1.2}
+library(ggplot2)
+
+data_long |>
+  ggplot(aes(mes,value,color =name)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(nombre_ema~.,scales = 'free') +
+  theme_bw()
+```
