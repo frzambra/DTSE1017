@@ -9,7 +9,7 @@ format:
 execute: 
   warning: false
   message: false
-  echo: false
+  echo: true
   eval: true
 editor: visual
 ---
