@@ -13,6 +13,7 @@ format:
     self-contained: true
 execute: 
   cache: false
+  message: false
 editor: visual
 ---
 
@@ -28,33 +29,159 @@ dónde $Q_{25}$: cuantil $25\%$, $IQR$: rango intercuartil y $Q_{75}$: cuantil $
 
 La función debe transformar en NA los valores que se encuentran fuera del rango.
 
+```{r}
+set.seed(123)
+x <- c(10,-10,rnorm(100))
+hist(x)
+
+#defino los límites superior e inferior
+lim_inf <- quantile(x,.25) - 1.5*IQR(x)
+lim_sup <- quantile(x,.75) + 1.5*IQR(x)
+
+x[x < lim_inf] <- NA
+x[x > lim_sup] <- NA
+
+x
+x < lim_inf
+x > lim_sup
+
+x[x < lim_inf | x > lim_sup] <- NA
+
+IQR(x,na.rm = TRUE)
+quantile(x,.25,na.rm = TRUE)
+quantile(x,.75,na.rm = TRUE)
+```
+
+Ahora crear la función
+
+```{r}
+elim_anomal <- function(x,...){
+  if (!is.numeric(x)) stop('suministre valor numérico')
+  
+  lim_inf <- quantile(x,.25,...) - 1.5*IQR(x,...)
+  lim_sup <- quantile(x,.75,...) + 1.5*IQR(x,...)
+  x[x < lim_inf | x > lim_sup] <- NA
+  
+  return(x)
+}
+```
+
 -   Pruebe la función con un vector numérico creado por usted.
+
+```{r}
+elim_anomal(x,na.rm = TRUE)
+```
 
 -   Pruebe la función utilizando `mutate` con el set de datos `iris`
 
+Utilizando una función nombrada
+
+```{r}
+library(dplyr)
+
+iris |> 
+  mutate(across(where(is.numeric),elim_anomal)) |> 
+  glimpse()
+```
+
 -   Transforme la función en una función anónima (lambda) y úsela con `mutate` con los datos `iris`
 
+```{r}
+iris |> 
+  mutate(across(where(is.numeric),.fns = function(x,...){
+    lim_inf <- quantile(x,.25,...) - 1.5*IQR(x,...)
+    lim_sup <- quantile(x,.75,...) + 1.5*IQR(x,...)
+    x[x < lim_inf | x > lim_sup] <- NA
+    
+    return(x)
+  })) |> glimpse()
+```
+
 -   Utilice la función para eliminar valores anómalos del set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
+
+```{r}
+library(readr)
+data_agro <- read_rds('../data/data_estaciones_agrometAPI.rds')
+  
+data_sinout <- data_agro |> 
+  select(station_id:direccion_del_viento) |> 
+  mutate(across(temp_promedio_aire:direccion_del_viento,.fns = elim_anomal,na.rm = TRUE))
+
+data_sinout |> glimpse()
+```
 
 ### Función para `{dplyr}` (ej., `mutate`) con multiples columnas como argumentos (30 pts)
 
 -   Utilizando el set de datos `iris` y `mutate` haga el calculo en que cada columna numérica sea dividida por la raiz cuadrada de el promedio de `Sepal.Lenght`.
 
+```{r}
+val <- sqrt(mean(iris$Sepal.Length))
+iris |> 
+  mutate(SL = Sepal.Length/ val,
+         SW = Sepal.Width/ val,
+         PL = Petal.Length/ val,
+         PW = Petal.Width/ val) |> 
+  glimpse()
+```
+
+
 -   Utilice `across` y `mutate` junto con una función anónima (lambda)
 
+```{r}
+iris |> 
+  mutate(across(where(is.numeric),\(x,y) x/sqrt(mean(y)),y=Sepal.Length)) |> 
+  glimpse()
+```
+
 -   Utilice `across` y `mutate` junto con una función nombrada (lambda)
+
+```{r}
+
+fun <- function(x,y) x/sqrt(mean(y))
+
+iris |> 
+  mutate(across(where(is.numeric),.fns = fun,y=Sepal.Length)) |> 
+  glimpse()
+```
 
 ### Resumir por rangos tipo categórica (50pts)
 
 -   Cree una función que identifique tres grupos para un vector numérico `x`, alto, medio y bajo. Use la función `cut` y rangos de igual tamaño
 
+```{r}
+fun2 <- function(x) cut(x,3,labels = c('alto','medio','bajo'))
+```
+
 -   Pruebe la función con un vector numérico creado por usted.
+
+```{r}
+fun2(1:10)
+```
 
 -   Pruebe la función utilizando `mutate` con el set de datos `iris`
 
+```{r}
+iris |> 
+  mutate(across(where(is.numeric),fun2)) |> 
+  glimpse()
+```
+
 -   Transforme la función en una función anónima (lambda) y úsela con `mutate` con los datos `iris`
 
+```{r}
+iris |> 
+  mutate(across(where(is.numeric),\(x) cut(x,3,labels = c('alto','medio','bajo')))) |> 
+  glimpse()
+```
+
 -   Utilice la función para clasificar los set de datos `agromet` en todas las variables climáticas, salvo en `grados_dias` y `horas_frio`, use la función como anónima.
+
+```{r}
+data_agro |> 
+  select(station_id:direccion_del_viento) |> 
+  mutate(station_id = as.factor(station_id)) |> 
+  mutate(across(where(is.numeric),\(x) cut(x,3,labels = c('alto','medio','bajo'))))
+```
 
 ### Coeficiente de variación (50pts)
 
@@ -62,19 +189,86 @@ La función debe transformar en NA los valores que se encuentran fuera del rango
 
 $$ CV = \frac{\sigma}{\bar{x}}$$
 
+```{r}
+sel_cv <- function(x) {
+  x <- na.omit(x)
+  out <- FALSE
+  if (is.numeric(x)){
+    cv <- sd(x)/mean(x)
+    out <- cv < 0.3 
+    } 
+  
+  return(isTRUE(out))
+  
+}
+```
+
 -   Cree una función nombrada y apliquela a un vector aleatorio.
+
+```{r}
+set.seed(345)
+sel_cv(rnorm(100))
+sel_cv(runif(100))
+```
 
 -   Aplique la función con `apply` a las columnas numéricas del set de datos `iris`
 
+```{r}
+iris[,1:4] |> 
+  apply(2,sel_cv)
+```
+
+
 -   Aplique la función con `where` para seleccionar columnas del set de datos `iris`
 
+```{r}
+iris |> 
+  select(where(sel_cv)) |> 
+  glimpse()
+```
+
 -   Aplique la función al set de datos agromet en el que se filtraron los valores anómalos.
+
+```{r}
+data_sinout |> 
+  select(1:4) |> 
+  select(where(sel_cv)) |> 
+  glimpse()
+```
 
 ## Ejercicios transformación y visualización
 
 ### Comparar distribuciones (40pts)
 
 -   Compare las distribuciones de datos con y sin los valores anómalos obtenidas en el ejercicio 1.1. Agrúpe las estaciones por región de Chile.
+
+```{r}
+library(tidyr)
+library(ggplot2)
+metadata <- read_rds('../data/metadata_estaciones_agrometAPI.rds')
+
+#sin filtrar
+
+data_sf <- data_agro |> 
+    select(station_id:direccion_del_viento) |>  pivot_longer(temp_promedio_aire:direccion_del_viento)
+
+#data con filtrar
+data_cf <- data_agro |> 
+  select(station_id:direccion_del_viento) |> 
+  mutate(across(temp_promedio_aire:direccion_del_viento,.fns = elim_anomal,na.rm = TRUE)) |>
+  pivot_longer(temp_promedio_aire:direccion_del_viento,values_to = 'value_fil')
+  
+
+data_join <- left_join(data_sf,data_cf) |> 
+  left_join(metadata, by = c('station_id' = 'ema'))
+
+  ggplot(data_join,aes(region,value,colour = region)) +
+    geom_boxplot() +
+    facet_grid(name~.)
+    theme_bw()
+  
+
+```
 
 -   Cree un gráfico para visualizar la densidad de distribución de la precipitación acumulada diaria para las diferentes regiones de Chile. Use gráfico de `densidad` (`geom_density`)
 

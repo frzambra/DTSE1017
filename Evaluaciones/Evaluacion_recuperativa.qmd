@@ -7,7 +7,7 @@ format:
     number-sections: true
     toc: true
 execute: 
-  echo: false
+  echo: true
   eval: true
 editor: visual
 ---
@@ -18,7 +18,25 @@ editor: visual
 
 1.  Cree una función que mediante un ciclo `for` haga la suma de los n elementos de un vector. Aplique la función sobre el vector `x <- rnorm(1e9)`. Use la función `system.time` para conocer el tiempo quese demoro en hacer la operación. (30pts)
 
+```{r}
+f <- function(x){
+  s <- 0
+  for( i in x){
+    s <- s+i
+  }
+  s
+}
+
+system.time(f(1:1e9))
+```
+
 2.  Utilice la operación vectorizada `sum` para hacer la suma del vector `x`. Use la función `system.time` para conocer el tiempo quese demoró en hacer la operación. Cuál de las dos alternativas realiza el cálculo en menor tiempo. (10 pts)
+
+```{r}
+
+system.time(sum(1:1e9))
+
+```
 
 ## `apply/lapply`
 
@@ -39,9 +57,21 @@ data <- iris |>
 
 i.  Utilice `lapply` sobre la columna `list-column` que permita obtener la dimensión de cada `data.frame` anidado. (10pts)
 
+```{r}
+data$data |> lapply(dim)
+```
+
 ii. Utilice `lapply` sobre la columna `list-column` `data` que permita obtener los nombres de cada `data.frame` anidado. (10pts)
 
+```{r}
+data$data |> lapply(names)
+```
+
 iii. Utilice `lapply` sobre la columna `list-column` `data` que permita obtener la primera y cuarta columna de cada `data.frame` anidado. (30pts)
+
+```{r}
+data$data |> lapply(\(x) x[,c(1,4)])
+```
 
 ## Transformación de datos `{tidyr} y {dplyr}`
 

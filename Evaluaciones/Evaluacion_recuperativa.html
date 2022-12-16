@@ -145,9 +145,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="1" class="anchored" data-anchor-id="crear-funciones"><span class="header-section-number">1</span> Crear funciones</h2>
 <p><strong>Iteración <code>for</code> vs funciones vectorizadas</strong></p>
 <ol type="1">
-<li><p>Cree una función que mediante un ciclo <code>for</code> haga la suma de los n elementos de un vector. Aplique la función sobre el vector <code>x &lt;- rnorm(1e9)</code>. Use la función <code>system.time</code> para conocer el tiempo quese demoro en hacer la operación. (30pts)</p></li>
-<li><p>Utilice la operación vectorizada <code>sum</code> para hacer la suma del vector <code>x</code>. Use la función <code>system.time</code> para conocer el tiempo quese demoró en hacer la operación. Cuál de las dos alternativas realiza el cálculo en menor tiempo. (10 pts)</p></li>
+<li>Cree una función que mediante un ciclo <code>for</code> haga la suma de los n elementos de un vector. Aplique la función sobre el vector <code>x &lt;- rnorm(1e9)</code>. Use la función <code>system.time</code> para conocer el tiempo quese demoro en hacer la operación. (30pts)</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>( i <span class="cf">in</span> x){</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> s<span class="sc">+</span>i</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  s</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(<span class="fu">f</span>(<span class="dv">1</span><span class="sc">:</span><span class="fl">1e9</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+ 25.089   0.002  25.088 </code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Utilice la operación vectorizada <code>sum</code> para hacer la suma del vector <code>x</code>. Use la función <code>system.time</code> para conocer el tiempo quese demoró en hacer la operación. Cuál de las dos alternativas realiza el cálculo en menor tiempo. (10 pts)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(<span class="fu">sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="fl">1e9</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+      0       0       0 </code></pre>
+</div>
+</div>
 </section>
 <section id="applylapply" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="applylapply"><span class="header-section-number">2</span> <code>apply/lapply</code></h2>
@@ -156,13 +180,101 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Para el siguiente <code>tibble</code>:</p></li>
 </ol>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> iris <span class="sc">|&gt;</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol type="i">
-<li><p>Utilice <code>lapply</code> sobre la columna <code>list-column</code> que permita obtener la dimensión de cada <code>data.frame</code> anidado. (10pts)</p></li>
-<li><p>Utilice <code>lapply</code> sobre la columna <code>list-column</code> <code>data</code> que permita obtener los nombres de cada <code>data.frame</code> anidado. (10pts)</p></li>
-<li><p>Utilice <code>lapply</code> sobre la columna <code>list-column</code> <code>data</code> que permita obtener la primera y cuarta columna de cada <code>data.frame</code> anidado. (30pts)</p></li>
+<li>Utilice <code>lapply</code> sobre la columna <code>list-column</code> que permita obtener la dimensión de cada <code>data.frame</code> anidado. (10pts)</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>data <span class="sc">|&gt;</span> <span class="fu">lapply</span>(dim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 50  4
+
+[[2]]
+[1] 50  4
+
+[[3]]
+[1] 50  4</code></pre>
+</div>
+</div>
+<ol start="2" type="i">
+<li>Utilice <code>lapply</code> sobre la columna <code>list-column</code> <code>data</code> que permita obtener los nombres de cada <code>data.frame</code> anidado. (10pts)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>data <span class="sc">|&gt;</span> <span class="fu">lapply</span>(names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
+
+[[2]]
+[1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
+
+[[3]]
+[1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" </code></pre>
+</div>
+</div>
+<ol start="3" type="i">
+<li>Utilice <code>lapply</code> sobre la columna <code>list-column</code> <code>data</code> que permita obtener la primera y cuarta columna de cada <code>data.frame</code> anidado. (30pts)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>data <span class="sc">|&gt;</span> <span class="fu">lapply</span>(\(x) x[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 50 × 2
+   Sepal.Length Petal.Width
+          &lt;dbl&gt;       &lt;dbl&gt;
+ 1          5.1         0.2
+ 2          4.9         0.2
+ 3          4.7         0.2
+ 4          4.6         0.2
+ 5          5           0.2
+ 6          5.4         0.4
+ 7          4.6         0.3
+ 8          5           0.2
+ 9          4.4         0.2
+10          4.9         0.1
+# … with 40 more rows
+
+[[2]]
+# A tibble: 50 × 2
+   Sepal.Length Petal.Width
+          &lt;dbl&gt;       &lt;dbl&gt;
+ 1          7           1.4
+ 2          6.4         1.5
+ 3          6.9         1.5
+ 4          5.5         1.3
+ 5          6.5         1.5
+ 6          5.7         1.3
+ 7          6.3         1.6
+ 8          4.9         1  
+ 9          6.6         1.3
+10          5.2         1.4
+# … with 40 more rows
+
+[[3]]
+# A tibble: 50 × 2
+   Sepal.Length Petal.Width
+          &lt;dbl&gt;       &lt;dbl&gt;
+ 1          6.3         2.5
+ 2          5.8         1.9
+ 3          7.1         2.1
+ 4          6.3         1.8
+ 5          6.5         2.2
+ 6          7.6         2.1
+ 7          4.9         1.7
+ 8          7.3         1.8
+ 9          6.7         1.8
+10          7.2         2.5
+# … with 40 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="transformación-de-datos-tidyr-y-dplyr" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="transformación-de-datos-tidyr-y-dplyr"><span class="header-section-number">3</span> Transformación de datos <code>{tidyr} y {dplyr}</code></h2>
@@ -170,15 +282,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Utilice los datos de agromet, filtre las siguientes cinco estaciones (20pts)</li>
 </ol>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>data_agromet <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/data_estaciones_agrometAPI.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4321</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> data_agromet <span class="sc">|&gt;</span> </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n=</span><span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(station_id) <span class="sc">|&gt;</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(station_id)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>ids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4321</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> data_agromet <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n=</span><span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(station_id) <span class="sc">|&gt;</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(station_id)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>ids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 661 208 658  78 428</code></pre>
 </div>
@@ -187,6 +300,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Seleccione los datos entre <code>station_id</code> <code>temp_maxima</code> (10pts)</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_agromet <span class="ot">&lt;-</span> data_agromet <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(station_id <span class="sc">%in%</span> ids) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(station_id<span class="sc">:</span>temp_maxima)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>data_agromet <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 43,680
 Columns: 10
@@ -206,6 +324,11 @@ $ temp_maxima           &lt;dbl&gt; 13.9, NA, 14.3, 13.1, 13.9, NA, 20.0, NA, NA
 <li>Anide los datos entre <code>fecha_hora</code> y <code>temp_maxima</code> para cada estación en la columna <code>data</code>. (20 pts)</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data_nest <span class="ot">&lt;-</span> data_agromet <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(station_id) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>data_nest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
   station_id data                
@@ -221,6 +344,15 @@ $ temp_maxima           &lt;dbl&gt; 13.9, NA, 14.3, 13.1, 13.9, NA, 20.0, NA, NA
 <li>Utilice funciones de <code>tidyr</code> para extraer las columnas de <code>fecha_hora</code>,<code>temp_promedio_aire</code>, <code>temp_minima</code> y <code>temp_maxima</code>. (50pts)</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data_unnest <span class="ot">&lt;-</span> data_nest <span class="sc">|&gt;</span>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hoist</span>(data,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">fecha_hora =</span> <span class="st">'fecha_hora'</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_prom =</span> <span class="st">'temp_promedio_aire'</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_max =</span> <span class="st">'temp_maxima'</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_min =</span> <span class="st">'temp_minima'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(fecha_hora,temp_prom,temp_max,temp_min)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>data_unnest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 43,680 × 5
    station_id fecha_hora          temp_prom temp_max temp_min
@@ -242,6 +374,12 @@ $ temp_maxima           &lt;dbl&gt; 13.9, NA, 14.3, 13.1, 13.9, NA, 20.0, NA, NA
 <li>Calcule el promedio mensual de todas las temperaturas para cada estación. (40pts)</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>data_mes <span class="ot">&lt;-</span> data_unnest <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(station_id, <span class="at">mes =</span> <span class="fu">floor_date</span>(fecha_hora, <span class="st">'1 month'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">contains</span>(<span class="st">'temp'</span>),mean,<span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>data_mes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 60 × 5
 # Groups:   station_id [5]
@@ -264,6 +402,9 @@ $ temp_maxima           &lt;dbl&gt; 13.9, NA, 14.3, 13.1, 13.9, NA, 20.0, NA, NA
 <li>Convierta la data mensual en data en formato largo. (30pts)</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="ot">&lt;-</span> data_mes <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>data_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 180 × 4
 # Groups:   station_id [5]
@@ -286,6 +427,11 @@ $ temp_maxima           &lt;dbl&gt; 13.9, NA, 14.3, 13.1, 13.9, NA, 20.0, NA, NA
 <li>Lea los datos de metadata de agromet y agregue la columna de nombre de la estación. (30pts)</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/metadata_estaciones_agrometAPI.rds'</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>data_long <span class="ot">&lt;-</span> data_long <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(met,<span class="fu">c</span>(ema,nombre_ema)), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'station_id'</span> <span class="ot">=</span> <span class="st">'ema'</span>))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 180
 Columns: 5
@@ -304,8 +450,16 @@ $ nombre_ema &lt;chr&gt; "La Estrella Sur Ex Pumanque", "La Estrella Sur Ex Puma
 <li>Cree un gráfico de la serie de tiempo de temperaturas para cada estación. (50pts)</li>
 </ol>
 <div class="cell" data-fig.asp="1.2">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(mes,value,<span class="at">color =</span>name)) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(nombre_ema<span class="sc">~</span>.,<span class="at">scales =</span> <span class="st">'free'</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Evaluacion_recuperativa_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<p><img src="Evaluacion_recuperativa_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>

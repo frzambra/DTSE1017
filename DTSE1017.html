@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -38,14 +43,15 @@ ul.task-list{list-style: none;}
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc">
+  <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Indice de contenidos</h2>
    
   <ul>
-  <li><a href="#reseña" id="toc-reseña" class="nav-link active" data-scroll-target="#reseña"> <span class="header-section-number">1</span> Reseña</a></li>
-  <li><a href="#clases" id="toc-clases" class="nav-link" data-scroll-target="#clases"> <span class="header-section-number">2</span> Clases</a></li>
-  <li><a href="#talleres" id="toc-talleres" class="nav-link" data-scroll-target="#talleres"> <span class="header-section-number">3</span> Talleres</a></li>
-  <li><a href="#material" id="toc-material" class="nav-link" data-scroll-target="#material"> <span class="header-section-number">4</span> Material</a></li>
+  <li><a href="#reseña" id="toc-reseña" class="nav-link active" data-scroll-target="#reseña"><span class="toc-section-number">1</span>  Reseña</a></li>
+  <li><a href="#clases" id="toc-clases" class="nav-link" data-scroll-target="#clases"><span class="toc-section-number">2</span>  Clases</a></li>
+  <li><a href="#talleres" id="toc-talleres" class="nav-link" data-scroll-target="#talleres"><span class="toc-section-number">3</span>  Talleres</a></li>
+  <li><a href="#evaluaciones" id="toc-evaluaciones" class="nav-link" data-scroll-target="#evaluaciones"><span class="toc-section-number">4</span>  Evaluaciones</a></li>
+  <li><a href="#material" id="toc-material" class="nav-link" data-scroll-target="#material"><span class="toc-section-number">5</span>  Material</a></li>
   </ul>
 </nav>
 </div>
@@ -112,8 +118,16 @@ ul.task-list{list-style: none;}
 </li>
 </ol>
 </section>
-<section id="material" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="material"><span class="header-section-number">4</span> Material</h2>
+<section id="evaluaciones" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="evaluaciones"><span class="header-section-number">4</span> Evaluaciones</h2>
+<ol type="1">
+<li><a href="Evaluaciones/Evaluacion2.html">Evaluación 2</a></li>
+<li><a href="Evaluaciones/Evaluacion_recuperativa.html">Evaluación recuperativa</a></li>
+<li><a href="Evaluaciones/examen.html">Examen</a></li>
+</ol>
+</section>
+<section id="material" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="material"><span class="header-section-number">5</span> Material</h2>
 <ul>
 <li>R
 <ul>
@@ -199,7 +213,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

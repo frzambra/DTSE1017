@@ -43,6 +43,12 @@ En este repositorio se pone a disposición de los alumnos de la carrera de Cienc
 3.  [Taller 3: Ejercicios {readr},{tidyr} y {dplyr}](Talleres/Taller3/taller3.html)\
 4.  [Taller 4: Transformación de datos y visualización](Talleres/Taller4/taller4.html)\
 
+## Evaluaciones
+
+1.  [Evaluación 2](Evaluaciones/Evaluacion2.html)
+2.  [Evaluación recuperativa](Evaluaciones/Evaluacion_recuperativa.html)
+3.  [Examen](Evaluaciones/examen.html)
+
 ## Material
 
 -   R

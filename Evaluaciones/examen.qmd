@@ -1,0 +1,130 @@
+---
+title: "Examen"
+subtitle: "Minería de Datos (DTSE1017)"
+author: "Dr. Francisco Zambrano"
+format: 
+  html:
+    number-sections: true
+    toc: true
+execute: 
+  warning: false
+  message: false
+  echo: false
+  eval: true
+editor: visual
+---
+
+# Mineria de datos con `{dplyr}`,`{tidyr}`, `{ggplot2}` y `{purrr}`
+
+1.  (10pts) Cargue los datos climáticos de la red agromet
+
+```{r}
+#| message: false
+library(readr)
+library(lubridate)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+data <- read_rds('data/data_estaciones_agrometAPI.rds')
+```
+
+2.  (20pts) Filtre para las siguientes estaciones
+
+```{r}
+#| echo: true
+set.seed(4231)
+ids <- data |> 
+  slice_sample(n=15) |> 
+  select(station_id) |> 
+  pull(station_id)
+ids
+```
+
+```{r}
+data <- data |> 
+  filter(station_id %in% ids)
+```
+
+3.  (10pts) Cargue los datos de metadata de agromet.
+
+```{r}
+metadata <- read_rds('data/metadata_estaciones_agrometAPI.rds')
+```
+
+4.  (30pts) Calcule el promedio diario para todas las estaciones de las variables de temperatura y humedad relativa.
+
+```{r}
+data_dia_temphr <- data |> 
+  group_by(station_id,dia = floor_date(fecha_hora,'1 day')) |> 
+  summarise(across(matches('Temp|humed'),mean,na.rm = TRUE))
+
+data_dia_temphr |> glimpse()
+
+```
+
+5.  (30pts) Calcule la precipitación acumulada diaria para todas las estaciones de las variables de temperatura.
+
+```{r}
+data_dia_prec <- data |> 
+  group_by(station_id,dia = floor_date(fecha_hora,'1 day')) |> 
+  summarise(across(contains('Prec'),sum,na.rm = TRUE))
+
+data_dia_prec |> glimpse()
+```
+
+6.  (30pts) Una los datos de temperaturas promedio dia, precipitación acumulada diaria y metadata.
+
+```{r}
+data_unida <- data_dia_prec |> 
+  left_join(data_dia_temphr) |> 
+  left_join(metadata,by = c('station_id' = 'ema'))
+data_unida |> glimpse() 
+```
+
+7.  (30pts) Convierta las columnas de temperaturas, precipitacion y humedad relativa a formato largo.
+
+```{r}
+data_piv <- data_unida |> 
+  pivot_longer(precipitacion_horaria:temp_maxima)
+
+data_piv |> glimpse()
+```
+
+8.  (50pts) Cree un gráfico de tipo boxplot con `{ggplot2}` para comparar las distribuciones de las variables de precipitación, temperaturas y humedad relativa.
+
+```{r}
+data_piv |> 
+  ggplot(aes(value,as.factor(round(latitud,2)))) +
+  geom_boxplot() +
+  labs(y='latitud') +
+  facet_grid(.~name,scales = 'free') +
+  theme_bw()
+```
+
+9.  (60pts) Cree modelos de regresion lineal para evaluar la relaicón entre humedad relativa y temperatura promedio para cada estación.
+
+$$HR = \beta_0+\beta_1\cdot T$$
+
+```{r}
+library(purrr)
+data_models <- data_unida |> 
+  select(station_id:temp_maxima) |> 
+  group_by(station_id) |> 
+  drop_na() |> 
+  nest() |> 
+  ungroup() |>
+  mutate(mod = map(data,\(x) lm(humed_rel_promedio~temp_promedio_aire,data = x)))
+data_models |> glimpse()
+```
+
+10. (50pts) Extraiga los valores de $R^2$ de los modelos de regresión lineal y haga un gráfico para compararlos.
+
+```{r}
+data_models |> 
+  mutate(r2 = map(mod,\(x) summary(x)$r.squared)) |> unnest(r2) |> 
+  ggplot(aes(as.factor(station_id),r2)) +
+  geom_col() +
+  labs(y=expression(R^2),x='station_id') +
+  theme_bw()
+```
